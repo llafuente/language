@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "node node_modules/pegjs/bin/pegjs plee-grammar.peg"
+    "generate": "node node_modules/pegjs/bin/pegjs plee-grammar.peg",
+    "postinstall": "chmod +x ./bin/parse"
   },
   "author": "",
   "license": "ISC",
@@ -13,5 +14,8 @@
     "pegjs": "^0.8.0",
     "chalk": "^0.5.1",
     "js-beautify": "^1.5.4"
+  },
+  "bin": {
+    "parse": "./bin/parse"
   }
 }
