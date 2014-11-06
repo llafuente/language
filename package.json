@@ -1,0 +1,17 @@
+{
+  "name": "plee",
+  "version": "0.0.0",
+  "description": "Custom language",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "node node_modules/pegjs/bin/pegjs plee-grammar.peg"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pegjs": "^0.8.0",
+    "chalk": "^0.5.1",
+    "js-beautify": "^1.5.4"
+  }
+}
