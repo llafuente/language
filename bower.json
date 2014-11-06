@@ -1,0 +1,19 @@
+{
+  "name": "language",
+  "version": "0.0.0",
+  "homepage": "https://github.com/llafuente/language",
+  "authors": [
+    "Luis Lafuente <luis.lafuente@inetsys.es>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "github-markdown-css": "~1.2.0"
+  }
+}
