@@ -1,0 +1,3 @@
+// braces are mandatory
+
+if (a) return 0;

@@ -1,0 +1,25 @@
+var a;
+var b;
+
+if a == b {
+
+} else if a != b {
+
+} else {
+
+}
+
+for a = 0; a < 10; ++a {
+
+}
+
+while a {
+
+}
+
+do {
+
+} while a;
+
+
+var vc;

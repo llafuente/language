@@ -102,6 +102,7 @@
     obj.range = [offset(), offset() + contents.length];
     obj.line = line();
     obj.column = column();
+    //obj.text = contents; //debug
 
     return obj;
   }
@@ -525,7 +526,7 @@ PrimaryExpression
   / Literal
   / ArrayLiteral
   / ObjectLiteral
-  / "(" __ expression:Expression __ ")" { return expression; }
+  / __ expression:Expression __ { return expression; }
 
 ArrayLiteral
   = "[" __ elision:(Elision __)? "]" {
@@ -967,9 +968,17 @@ AssignmentOperator
   / "|="
 
 Expression
-  = first:AssignmentExpression rest:(__ "," __ AssignmentExpression)* {
+  = "(" __ expr:Expression __ ")"
+    {
+      return expr;
+    }
+  / first:AssignmentExpression rest:(__ "," __ AssignmentExpression)*
+    {
       return rest.length > 0
-        ? positionOf({ type: "SequenceExpression", expressions: buildList(first, rest, 3) })
+        ? positionOf({
+            type: "SequenceExpression",
+            expressions: buildList(first, rest, 3)
+          })
         : first;
     }
 
@@ -981,6 +990,15 @@ ExpressionNoIn
     }
 
 /* ----- A.4 Statements ----- */
+
+StatementWithBraces
+  = "{" __ Statement __ "}"
+  / "{" __ "}"
+    {
+      return positionOf({
+        type: "EmptyStatement"
+      });
+    }
 
 Statement
   = Block
@@ -1060,7 +1078,12 @@ InitialiserNoIn
   = "=" !"=" __ expression:AssignmentExpressionNoIn { return expression; }
 
 EmptyStatement
-  = ";" { return positionOf({ type: "EmptyStatement" }); }
+  = ";"
+    {
+      return positionOf({
+        type: "EmptyStatement"
+      });
+    }
 
 ExpressionStatement
   = !("{" / FunctionToken) expression:Expression EOS {
@@ -1071,10 +1094,10 @@ ExpressionStatement
     }
 
 IfStatement
-  = IfToken __ "(" __ test:Expression __ ")" __
-    consequent:Statement __
-    ElseToken __
-    alternate:Statement
+  = IfToken __ test:Expression __
+    consequent:StatementWithBraces __
+    ElseToken __ &IfToken
+    alternate:IfStatement
     {
       return positionOf({
         type:       "IfStatement",
@@ -1083,8 +1106,21 @@ IfStatement
         alternate:  alternate
       });
     }
-  / IfToken __ "(" __ test:Expression __ ")" __
-    consequent:Statement {
+  / IfToken __ test:Expression __
+    consequent:StatementWithBraces __
+    ElseToken __
+    alternate:StatementWithBraces
+    {
+      return positionOf({
+        type:       "IfStatement",
+        test:       test,
+        consequent: consequent,
+        alternate:  alternate
+      });
+    }
+  / IfToken __ test:Expression __
+    consequent:StatementWithBraces __
+    {
       return positionOf({
         type:       "IfStatement",
         test:       test,
@@ -1093,37 +1129,71 @@ IfStatement
       });
     }
 
-IterationStatement
-  = DoToken __
-    body:Statement __
-    WhileToken __ "(" __ test:Expression __ ")" EOS
-    { return positionOf({ type: "DoWhileStatement", body: body, test: test }); }
-  / WhileToken __ "(" __ test:Expression __ ")" __
-    body:Statement
-    { return positionOf({ type: "WhileStatement", test: test, body: body }); }
-  / ForToken __
-    "(" __
+ClassicForInit
+  = init:(ExpressionNoIn __)? ";" __
+    test:(Expression __)? ";" __
+    update:(Expression __)? __
+    {
+      return {
+        init: init,
+        test: test,
+        update: update
+      }
+    }
+
+  / "(" __
     init:(ExpressionNoIn __)? ";" __
     test:(Expression __)? ";" __
-    update:(Expression __)?
-    ")" __
-    body:Statement
+    update:(Expression __)? __
+    ")"
+    {
+      return {
+        init: init,
+        test: test,
+        update: update
+      }
+    }
+
+
+IterationStatement
+  = DoToken __
+    body:StatementWithBraces __
+    WhileToken __ test:Expression EOS
+    {
+      return positionOf({
+        type: "DoWhileStatement",
+        body: body,
+        test: test
+      });
+    }
+  / WhileToken __ test:Expression __
+    body:StatementWithBraces
+    {
+      return positionOf({
+        type: "WhileStatement",
+        test: test,
+        body: body
+      });
+    }
+  // TODO: extract this condition to make it parenthesis optional
+  / ForToken __ params:ClassicForInit __
+    body:StatementWithBraces
     {
       return positionOf({
         type:   "ForStatement",
-        init:   extractOptional(init, 0),
-        test:   extractOptional(test, 0),
-        update: extractOptional(update, 0),
+        init:   extractOptional(params.init, 0),
+        test:   extractOptional(params.test, 0),
+        update: extractOptional(params.update, 0),
         body:   body
       });
     }
+  // TODO: study if we can divide this into two/three statements
+  // TODO: extract this condition to make it parenthesis optional
   / ForToken __
-    "(" __
     VarToken __ declarations:VariableDeclarationListNoIn __ ";" __
     test:(Expression __)? ";" __
     update:(Expression __)?
-    ")" __
-    body:Statement
+    body:StatementWithBraces
     {
       return positionOf({
         type:   "ForStatement",
@@ -1136,13 +1206,12 @@ IterationStatement
         body:   body
       });
     }
+  // TODO: extract this condition to make it parenthesis optional
   / ForToken __
-    "(" __
     left:LeftHandSideExpression __
     InToken __
     right:Expression __
-    ")" __
-    body:Statement
+    body:StatementWithBraces
     {
       return positionOf({
         type:  "ForInStatement",
@@ -1151,13 +1220,12 @@ IterationStatement
         body:  body
       });
     }
+  // TODO: extract this condition to make it parenthesis optional
   / ForToken __
-    "(" __
     VarToken __ declarations:VariableDeclarationListNoIn __
     InToken __
     right:Expression __
-    ")" __
-    body:Statement
+    body:StatementWithBraces
     {
       return positionOf({
         type:  "ForInStatement",
@@ -1206,7 +1274,8 @@ SwitchStatement
     }
 
 CaseBlock
-  = "{" __ clauses:(CaseClauses __)? "}" {
+  = "{" __ clauses:(CaseClauses __)? "}"
+    {
       return optionalList(extractOptional(clauses, 0));
     }
   / "{" __
@@ -1223,7 +1292,8 @@ CaseClauses
   = first:CaseClause rest:(__ CaseClause)* { return buildList(first, rest, 1); }
 
 CaseClause
-  = CaseToken __ test:Expression __ ":" consequent:(__ StatementList)? {
+  = CaseToken __ test:Expression __ ":" consequent:(__ StatementList)?
+  {
       return positionOf({
         type:       "SwitchCase",
         test:       test,
@@ -1232,7 +1302,8 @@ CaseClause
     }
 
 DefaultClause
-  = DefaultToken __ ":" consequent:(__ StatementList)? {
+  = DefaultToken __ ":" consequent:(__ StatementList)?
+    {
       return positionOf({
         type:       "SwitchCase",
         test:       null,
@@ -1241,17 +1312,28 @@ DefaultClause
     }
 
 LabelledStatement
-  = label:Identifier __ ":" __ body:Statement {
+  = label:Identifier __ ":" __ body:Statement
+    {
       return positionOf({ type: "LabeledStatement", label: label, body: body });
     }
 
+// TODO this will be error
 ThrowStatement
-  = ThrowToken _ argument:Expression EOS {
-      return positionOf({ type: "ThrowStatement", argument: argument });
+  = ThrowToken _ argument:Expression EOS
+    {
+      return positionOf({
+        type: "ThrowStatement",
+        argument: argument
+      });
     }
 
 DebuggerStatement
-  = DebuggerToken EOS { return positionOf({ type: "DebuggerStatement" }); }
+  = DebuggerToken EOS
+    {
+      return positionOf({
+        type: "DebuggerStatement"
+      });
+    }
 
 /* ----- A.5 Functions and Programs ----- */
 

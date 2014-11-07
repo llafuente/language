@@ -1,0 +1,17 @@
+var a;
+
+while a {
+
+}
+
+while a {
+  a = false;
+}
+
+while !a && !a {
+  a = true;
+}
+
+while (a) {
+
+}
