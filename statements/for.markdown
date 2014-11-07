@@ -1,7 +1,8 @@
 ## for
 
+### Classic
 ```
-for [(][init;]condition; after_loop[)] {
+for [init;]condition; after_loop {
 
 } [else {
     // executed if condition fails the first time
@@ -9,48 +10,45 @@ for [(][init;]condition; after_loop[)] {
 
 ```
 
-### for AST
 
-```json
-ForStatement <: Statement {
-    "type": "for-statement";
-    "init": VariableDeclaration | Expression | null;
-    "test": Expression | null;
-    "update": Expression | null;
-    "body": BlockStatement;
-}
-```
-
-
-## for in
+### for in
 
 ```
-for [(][key, ] value in iterable[)] {
+for [key, ] value in iterable {
 
 } [else {
     // executed if condition fails the first time
 }]
 ```
 
-## short for
+### for till
+
+```
+for variable|number till number {
+
+} [else {
+    // executed if condition fails the first time
+}]
+```
+
+### for to
+
+```
+for variable|number to number {
+
+} [else {
+    // executed if condition fails the first time
+}]
+```
+
+### short for
 
 ```
 for iterable {
-    $value // is automatically declared
-    $key // is automatically declared
+    $iterable // value: is automatically declared
+    $$iterable // key: is automatically declared
     // cannot be nested!
 } [else {
     // executed if condition fails the first time
 }]
-```
-
-### for in AST
-```json
-ForInStatement <: Statement {
-    "type": "forin-statement";
-    "key": Identifier | null;
-    "value": Identifier;
-    "iterable": Identifier;
-    "body": BlockStatement;
-}
 ```

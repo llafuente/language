@@ -1,8 +1,8 @@
 ## string
 
-`string` type is a very peculiar type in plee. Is memory (mostly) continuous with every string in your app.
+`string` store UTF-8 characters (maybe unicode).
 
-memory management profiles.
+Study support memory management profiles/allocators
 - continuous pool
 - on demand
 
@@ -10,11 +10,11 @@ memory management profiles.
 
 * ui64 size = 0 [readonly]
 
-  allocated
+  bytes allocated, remember that utf-8 is multibyte.
 
 * ui64 used = 0 [readonly]
 
-  amount used
+  byte in use.
 
 * ui64 length = 0 [readonly]
 
