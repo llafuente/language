@@ -1,17 +1,19 @@
+#!/usr/bin/env node
+
 "use strict";
 
 var grammar = require("./plee-grammar.js"),
   fs = require("fs"),
   util = require("util"),
-  chalk = require('chalk');
-
-if (process.argv.length == 2) {
-    throw new Error("parse file not sent");
-}
+  chalk = require('chalk'),
+  argv = require('yargs')
+    .usage('Usage: $0 file|glob [--print-ast]')
+    .demand(1)
+    .argv;
 
 console.log();
 
-var contents = fs.readFileSync(process.argv[2], 'utf-8');
+var contents = fs.readFileSync(argv._[0], 'utf-8');
 
 console.log("************");
 console.log(contents);
@@ -22,7 +24,9 @@ try {
     grammar.parse(contents), {colors: true, depth: null}
   );
 
-  console.log(result);
+  if (argv.print_ast) {
+    console.log(result);
+  }
 } catch(e) {
     console.log(e);
 

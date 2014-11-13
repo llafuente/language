@@ -1,3 +1,102 @@
-!/bin/sh
+#!/usr/bin/env node
 
-node node_modules/pegjs/bin/pegjs plee-grammar.peg && node plee-parser.js $1
+"use strict";
+
+var PEG = require("pegjs"),
+  fs = require("fs"),
+  path = require("path"),
+  grammar = PEG.buildParser(fs.readFileSync(path.join(__dirname, "..", "plee-grammar.peg"), "utf-8")),
+  util = require("util"),
+  chalk = require('chalk'),
+  argv = require('yargs')
+    .usage('Usage: $0 [--print-ast] [--print-file] [ files]')
+    .demand(1)
+    .argv,
+  glob = require("glob");
+
+//console.log(argv);
+
+argv._.forEach(function(pattern) {
+  glob(pattern, function(err, files) {
+    if (err) {
+      return console.error(err);
+    }
+
+    files.forEach(parse_file);
+  });
+});
+
+function parse_file(file) {
+  console.error("parsing: ", file);
+  var contents = fs.readFileSync(file, 'utf-8');
+
+  if (argv.printFile) {
+      console.log("************");
+      console.log(contents);
+      console.log("************");
+  }
+
+  try {
+    var result = require("util").inspect(
+      grammar.parse(contents), {colors: true, depth: null}
+    );
+
+    if (argv.printAst) {
+      console.log(result);
+    }
+  } catch(e) {
+    if (argv.v) {
+        console.log(e);
+    }
+
+    var lines = contents.split("\n"),
+      err_line = lines[e.line -1],
+      chars = err_line.split(""),
+      x = "",
+      max = e.column + 8,
+      i,
+      pad = "      ",
+      pad_i;
+
+    if (chars.length > e.column) {
+      chars[e.column - 1] = chalk.bgRed(chars[e.column - 1]);
+    } else {
+      chars[chars.length - 1] = chalk.bgRed(chars[chars.length - 1]);
+    }
+
+    console.log("file:", process.argv[2]);
+    console.log("error context:");
+
+    for(i = 0; i < max; ++i) {
+      x+= " ";
+    }
+
+    max = Math.max(0, e.line - 5);
+    for(i = max; i < e.line; ++i) {
+      pad_i = pad.substring(0, pad.length - ("" + i).length) + i;
+
+      if (e.line - 1 === i) {
+          console.log(pad_i + " | " + chars.join(""));
+      } else {
+          console.log(pad_i + " | " + lines[i]);
+      }
+    }
+
+    if (max + e.message.length < 80) {
+      console.log(x + "^", chalk.bgRed(e.message));
+    } else {
+      console.log(x + "^\n", chalk.bgRed(e.message));
+    }
+    console.log("");
+
+    max = Math.min(lines.length, e.line + 5);
+
+    for(i = e.line; i < max; ++i) {
+      pad_i = pad.substring(0, pad.length - ("" + i).length) + i;
+
+      console.log(pad_i + " | " + lines[i]);
+    }
+
+  }
+}
+

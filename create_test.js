@@ -9,7 +9,8 @@ if (process.argv.length == 2) {
     throw new Error("parse file not sent");
 }
 
-var contents = fs.readFileSync(process.argv[2], 'utf-8'),
+var filename = process.argv[2],
+    contents = fs.readFileSync(filename, 'utf-8'),
     result;
 
 try {
@@ -20,5 +21,9 @@ try {
     result = e;
 }
 
+var test_base = require("fs").readFileSync("./tests/base.js", "utf8");
+test_base = test_base
+    .replace(/%%file%%/g, filename)
+    .replace(/%%ast%%/g, JSON.stringify(result, null, 2));
 
-console.log(JSON.stringify(result, null, 2));
+var test_base = require("fs").writeFileSync("./tests/test-" + require("path").basename(filename), test_base);

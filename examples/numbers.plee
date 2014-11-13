@@ -1,1 +1,4 @@
-numbers.plee
+var x = 10;
+x = 1.0;
+x = 1e10;
+x = 0x33;

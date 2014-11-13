@@ -102,10 +102,21 @@
     obj.range = [offset(), offset() + contents.length];
     obj.line = line();
     obj.column = column();
-    //obj.text = contents; //debug
 
     return obj;
   }
+
+  function unmatching_parenthesis(leftp, rightp) {
+      if (leftp === null && rightp !== null) {
+        error("right parenthesis not needed");
+      }
+
+      if (leftp !== null && rightp === null) {
+        error("left parenthesis not needed");
+      }
+  }
+
+
 }
 
 Start
@@ -220,6 +231,8 @@ Keyword
   / VarToken
   / VoidToken
   / WhileToken
+  / TillToken
+  / ToToken
 
 FutureReservedWord
   = ClassToken
@@ -478,7 +491,7 @@ FalseToken      = "false"      !IdentifierPart
 ForToken        = "for"        !IdentifierPart
 FunctionToken
     = "function"   !IdentifierPart
-    / "fn"   !IdentifierPart
+    / "fn"         !IdentifierPart
 GetToken        = "get"        !IdentifierPart
 IfToken         = "if"         !IdentifierPart
 ImportToken     = "import"     !IdentifierPart
@@ -496,9 +509,14 @@ TypeofToken     = "typeof"     !IdentifierPart
 VarToken        = "var"        !IdentifierPart
 VoidToken       = "void"       !IdentifierPart
 WhileToken      = "while"      !IdentifierPart
+TillToken       = "till"       !IdentifierPart
+ToToken         = "to"         !IdentifierPart
+
 
 /* Skipped */
 
+_W_
+  = (WhiteSpace / LineTerminatorSequence)*
 __
   = (WhiteSpace / LineTerminatorSequence / Comment)*
 
@@ -526,7 +544,7 @@ PrimaryExpression
   / Literal
   / ArrayLiteral
   / ObjectLiteral
-  / __ expression:Expression __ { return expression; }
+  / "(" __ expression:Expression __ ")" { return expression; }
 
 ArrayLiteral
   = "[" __ elision:(Elision __)? "]" {
@@ -968,17 +986,9 @@ AssignmentOperator
   / "|="
 
 Expression
-  = "(" __ expr:Expression __ ")"
-    {
-      return expr;
-    }
-  / first:AssignmentExpression rest:(__ "," __ AssignmentExpression)*
-    {
+  = first:AssignmentExpression rest:(__ "," __ AssignmentExpression)* {
       return rest.length > 0
-        ? positionOf({
-            type: "SequenceExpression",
-            expressions: buildList(first, rest, 3)
-          })
+        ? positionOf({ type: "SequenceExpression", expressions: buildList(first, rest, 3) })
         : first;
     }
 
@@ -990,15 +1000,6 @@ ExpressionNoIn
     }
 
 /* ----- A.4 Statements ----- */
-
-StatementWithBraces
-  = "{" __ Statement __ "}"
-  / "{" __ "}"
-    {
-      return positionOf({
-        type: "EmptyStatement"
-      });
-    }
 
 Statement
   = Block
@@ -1094,23 +1095,13 @@ ExpressionStatement
     }
 
 IfStatement
-  = IfToken __ test:Expression __
-    consequent:StatementWithBraces __
-    ElseToken __ &IfToken
-    alternate:IfStatement
-    {
-      return positionOf({
-        type:       "IfStatement",
-        test:       test,
-        consequent: consequent,
-        alternate:  alternate
-      });
-    }
-  / IfToken __ test:Expression __
-    consequent:StatementWithBraces __
+  = IfToken __ leftp:("(")? __ test:Expression __ rightp:(")")? __
+    consequent:IterationBody __
     ElseToken __
-    alternate:StatementWithBraces
+    alternate:Statement
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:       "IfStatement",
         test:       test,
@@ -1118,9 +1109,11 @@ IfStatement
         alternate:  alternate
       });
     }
-  / IfToken __ test:Expression __
-    consequent:StatementWithBraces __
+  / IfToken __ leftp:("(")? __ test:Expression __ rightp:(")")? __
+    consequent:IterationBody
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:       "IfStatement",
         test:       test,
@@ -1129,72 +1122,73 @@ IfStatement
       });
     }
 
-ClassicForInit
-  = init:(ExpressionNoIn __)? ";" __
-    test:(Expression __)? ";" __
-    update:(Expression __)? __
+// braces are mandatory
+IterationBody
+  = "{" __ "}"
     {
-      return {
-        init: init,
-        test: test,
-        update: update
-      }
+      return positionOf({
+        type: "EmptyStatement"
+      });
+    }
+  / "{" __ body:Statement __ "}"
+    {
+      return body;
     }
 
-  / "(" __
-    init:(ExpressionNoIn __)? ";" __
-    test:(Expression __)? ";" __
-    update:(Expression __)? __
-    ")"
-    {
-      return {
-        init: init,
-        test: test,
-        update: update
-      }
-    }
-
-
+// parenthesis are optional
 IterationStatement
-  = DoToken __
-    body:StatementWithBraces __
-    WhileToken __ test:Expression EOS
+  = DoToken _W_
+    body:IterationBody _W_
+    WhileToken __
+    leftp:("(")? __ test:Expression __ rightp:(")")? ";" // semicolon mandatory
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type: "DoWhileStatement",
         body: body,
         test: test
       });
     }
-  / WhileToken __ test:Expression __
-    body:StatementWithBraces
+  / WhileToken _W_ leftp:("(")? __ test:Expression __ rightp:(")")? __
+    body:IterationBody
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type: "WhileStatement",
         test: test,
         body: body
       });
     }
-  // TODO: extract this condition to make it parenthesis optional
-  / ForToken __ params:ClassicForInit __
-    body:StatementWithBraces
+  / ForToken __
+    leftp:("(")? __
+    init:(ExpressionNoIn __)? ";" __
+    test:(Expression __)? ";" __
+    update:(Expression __)?
+    rightp:(")")? __
+    body:IterationBody
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:   "ForStatement",
-        init:   extractOptional(params.init, 0),
-        test:   extractOptional(params.test, 0),
-        update: extractOptional(params.update, 0),
+        init:   extractOptional(init, 0),
+        test:   extractOptional(test, 0),
+        update: extractOptional(update, 0),
         body:   body
       });
     }
-  // TODO: study if we can divide this into two/three statements
-  // TODO: extract this condition to make it parenthesis optional
   / ForToken __
+    leftp:("(")? __
     VarToken __ declarations:VariableDeclarationListNoIn __ ";" __
     test:(Expression __)? ";" __
     update:(Expression __)?
-    body:StatementWithBraces
+    rightp:(")")? __
+    body:IterationBody
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:   "ForStatement",
         init:   {
@@ -1206,13 +1200,16 @@ IterationStatement
         body:   body
       });
     }
-  // TODO: extract this condition to make it parenthesis optional
   / ForToken __
+    leftp:("(")? __
     left:LeftHandSideExpression __
-    InToken __
+    token:(InToken / TillToken / ToToken) __
     right:Expression __
-    body:StatementWithBraces
+    rightp:(")")? __
+    body:IterationBody
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:  "ForInStatement",
         left:  left,
@@ -1220,13 +1217,16 @@ IterationStatement
         body:  body
       });
     }
-  // TODO: extract this condition to make it parenthesis optional
   / ForToken __
+    leftp:("(")? __
     VarToken __ declarations:VariableDeclarationListNoIn __
-    InToken __
+    token:(InToken / TillToken / ToToken) __
     right:Expression __
-    body:StatementWithBraces
+    rightp:(")")? __
+    body:IterationBody
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:  "ForInStatement",
         left:  {
@@ -1274,8 +1274,7 @@ SwitchStatement
     }
 
 CaseBlock
-  = "{" __ clauses:(CaseClauses __)? "}"
-    {
+  = "{" __ clauses:(CaseClauses __)? "}" {
       return optionalList(extractOptional(clauses, 0));
     }
   / "{" __
@@ -1292,8 +1291,7 @@ CaseClauses
   = first:CaseClause rest:(__ CaseClause)* { return buildList(first, rest, 1); }
 
 CaseClause
-  = CaseToken __ test:Expression __ ":" consequent:(__ StatementList)?
-  {
+  = CaseToken __ test:Expression __ ":" consequent:(__ StatementList)? {
       return positionOf({
         type:       "SwitchCase",
         test:       test,
@@ -1302,8 +1300,7 @@ CaseClause
     }
 
 DefaultClause
-  = DefaultToken __ ":" consequent:(__ StatementList)?
-    {
+  = DefaultToken __ ":" consequent:(__ StatementList)? {
       return positionOf({
         type:       "SwitchCase",
         test:       null,
@@ -1312,36 +1309,27 @@ DefaultClause
     }
 
 LabelledStatement
-  = label:Identifier __ ":" __ body:Statement
-    {
+  = label:Identifier __ ":" __ body:Statement {
       return positionOf({ type: "LabeledStatement", label: label, body: body });
     }
 
-// TODO this will be error
 ThrowStatement
-  = ThrowToken _ argument:Expression EOS
-    {
-      return positionOf({
-        type: "ThrowStatement",
-        argument: argument
-      });
+  = ThrowToken _ argument:Expression EOS {
+      return positionOf({ type: "ThrowStatement", argument: argument });
     }
 
 DebuggerStatement
-  = DebuggerToken EOS
-    {
-      return positionOf({
-        type: "DebuggerStatement"
-      });
-    }
+  = DebuggerToken EOS { return positionOf({ type: "DebuggerStatement" }); }
 
 /* ----- A.5 Functions and Programs ----- */
 
 FunctionDeclaration
   = FunctionToken __ id:Identifier __
-    "(" __ params:(FormalParameterList __)? ")" __
+    leftp:("(")? __ params:(FormalParameterList __)? rightp:(")")? __
     "{" __ body:FunctionBody __ "}"
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:   "FunctionDeclaration",
         id:     id,
@@ -1352,9 +1340,11 @@ FunctionDeclaration
 
 FunctionExpression
   = FunctionToken __ id:(Identifier __)?
-    "(" __ params:(FormalParameterList __)? ")" __
+    leftp:("(")? __ params:(FormalParameterList __)? rightp:(")")? __
     "{" __ body:FunctionBody __ "}"
     {
+      unmatching_parenthesis(leftp, rightp);
+
       return positionOf({
         type:   "FunctionExpression",
         id:     extractOptional(id, 0),
