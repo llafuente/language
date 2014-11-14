@@ -120,7 +120,10 @@
 }
 
 Start
-  = __ program:Program __ { return program; }
+  = _W_ program:Program _W_
+  {
+    return program;
+  }
 
 /* ----- A.1 Lexical Grammar ----- */
 
@@ -147,8 +150,6 @@ LineTerminatorSequence "end of line"
   / "\u2029"
 
 Comment "comment"
-//  = MultiLineComment
-//  / SingleLineComment
     = SingleLineComment
 
 //MultiLineComment
@@ -233,6 +234,14 @@ Keyword
   / WhileToken
   / TillToken
   / ToToken
+
+
+Types
+  = StringToken
+  / IntegerToken
+  / ObjectToken
+  / FunctionToken
+  / ArrayToken
 
 FutureReservedWord
   = ConstToken
@@ -486,8 +495,8 @@ ExportToken     = "export"     !IdentifierPart
 FalseToken      = "false"      !IdentifierPart
 ForToken        = "for"        !IdentifierPart
 FunctionToken
-    = "function"   !IdentifierPart
-    / "fn"         !IdentifierPart
+    = "function"               !IdentifierPart
+    / "fn"                     !IdentifierPart
 GetToken        = "get"        !IdentifierPart
 IfToken         = "if"         !IdentifierPart
 ImportToken     = "import"     !IdentifierPart
@@ -507,6 +516,14 @@ VoidToken       = "void"       !IdentifierPart
 WhileToken      = "while"      !IdentifierPart
 TillToken       = "till"       !IdentifierPart
 ToToken         = "to"         !IdentifierPart
+StringToken     = "string"     !IdentifierPart
+IntegerToken    = "int"        !IdentifierPart
+ObjectToken     = "object"     !IdentifierPart
+//  / "{}"                     !IdentifierPart
+ArrayToken      = "array"      !IdentifierPart
+//  / "[]"                     !IdentifierPart
+
+
 
 
 /* Skipped */
@@ -1020,10 +1037,19 @@ Statement
   / DebuggerStatement
 
 CommentStatement
-  = "/*" literal:(CommentStatement / !"*/" SourceCharacter)* "*/" {
+  = "//" literal:(!LineTerminator SourceCharacter)*
+    {
       return positionOf({
         type: "CommentStatement",
-        text: text()
+        text: text().substring(2)
+      });
+    }
+  / "/*" literal:(CommentStatement / !"*/" SourceCharacter)* "*/"
+    {
+      var txt = text();
+      return positionOf({
+        type: "CommentStatement",
+        text: txt.substring(2, txt.length - 2)
       });
     }
 
@@ -1370,7 +1396,7 @@ Program
     }
 
 SourceElements
-  = first:SourceElement rest:(__ SourceElement)* {
+  = first:SourceElement rest:(_W_ SourceElement)* {
       return buildList(first, rest, 1);
     }
 

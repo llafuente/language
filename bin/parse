@@ -14,7 +14,9 @@ var PEG = require("pegjs"),
     .argv,
   glob = require("glob");
 
-//console.log(argv);
+if (argv.v) {
+    console.error(argv);
+}
 
 argv._.forEach(function(pattern) {
   glob(pattern, function(err, files) {
@@ -27,19 +29,21 @@ argv._.forEach(function(pattern) {
 });
 
 function parse_file(file) {
-  console.error("parsing: ", file);
+  console.error("# parsing: ", file);
   var contents = fs.readFileSync(file, 'utf-8');
 
   if (argv.printFile) {
-      console.log("************");
+      console.log("# file contents: ", file);
       console.log(contents);
-      console.log("************");
+      console.log("# EOF");
   }
 
   try {
     var result = require("util").inspect(
       grammar.parse(contents), {colors: true, depth: null}
     );
+
+    console.error("# done");
 
     if (argv.printAst) {
       console.log(result);

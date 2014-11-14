@@ -1,0 +1,12 @@
+var x;
+var y = 0;
+
+var z = 0,
+    _z = 1,
+    str = "str";
+
+
+// var x:string;
+
+
+/* abc */
