@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/llafuente/language",
   "dependencies": {
-    "marked": "^0.3.2"
+    "marked": "^0.3.2",
+    "mktemp": "^0.3.5"
   }
 }
