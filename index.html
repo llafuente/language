@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+  <title>Plee</title>
+
+  <link rel="stylesheet" href="bower_components/github-markdown-css/github-markdown.css" >
+</head>
+<body class="markdown-body">
+    <h1 id="plee-language">plee language</h1>
+<p>Things that the compiler must do.</p>
+<ul>
+<li><p>Continuous integration. Nowadays is mandatory. This also add some responsibility in the language that need to support a basic-extendable testing system.</p>
+</li>
+<li><p>Code coverage. Extracting the information from ci generate a report of the dangers in the code.</p>
+</li>
+<li><p>Documentation. Basic and extendable. Most important, don&#39;t need much information from doc-blocks, should implicity extract information from the code, that will give users extra information about what the are doing &#39;in theory&#39;.</p>
+</li>
+<li><p>Benchmarks. Once again, basic and extendable.</p>
+</li>
+</ul>
+<p>Things that you should now before the shocking news.</p>
+<ul>
+<li><p>No classes. The concept of classes is not necessary in plee, you will see why, soon enough.</p>
+</li>
+<li><p>Function scope rather than block scope.</p>
+</li>
+<li><p>Robust memory management, focus on no leaks a proper error display for easy debugging.</p>
+</li>
+<li><p>Braces are mandatory everywhere but you can avoid using parenthesis :)</p>
+</li>
+<li><p>Everything is a reference for speed. You can clone everything easily (I assure you)</p>
+<h3 id="types">Types</h3>
+</li>
+</ul>
+<p>Types are case sensitive. All types in the language and functions are lowercased.</p>
+<h4 id="primitives">Primitives</h4>
+<ul>
+<li><p>bool</p>
+<p>There are only two Boolean values, <code>true</code> and <code>false</code>.</p>
+</li>
+<li><p>number</p>
+<p>Mutable-multipuporse number. Increase it&#39;s size as needed / overflow happens.</p>
+<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
+</li>
+<li><p>i8, i16, i32, i64, ui8, ui16, ui32, ui64</p>
+<p>Integers and Unsigned integers of different sizes.</p>
+<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
+</li>
+<li><p>f32 f64</p>
+<p>Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.</p>
+<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
+</li>
+<li><p>function</p>
+<p>Function as type. Unlike other languages arguments doesn&#39;t matter.</p>
+</li>
+<li><p>string</p>
+<p>Primitive value that is a finite ordered sequence of zero or more 16-bit unsigned integer</p>
+<ul>
+<li>iterable</li>
+</ul>
+</li>
+</ul>
+<h4 id="data-aggregation">Data aggregation</h4>
+<ul>
+<li><p>array</p>
+<p>List of things, this is continuous memory and should have a defined type, cannot contains different things (unless store you pointers).</p>
+<ul>
+<li>iterable</li>
+<li>thread-block</li>
+<li>GC</li>
+</ul>
+</li>
+<li><p>struct</p>
+<p>Constant structured data.</p>
+<ul>
+<li>iterable</li>
+<li>thread-block</li>
+<li>GC</li>
+</ul>
+</li>
+<li><p>block</p>
+<p>It&#39;s the same as struct but memory continuous.</p>
+<ul>
+<li>iterable</li>
+<li>thread-block</li>
+<li>GC</li>
+</ul>
+</li>
+<li><p>object</p>
+<p>Mutable structured data. You could add/remove properties.</p>
+</li>
+<li><p>p1, p2, p3, p4</p>
+<p>Points to something, directly in memory with given byte size.</p>
+<ul>
+<li>alloc</li>
+<li>dealloc</li>
+<li>realloc</li>
+<li>copy</li>
+</ul>
+</li>
+<li><p>stream</p>
+</li>
+<li><p>bin</p>
+<p>binary data, just a pointer with size.</p>
+</li>
+<li><p>null</p>
+</li>
+</ul>
+<p>Note: thread-block means, once a thread declared the use of this variable, if other thread ask about it, it has to wait.## string</p>
+<p><code>string</code> store UTF-8 characters (maybe unicode).</p>
+<p>Study support memory management profiles/allocators</p>
+<ul>
+<li>continuous pool</li>
+<li>on demand</li>
+</ul>
+<h3 id="instance-properties">instance properties</h3>
+<ul>
+<li><p>ui64 size = 0 [readonly]</p>
+<p>bytes allocated, remember that utf-8 is multibyte.</p>
+</li>
+<li><p>ui64 used = 0 [readonly]</p>
+<p>byte in use.</p>
+</li>
+<li><p>ui64 length = 0 [readonly]</p>
+<p>Number of characters</p>
+</li>
+</ul>
+<h3 id="instance-methods">instance methods</h3>
+<ul>
+<li><p>[] access to a single character</p>
+</li>
+<li><p>substr</p>
+</li>
+<li>substring</li>
+<li>concat</li>
+<li>resize</li>
+</ul>
+<ul>
+<li>charAt</li>
+<li>charCodeAt</li>
+<li>codePointAt</li>
+<li>contains</li>
+<li>concat</li>
+<li>indexOf</li>
+<li>lastIndexOf</li>
+<li>length</li>
+<li>localeCompare</li>
+<li>match</li>
+<li>replace</li>
+<li>search</li>
+<li>slice</li>
+<li>split|explode</li>
+<li>substr</li>
+<li>substring</li>
+<li>toLocaleLowerCase</li>
+<li>toLocaleUpperCase</li>
+<li>toLowerCase</li>
+<li>toUpperCase</li>
+<li>trim</li>
+<li>trimLeft</li>
+<li><p>trimRight</p>
+</li>
+<li><p>lcfirst</p>
+</li>
+<li><p>ucfirst</p>
+</li>
+<li><p>chunk_split</p>
+<p>Split a string into smaller chunks</p>
+<p><code>string chunk_split ( string $body [, int $chunklen = 76 [, string $end = &quot;\r\n&quot; ]] )</code></p>
+</li>
+<li><p><a href="http://php.net/manual/en/function.nl2br.php">nl2br</a></p>
+</li>
+</ul>
+<p>  Calculates the crc32 polynomial of a string</p>
+<p>  One-way string hashing</p>
+<ul>
+<li><a href="http://php.net/manual/en/function.ord.php">ord</a></li>
+<li>parse_http_get</li>
+</ul>
+<h4 id="crypto-related">crypto related</h4>
+<ul>
+<li><a href="http://php.net/manual/en/function.crypt.php">crypt</a></li>
+<li><a href="http://php.net/manual/en/function.sha1.php">sha1</a></li>
+<li><a href="http://php.net/manual/en/function.md5.php">md5</a></li>
+<li><a href="http://php.net/manual/en/function.crc32.php">crc32</a></li>
+</ul>
+<h4 id="study">study</h4>
+<ul>
+<li>ord, make sense ? will be utf-16</li>
+<li>base64 where?</li>
+<li>number_format where?</li>
+<li>currency_format where?</li>
+</ul>
+<h3 id="string-properties-">string properties:</h3>
+<ul>
+<li><p>ui64 pool_size = 1m [mutable]</p>
+<p>Determine the minimum memory reserved anytime for string operations.</p>
+</li>
+<li><p>ui64 max_size = 2m [mutable]</p>
+<p>From this point memory will be released if destruction happens, and meet certain criteria.</p>
+</li>
+<li><p>ui32 deallocations [readonly]</p>
+<p>Counter</p>
+</li>
+<li><p>ui32 .allocations [readonly]</p>
+<p>Counter</p>
+</li>
+<li><p>f32 .fragmentation [readonly] [TODO-study]</p>
+<p>Fragmentation factor.</p>
+</li>
+</ul>
+<p>Functions:</p>
+<ul>
+<li><p>.defrag [TODO-study]</p>
+<p>Sort all memory strings in a new place.</p>
+</li>
+</ul>
+<p>Instances properties</p>
+<ul>
+<li><p>ui32 length</p>
+<p>readonly length</p>
+</li>
+<li><p>pX .p</p>
+<p>readonly pointer to the beginning of the string.</p>
+<p>!!!TODO what type of pointer can be used for multibyte utf-8/unicode</p>
+</li>
+<li><p>[index]## Number types</p>
+</li>
+</ul>
+<p>Any number type has the following properties.</p>
+<ul>
+<li><p>.EPSILON</p>
+<p>This is a mutable value, but default is always 0, for every type.</p>
+<p>Designed to avoid floating-points errors, you should set EPISILON in your main file to your desired/app specific value. And you can happily do == in floating points numbers.</p>
+</li>
+<li><p>.INFINITY</p>
+</li>
+<li><p>.MINFINITY</p>
+</li>
+<li><p>.MAX</p>
+<p>Maximum number represented</p>
+</li>
+<li><p>.MIN</p>
+<p>Minimum number represented</p>
+</li>
+<li><p>.MIN_RES</p>
+<p>Minimum resolution.</p>
+<p>1 for integers</p>
+<p>[STUDY] f32 &amp; f64</p>
+</li>
+<li><p>.ROUND</p>
+<p>0 toward zero
+1 to nearest
+2 toward positive infinity
+3 toward negative infinity</p>
+</li>
+<li><p>.NULL</p>
+<p>Default value for a not initialized number.## array</p>
+</li>
+</ul>
+<p>Note: Arrays are always dense.
+Note: Assign a pointer to something in the array it&#39;s only possible if fixed_size = true</p>
+<h3 id="initialization">Initialization</h3>
+<pre><code>array [ui64:length] [bool:fixed_size]
+</code></pre><ul>
+<li>length: initial length</li>
+<li>fixed_size: cannot be resized</li>
+</ul>
+<pre><code>var ar1 = [];
+var ar2 = array(5 /*ui64 length*/)
+var ar3 = clone other_array;
+var ar4 = [x, y, z]; // x y &amp; z must have the same type.
+
+
+ar1[3] = 0;
+ar1.toJSON(); // [null, null, null, 0]
+</code></pre><p>The compiler will decide the type of the array with a simple rule: Type of the first insertion.</p>
+<ul>
+<li>Will raise a warning if no implicit conversion is made, when possible information loss. for example: ui64 -&gt; ui32</li>
+</ul>
+<h3 id="instances-properties">Instances properties</h3>
+<ul>
+<li>.length // readonly</li>
+<li>.last // pointer to the last object, no more array[array.length -1]</li>
+<li>[index]</li>
+</ul>
+<h3 id="transformations">Transformations</h3>
+<ul>
+<li><p>toString</p>
+<p>Return the JSON representation.</p>
+</li>
+<li><p>toNumber</p>
+<p>Return the length.</p>
+<p>[STUDY] This could lead to problems but avoid check against .length</p>
+</li>
+<li><p>toObject</p>
+<p>Return a new Object will keys as Ids</p>
+<p>// change id-property and returned as Object</p>
+</li>
+</ul>
+<p>.for: -&gt; raise runtime error
+.switch: -&gt; raise runtime error
+.is: // memory position check -&gt; check length. if the same, loop every item and do <code>this[i] is that[i]</code></p>
+<p>.concat // create a new array concatenathing this+that
+.join // implode array calling toString of every item joined by given glue
+.lastIndexOf</p>
+<p>.indexOf
+.contains</p>
+<p>// loops
+.every
+.filter
+.forEach|.each
+.map
+.reduce
+.reduceRight
+.reverse
+.some
+.sort
+.splice</p>
+<p>.shift
+.slice
+.pop
+.push
+.unshift</p>
+<p>Notes</p>
+<ul>
+<li>if type is defined, when enter a switch gives a compile error.</li>
+</ul>
+<h3 id="filter">filter</h3>
+<h3 id="indexof">indexOf</h3>
+<h3 id="contains-iterable">contains# Iterable</h3>
+<p>Object, Arrays and Y..X#Observers</p>
+<p>Observers listen changes in variables, it only works on debug mode, on release this code will be removed.</p>
+<pre><code>observer(var).on(fn(String action[assignament|access], Mixed value) {...})
+
+```# Functions
+
+
+
+## #run
+
+Compile time function running# Listeners
+
+Listeners can be attached to functions at compile time.
+</code></pre><h1 id="listener-fn-before-fn-function_name-arguments-stack-">listener(fn).before(fn(function_name, arguments, stack))</h1>
+<h1 id="listener-fn-beforeoff-fn-">listener(fn).beforeOff(fn)</h1>
+<h1 id="listener-fn-after-fn-function_name-arguments-return_value-error_value-stack-">listener(fn).after(fn(function_name, arguments, return_value, error_value, stack))</h1>
+<h1 id="listener-fn-afteroff-fn-">listener(fn).afterOff(fn)</h1>
+<h1 id="listener-fn-removeall">listener(fn).removeAll</h1>
+<pre><code>## for
+
+### Classic
+</code></pre><p>for [init;]condition; after_loop {</p>
+<p>} [else {
+    // executed if condition fails the first time
+}]</p>
+<pre><code>
+
+### for in
+</code></pre><p>for [key, ] value in iterable {</p>
+<p>} [else {
+    // executed if condition fails the first time
+}]</p>
+<pre><code>
+### for till
+</code></pre><p>for variable|number till number {</p>
+<p>} [else {
+    // executed if condition fails the first time
+}]</p>
+<pre><code>
+### for to
+</code></pre><p>for variable|number to number {</p>
+<p>} [else {
+    // executed if condition fails the first time
+}]</p>
+<pre><code>
+### short for
+</code></pre><p>for iterable {
+    $iterable // value: is automatically declared
+    $iterable // key: is automatically declared
+    // cannot be nested!
+} [else {
+    // executed if condition fails the first time
+}]
+```## if</p>
+<pre><code>if test {
+    // note: braces are mandatory, event for empty-statements
+} [else if test {
+
+} [else {
+
+}]
+</code></pre><h2 id="swap">swap</h2>
+<p>swap variable names.</p>
+<p>swap x y;</p>
+<h3 id="swap-ast">swap AST</h3>
+<pre><code class="lang-json">SwapStatement &lt;: Statement {
+    &quot;type&quot;: &quot;swap-statement&quot;,
+    &quot;left&quot;: Idenfier,
+    &quot;right&quot;: Idenfier
+}
+</code></pre>
+<h2 id="switch-case-break-fallthrough-">switch (case, break, fallthrough)</h2>
+<p>&quot;Switch&quot; statements provide multi-way execution.
+An expression or type specifier is compared to the &quot;cases&quot; inside the &quot;switch&quot; to determine which branch to execute.</p>
+<p><code>switch</code> is very special in plee in comparison with other languages.</p>
+<p>Most common languages choose to break by default, and it&#39;s resonable, they provide <code>fallthrough</code> as error prone replacement of <code>break</code></p>
+<p>Plee goes a bit beyond while provide <code>fallthrough</code> also provide <code>break</code> but the default behavior is continue testing the next cases. So you can reuse code easily.</p>
+<p>There are two types of switch: expression switch and comparison switch.</p>
+<h3 id="comparison-switch">comparison switch</h3>
+<p>Compare all case against one value.</p>
+<p>This example illustrate the usage of comparison switch</p>
+<pre><code>var test = &quot;ok&quot;;
+
+switch(test) {
+    default: return &quot;i will be the last&quot;;
+
+    case &quot;ok&quot;: // test == &quot;ok&quot;
+        echo &quot;ok is found!&quot;;
+
+        // continue testing by default
+    case &quot;nok&quot;: // test == &quot;nok&quot;
+        echo &quot;nok is found!&quot;;
+
+        break; // to stop
+    case &quot;ok&quot;,&quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
+        echo &quot;ok or nice is found!&quot;;
+
+        break;
+}
+</code></pre><p>output will be:</p>
+<pre><code>ok is found!
+ok or nice is found!
+</code></pre><p>You may expect &quot;nok is found!&quot; to be part of the output. But that&#39;s not the <code>case</code> and you didn&#39;t read the intro...</p>
+<p>Fall-through in a switch is a common error for programmers that forget to <code>break</code>,
+to avoid this undesired behavior even if the switch is falling-though case comparison must be meet.
+If is desired you must specify it with the reserved word: <code>fallthrough</code>.</p>
+<pre><code>var test = &quot;ok&quot;;
+
+switch(test) {
+    default: return &quot;i will be the last&quot;;
+
+    case &quot;ok&quot;: // test == &quot;ok&quot;
+        echo &quot;ok is found!&quot;;
+
+        fallthrough; // don&#39;t mind continue testing, enter in the next
+    case &quot;nok&quot;: // test == &quot;nok&quot;
+        echo &quot;nok is found!&quot;;
+        break;
+
+    case &quot;ok&quot;,&quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
+        echo &quot;ok or nice is found!&quot;;
+
+        break;
+}
+</code></pre><pre><code>ok is found!
+nok is found!
+</code></pre><h3 id="expression-switch">expression switch</h3>
+<pre><code>switch {
+    default: return &quot;i will be the last&quot;;
+
+    case test == &quot;ok&quot;: // test == &quot;ok&quot;
+        echo &quot;ok is found!&quot;;
+
+        // fall thought
+    case test == &quot;nok&quot;: // test == &quot;nok&quot;
+        echo &quot;nok is found!&quot;;
+        break;
+
+    case test == &quot;ok&quot; || test == &quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
+        echo &quot;ok or nice is found!&quot;;
+
+        break;
+}
+</code></pre><h1 id="testing">Testing</h1>
+<p>Testing can be done in two stages. Runtime (specific build) and compile time.</p>
+<h2 id="testing-runtime">Testing runtime</h2>
+<p>Code will be isolated in a specific build. So no testing code will be in the real executable.</p>
+<h3 id="testing-single-function">Testing single function</h3>
+<pre><code>test return_var[, error_var] fn function_name(arguments...) {
+    assert return_var == true &quot;it should be true&quot;;
+    assert error_var == null &quot;it should be null&quot;;
+}
+</code></pre><h3 id="testing-multiple-functions">testing multiple functions</h3>
+<pre><code>test fn test_unique_name() {
+    //  do your staff, test object will be available for you.
+}
+</code></pre><h1 id="testing-asserting-in-compile-time">testing/asserting in compile time</h1>
+<p>If you change <code>test</code> keyword <code>#test</code> the test will be run in compile time.</p>
+<p>Same goes to <code>assert</code>, you can use <code>#assert</code>.</p>
+
+</body>
+</html>
