@@ -16,3 +16,6 @@ while (a) {
 
 }
 
+while (!a) && !a {
+  a = true;
+}

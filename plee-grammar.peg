@@ -235,11 +235,9 @@ Keyword
   / ToToken
 
 FutureReservedWord
-  = ClassToken
-  / ConstToken
+  = ConstToken
   / EnumToken
   / ExportToken
-  / ExtendsToken
   / ImportToken
   / SuperToken
 
@@ -476,7 +474,6 @@ Zs = [\u0020\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]
 
 BreakToken      = "break"      !IdentifierPart
 CaseToken       = "case"       !IdentifierPart
-ClassToken      = "class"      !IdentifierPart
 ConstToken      = "const"      !IdentifierPart
 ContinueToken   = "continue"   !IdentifierPart
 DebuggerToken   = "debugger"   !IdentifierPart
@@ -486,7 +483,6 @@ DoToken         = "do"         !IdentifierPart
 ElseToken       = "else"       !IdentifierPart
 EnumToken       = "enum"       !IdentifierPart
 ExportToken     = "export"     !IdentifierPart
-ExtendsToken    = "extends"    !IdentifierPart
 FalseToken      = "false"      !IdentifierPart
 ForToken        = "for"        !IdentifierPart
 FunctionToken
@@ -523,12 +519,10 @@ __
 _
   = (WhiteSpace / MultiLineCommentNoLineTerminator)*
 
-/* Automatic Semicolon Insertion */
+/* No Semicolon Insertion atm */
 
 EOS
-  = __ ";"
-  / _ &"}"
-  / __ EOF
+  = _W_ ";"
 
 EOF
   = !.
@@ -986,16 +980,24 @@ AssignmentOperator
   / "|="
 
 Expression
-  = first:AssignmentExpression rest:(__ "," __ AssignmentExpression)* {
+  = first:AssignmentExpression rest:(__ "," __ AssignmentExpression)*
+    {
       return rest.length > 0
-        ? positionOf({ type: "SequenceExpression", expressions: buildList(first, rest, 3) })
+        ? positionOf({
+            type: "SequenceExpression",
+            expressions: buildList(first, rest, 3)
+          })
         : first;
     }
 
 ExpressionNoIn
-  = first:AssignmentExpressionNoIn rest:(__ "," __ AssignmentExpressionNoIn)* {
+  = first:AssignmentExpressionNoIn rest:(__ "," __ AssignmentExpressionNoIn)*
+    {
       return rest.length > 0
-        ? positionOf({ type: "SequenceExpression", expressions: buildList(first, rest, 3) })
+        ? positionOf({
+            type: "SequenceExpression",
+            expressions: buildList(first, rest, 3)
+          })
         : first;
     }
 
@@ -1095,12 +1097,11 @@ ExpressionStatement
     }
 
 IfStatement
-  = IfToken __ leftp:("(")? __ test:Expression __ rightp:(")")? __
-    consequent:IterationBody __
+  = IfToken __ test:Expression _W_
+    consequent:Body __
     ElseToken __
     alternate:Statement
     {
-      unmatching_parenthesis(leftp, rightp);
 
       return positionOf({
         type:       "IfStatement",
@@ -1109,11 +1110,9 @@ IfStatement
         alternate:  alternate
       });
     }
-  / IfToken __ leftp:("(")? __ test:Expression __ rightp:(")")? __
-    consequent:IterationBody
+  / IfToken __ test:Expression __
+    consequent:Body
     {
-      unmatching_parenthesis(leftp, rightp);
-
       return positionOf({
         type:       "IfStatement",
         test:       test,
@@ -1123,8 +1122,8 @@ IfStatement
     }
 
 // braces are mandatory
-IterationBody
-  = "{" __ "}"
+Body
+  = "{" _W_ "}"
     {
       return positionOf({
         type: "EmptyStatement"
@@ -1138,23 +1137,19 @@ IterationBody
 // parenthesis are optional
 IterationStatement
   = DoToken _W_
-    body:IterationBody _W_
-    WhileToken __
-    leftp:("(")? __ test:Expression __ rightp:(")")? ";" // semicolon mandatory
+    body:Body _W_
+    WhileToken _W_
+    test:Expression _W_ ";" // semicolon mandatory
     {
-      unmatching_parenthesis(leftp, rightp);
-
       return positionOf({
         type: "DoWhileStatement",
         body: body,
         test: test
       });
     }
-  / WhileToken _W_ leftp:("(")? __ test:Expression __ rightp:(")")? __
-    body:IterationBody
+  / WhileToken _W_ test:Expression _W_
+    body:Body
     {
-      unmatching_parenthesis(leftp, rightp);
-
       return positionOf({
         type: "WhileStatement",
         test: test,
@@ -1167,7 +1162,7 @@ IterationStatement
     test:(Expression __)? ";" __
     update:(Expression __)?
     rightp:(")")? __
-    body:IterationBody
+    body:Body
     {
       unmatching_parenthesis(leftp, rightp);
 
@@ -1185,7 +1180,7 @@ IterationStatement
     test:(Expression __)? ";" __
     update:(Expression __)?
     rightp:(")")? __
-    body:IterationBody
+    body:Body
     {
       unmatching_parenthesis(leftp, rightp);
 
@@ -1206,7 +1201,7 @@ IterationStatement
     token:(InToken / TillToken / ToToken) __
     right:Expression __
     rightp:(")")? __
-    body:IterationBody
+    body:Body
     {
       unmatching_parenthesis(leftp, rightp);
 
@@ -1223,7 +1218,7 @@ IterationStatement
     token:(InToken / TillToken / ToToken) __
     right:Expression __
     rightp:(")")? __
-    body:IterationBody
+    body:Body
     {
       unmatching_parenthesis(leftp, rightp);
 
