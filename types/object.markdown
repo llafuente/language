@@ -16,13 +16,13 @@ var xxx = {
 };
 
 ### methods
-* #has(key:string) : bool
-* #keys() : array
-* #get(key:string, safe:boolean) : pointer
-* #set(key:string, value:pointer) : bool
-* #delete(key:string) : bool
-* #setter(sttr: function = null) : function
-* #getter(gttr: function = null) : function
+* `#has`(**key**:**string**) : **bool**
+* `#keys`() : **array**
+* `#get`(**key**:**string**, **safe**:**boolean**) : **pointer**
+* `#set`(**key**:**string**, **value**:**pointer**) : **bool**
+* `#delete`(**key**:**string**) : **bool**
+* `#setter`(**sttr**: **function** = null) : **function**
+* `#getter`(**gttr**: **function** = null) : **function**
 
 
 ## test if key exist (?)
