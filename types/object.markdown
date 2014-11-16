@@ -16,13 +16,33 @@ var xxx = {
 };
 
 ### methods
-* `#has`(**key**:**string**) : **bool**
+* `#has`(**key**:**string**) : **boolean**
+
+  Return if given key is defined. 
+
 * `#keys`() : **array**
-* `#get`(**key**:**string**, **safe**:**boolean**) : **pointer**
-* `#set`(**key**:**string**, **value**:**pointer**) : **bool**
-* `#delete`(**key**:**string**) : **bool**
+
+  Returned keys are always sorted. 
+
+* `#get`(**key**:**string**, **safe**:**boolean** = false) : **pointer**
+
+  Get value, if `safe=false` will raise a run-time-error
+
+* `#set`(**key**:**string**, **value**:**pointer**) : **boolean**
+
+  Set/overwrite given key with given value. 
+
+* `#delete`(**key**:**string**) : **pointer**
+
+  Remove given key and return pointer or null.
+
 * `#setter`(**sttr**: **function** = null) : **function**
+
+  Set a setter function that will be called before each set. 
+
 * `#getter`(**gttr**: **function** = null) : **function**
+
+  Set a getter function that will be called before each get.
 
 
 ## test if key exist (?)
