@@ -29,22 +29,35 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 
 ### Instances properties
 
-* .length // readonly
-* .last // pointer to the last object, no more array[array.length -1]
-* [index]
+* `length`
+
+  readonly. Number of elements.
+
+* `size`
+
+  readonly. Reserved memory.
+
+* `last`
+
+  Last element in the array, no more array[array.length -1]
+
+* [**index**:**ui64**]
+
+  Access to given index.
 
 ### Transformations
-* toString
+
+* `toString`
 
   Return the JSON representation.
 
-* toNumber
+* `toNumber`
 
   Return the length.
 
-  [STUDY] This could lead to problems but avoid check against .length
+  [**STUDY**] This could lead to problems but could avoid check against `array.length`
 
-* toObject
+* `toObject`
 
   Return a new Object will keys as Ids
 
@@ -57,7 +70,7 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 * `concat` (**other**:**array**)
 
   Returns a new array comprised of the array on which it is called joined with the array(s) and/or value(s) provided as arguments.
-  
+
   Must have at least one argument, use `clone` instead.
 
 * `append`
@@ -66,7 +79,7 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 
 * `join` (**separator**:**string**)
 
-  Return a string resulting of join all elements with given separator. 
+  Return a string resulting of join all elements with given separator.
 
 `last_index_of`(**search_element**:void, **from_index**:**ui64** = length)
 
@@ -79,7 +92,7 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 * `has_any`(**searchArray**: array)
 
   Returns if any of the values in searchArray is contained in the array.
-  
+
 * `reverse`()
 * `sort`()
 * `splice`(**index**:ui64, **howMany**:ui64, **elements**:array ...)
@@ -95,7 +108,7 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 * `pop`()
 
   Removes the last element from an array and returns that element
-  
+
 * `push`(**elements**:array ...)
 
   Adds one or more elements to the end of an array and returns the new length of the array
@@ -112,50 +125,50 @@ For evey function listed here if the function is anonymously declared, the compi
 * `every` (**callback**: function)
 
   Tests whether all elements in the array pass the test implemented by the provided function.
-  
+
   The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return a boolean.
 
 * `filter` (**calback**: function)
 
   creates a new array (with the original length) with all elements that pass the test implemented by the provided function.
-  
+
   The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return a boolean.
 
 * `for_each`  (**calback**: function)
 * `each` (**calback**: function)
 
   Executes a provided function once per array element
-  
+
   The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array.
 
 * `map`(**calback**: function)
 
   creates a new array with the results of calling a provided function on every element in this array.
-  
+
   The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return the same value that the array contains.
 
 * `mapme`(**calback**: function)
 
   Same as map but without array creation.
-  
+
   The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return the same value that the array contains.
 
 * `reduce`(**calback**: function)
 
   Applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
-  
+
   The callback will recieve 4 parameters: **previousValue**:void, **currentValue**:void, **index**:ui64, **array**:array. Returned value is defined by the callback itself.
 
 * `reduceRight`(**calback**: function)
 
   Applies a function against an accumulator and each value of the array (from right-to-left) has to reduce it to a single value
-  
+
   The callback will recieve 4 parameters: **previousValue**:void, **currentValue**:void, **index**:ui64, **array**:array. Returned value is defined by the callback itself.
 
 * `some`(**calback**: function)
 
   Tests whether some element in the array passes the test implemented by the provided function
-  
+
   The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return a boolean.
 
 

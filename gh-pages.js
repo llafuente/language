@@ -9,21 +9,28 @@ console.log("tmp-dir", tmp);
 var files = {
 
     "readme.markdown": "index.html",
+    "memory-management.markdown": "memory-management.html",
+
 
     "types/_intro.markdown": "types.html",
     "types/string.markdown": "string.html",
-    "types/numerics.markdown": "numerics.html",
+    "types/numbers.markdown": "numbers.html",
+    "types/pointers.markdown": "pointers.html",
     "types/array.markdown": "array.html",
+    "types/struct.markdown": "array.html",
+    "types/block.markdown": "array.html",
+    "types/object.markdown": "array.html",
     "types/iterable.markdown": "iterable.html",
     "types/observers.markdown": "observers.html",
 
     "functions/_intro.markdown": "functions.html",
     "functions/listeners.markdown": "functions-listeners.html",
 
-    "statements/for.markdown": "for-statement.html",
     "statements/if.markdown": "if-statement.html",
-    "statements/swap.markdown": "swap-statement.html",
     "statements/switch.markdown": "switch-statement.html",
+    "statements/for.markdown": "for-statement.html",
+    "statements/while.markdown": "while-statement.html",
+    "statements/swap.markdown": "swap-statement.html",
 
     "testing/testing.markdown": "testing.html",
 

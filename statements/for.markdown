@@ -13,9 +13,9 @@ for [init;]condition; after_loop {
 
 ### for-in
 
-for-in wont clone the iterable. The iterator will behave if something is removed.
+for-in won't clone the iterable. The iterator will behave if something is removed.
 
-Iterator behaviour:
+Iterator behavior:
 
 * If current value is removed (splice) the next value will have the same key and next value.
 * If a value before the current is removed the next value will have the same key and next value.
@@ -33,7 +33,7 @@ for [key, ] value in iterable {
 
 for-in-slice wont clone the iterable part. The iterator will behave if something is removed.
 
-Iterator behaviour:
+Iterator behavior:
 
 * If current value is removed (splice) the next value will have the same key and next value.
 * If a value before the current is removed the next value will have the same key and next value.
@@ -59,7 +59,9 @@ for variable|number till number {
 ```
 
 Compiler will translate for-till with the folowing rules:
-> for i till 10 -> for i=0; i < 10; ++i
+> for i till 10 -> for ; i < 10; ++i
+
+> for var i till 10 -> for i=0; i < 10; ++i
 
 > for i=1 till 10 -> for i=1; i < 10; ++i
 
@@ -74,9 +76,11 @@ for variable|number to number {
 ```
 
 Compiler will translate for-to with the folowing rules:
-> for i to 10 -> for i=0; i <= 10; ++i
+> for i to 10 -> for ; i <= 10; ++i
 
-> for i=1 to 10 -> for i=1; i <= 10; ++i
+> for var i to 10 -> for i = 0; i <= 10; ++i
+
+> for i=1 to 10 -> for ; i <= 10; ++i
 
 ### for-iterable (shrink)
 
@@ -88,7 +92,7 @@ Cannot be nested with the same iterable variable-name. You can alias a variable 
 for iterable {
     iterable.value // will be aliased, can be used outside the loop!
     iterable.key // will be aliased, can be used outside the loop!
-    // 
+    //
 } [else {
     // executed if condition fails the first time
 }]
