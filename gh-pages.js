@@ -50,7 +50,7 @@ var tpl = fs.readFileSync("./tpl.html", "utf-8"),
 
 Object.keys(files).forEach(function(source_file) {
 
-    source += fs.readFileSync(path.join(__dirname, source_file), "utf-8");
+    source += fs.readFileSync(path.join(__dirname, source_file), "utf-8") + "\n\n\n";
 
 });
 

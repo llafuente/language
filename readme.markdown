@@ -6,7 +6,7 @@ Things that the compiler must do.
 
 * Code coverage. Extracting the information from ci generate a report of the dangers in the code.
 
-* Documentation. Basic and extendable. Most important, don't need much information from doc-blocks, should implicity extract information from the code, that will give users extra information about what the are doing 'in theory'.
+* Documentation. Basic and extendable. Fill the gaps with information from compiler.
 
 * Benchmarks. Once again, basic and extendable.
 
@@ -21,4 +21,8 @@ Things that you should now before the shocking news.
 
 * Braces are mandatory everywhere but you can avoid using parenthesis :)
 
-* Everything is a reference for speed. You can clone everything easily (I assure you)
+* Everything is a reference to improve performance. You can clone everything easily.
+
+* No uppercases. Everything is lowercased and case sensitive. False is not false.
+
+* Every type has a `null` value.
