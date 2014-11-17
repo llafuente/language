@@ -13,7 +13,7 @@
 </li>
 <li><p>Code coverage. Extracting the information from ci generate a report of the dangers in the code.</p>
 </li>
-<li><p>Documentation. Basic and extendable. Most important, don&#39;t need much information from doc-blocks, should implicity extract information from the code, that will give users extra information about what the are doing &#39;in theory&#39;.</p>
+<li><p>Documentation. Basic and extendable. Fill the gaps with information from compiler.</p>
 </li>
 <li><p>Benchmarks. Once again, basic and extendable.</p>
 </li>
@@ -28,85 +28,210 @@
 </li>
 <li><p>Braces are mandatory everywhere but you can avoid using parenthesis :)</p>
 </li>
-<li><p>Everything is a reference for speed. You can clone everything easily (I assure you)</p>
-<h3 id="types">Types</h3>
+<li><p>Everything is a reference to improve performance. You can clone everything easily.</p>
+</li>
+<li><p>No uppercases. Everything is lowercased and case sensitive. False is not false.</p>
+</li>
+<li><p>Every type has a <code>null</code> value.</p>
 </li>
 </ul>
+<h2 id="memory-management">Memory management</h2>
+<h3 id="new">new</h3>
+<p>Allocate memory.
+Memory will be deleted at the end of the block if the variable that own that memory is destroyed.</p>
+<pre><code>{
+    var x = new ui8[10];
+}
+// x doesn&#39;t exists, and the memory is freed
+
+{
+    var y;
+    {
+        var x = defer new ui8[10];
+        y = x;
+    }
+    // x doesn&#39;t exists, but the memory ownership is transfered to y
+}
+// now y is deleted, and memory freed
+</code></pre><p>examples:</p>
+<pre><code>var ptr_str_10 = new string[10]; // array with 10 strings
+var ptr_i_10 = new number[10]; // array with 10 numbers
+var ptr_i_10x10 = new number[10][10]; // allocate a 10x10 numeric matrix
+
+var str = new string(10); // string with 10 size, 0 length
+
+var stru_test = new struct_test; // allocate a struct
+var blk_test = new block_test(10, 5); // allocate a block with first ptr 10 and second 5
+var blk_test_5 = new block_test(10, 5)[5]; // allocate a list of 5
+</code></pre><h3 id="resize">resize</h3>
+<p>Reallocate memory block.</p>
+<pre><code>var x = new string(10); // string with 10 size, 0 length
+x = &quot;say hello&quot;;
+log x; // stdout: say hello
+
+x = resize string(20); // string with 20 size, 0 length
+log x; // stdout: say hello
+</code></pre><p>Resize can be used as soft delete when used with 0.
+When allocating some structures, like strings it allocate not only the space
+for the &quot;string itself&quot; also some numbers, pointers. <code>resize string(0)</code> will
+free the pointer while leaving the string to be accesible.</p>
+<h3 id="delete">delete</h3>
+<p>Free memory.</p>
+<pre><code>delete x;
+</code></pre><h3 id="copy">copy</h3>
+<p>Copy will create a new pointer, allocate the same amount of memory, and copy the memory in it.</p>
+<pre><code>
+var arr = [];
+arr[10] = 100; // arr is resized to 10
+arr.splice(2); // arr length = 2
+
+var narr = copy arr;
+log narr.length; // stdout: 2
+log narr.size; // stdout: 10
+log arr.size; // stdout: 10
+</code></pre><p>If length is provided to copy, will allocate and copy</p>
+<pre><code>
+var arr = [];
+arr[10] = 100; // arr is resized to 10
+arr.splice(2); // arr length = 2
+
+var narr = copy arr[7];
+log narr.length; // stdout: 2
+log narr.size; // stdout: 7
+log arr.size; // stdout: 10
+</code></pre><h3 id="clone">clone</h3>
+<p>Will allocate and copy the minimum structure needed to replicate the same structure.</p>
+<pre><code>
+var arr = [];
+arr[10] = 100; // arr is resized to 10
+arr.splice(2); // arr length = 2
+
+var narr = clone arr;
+log narr.length; // stdout: 2
+log narr.size; // stdout: 2
+log arr.size; // stdout: 10
+</code></pre><h3 id="avoid-memory-leaks">avoid memory leaks</h3>
+<p>Most of the time, leaks comes when allocating arrays. Array is implement like shared
+pointer so when anybody reference it, it will automatically be deleted.</p>
+<h3 id="types">Types</h3>
 <p>Types are case sensitive. All types in the language and functions are lowercased.</p>
 <h4 id="primitives">Primitives</h4>
 <ul>
-<li><p>bool</p>
+<li><p><strong>bool</strong></p>
 <p>There are only two Boolean values, <code>true</code> and <code>false</code>.</p>
 </li>
-<li><p>number</p>
+<li><p><strong>number</strong></p>
 <p>Mutable-multipuporse number. Increase it&#39;s size as needed / overflow happens.</p>
+<p>Will be i64 until floating point is needed and change it&#39;s type to f64.</p>
 <p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
 </li>
-<li><p>i8, i16, i32, i64, ui8, ui16, ui32, ui64</p>
-<p>Integers and Unsigned integers of different sizes.</p>
+<li><p><strong>i8, i16, i32, i64(int), ui8, ui16, ui32, ui64</strong></p>
+<p>Integers and unsigned integers of different sizes.</p>
 <p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
 </li>
-<li><p>f32 f64</p>
+<li><p><strong>f32(float) &amp; f64</strong></p>
 <p>Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.</p>
 <p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
 </li>
-<li><p>function</p>
+<li><p><strong>function</strong></p>
 <p>Function as type. Unlike other languages arguments doesn&#39;t matter.</p>
 </li>
-<li><p>string</p>
+<li><p><strong>string</strong></p>
 <p>Primitive value that is a finite ordered sequence of zero or more 16-bit unsigned integer</p>
+<p><em>Properties:</em></p>
 <ul>
 <li>iterable</li>
+<li>shared-ptr</li>
 </ul>
 </li>
 </ul>
-<h4 id="data-aggregation">Data aggregation</h4>
+<h4 id="data-aggregation-complex-types-">Data aggregation, complex types.</h4>
 <ul>
-<li><p>array</p>
-<p>List of things, this is continuous memory and should have a defined type, cannot contains different things (unless store you pointers).</p>
+<li><p><strong>array</strong></p>
+<p>List of things, this is continuous memory and should have a defined type, cannot contains different things (unless pointers are stored).</p>
+<p><em>Properties:</em></p>
 <ul>
 <li>iterable</li>
 <li>thread-block</li>
-<li>GC</li>
+<li>shared-ptr</li>
 </ul>
 </li>
-<li><p>struct</p>
+<li><p><strong>struct</strong></p>
 <p>Constant structured data.</p>
+<p><em>Properties:</em></p>
 <ul>
 <li>iterable</li>
 <li>thread-block</li>
-<li>GC</li>
+<li>shared-ptr</li>
 </ul>
 </li>
-<li><p>block</p>
+<li><p><strong>block</strong></p>
 <p>It&#39;s the same as struct but memory continuous.</p>
+<p>When you allocate a block you must specify every length in the block.</p>
+<p><em>Properties:</em></p>
 <ul>
 <li>iterable</li>
 <li>thread-block</li>
-<li>GC</li>
+<li>shared-ptr</li>
 </ul>
 </li>
-<li><p>object</p>
-<p>Mutable structured data. You could add/remove properties.</p>
-</li>
-<li><p>p1, p2, p3, p4</p>
-<p>Points to something, directly in memory with given byte size.</p>
+<li><p><strong>object</strong></p>
+<p>Mutable structured data. You could add/remove members.</p>
+<p><em>Properties</em></p>
 <ul>
-<li>alloc</li>
-<li>dealloc</li>
-<li>realloc</li>
+<li>iterable</li>
+<li>thread-block</li>
+<li>shared-ptr</li>
+</ul>
+</li>
+<li><p><strong>p1, p2, p3, p4</strong></p>
+<p>Pointer of different sizes (bytes).</p>
+<p>There are two types of pointer.</p>
+<ul>
+<li>Pointer to iterate, those that use memory already allocated.</li>
+<li>Pointer to mange memory, those that allocate memory</li>
+</ul>
+<p><em>Members:</em></p>
+<ul>
+<li>.start</li>
+<li>.end</li>
+<li>.length</li>
+</ul>
+<p><em>Properties:</em></p>
+<ul>
+<li>alloc / new</li>
+<li>dealloc / delete</li>
+<li>realloc / resize</li>
 <li>copy</li>
 </ul>
 </li>
-<li><p>stream</p>
+<li><p><strong>bin[X]</strong></p>
+<p>binary data of given number of bytes.</p>
 </li>
-<li><p>bin</p>
-<p>binary data, just a pointer with size.</p>
+<li><p><strong>stream:type</strong></p>
+<p>Wrapper for a given subtype that allow processing in chunks.</p>
 </li>
-<li><p>null</p>
+<li><p><strong>null</strong></p>
 </li>
 </ul>
-<p>Note: thread-block means, once a thread declared the use of this variable, if other thread ask about it, it has to wait.## string</p>
+<h4 id="type-properties">Type properties</h4>
+<p><strong>iterable</strong></p>
+<blockquote>
+<p>has some special methods like: each, filter, reduce...
+Can be directly used inside a <code>for-in</code> loop</p>
+</blockquote>
+<p><strong>thread-block</strong></p>
+<blockquote>
+<p>A thread can block the usage for the rest of the threads.
+When a thread want to use it, first must wait the lock.</p>
+</blockquote>
+<p><strong>shared-ptr</strong></p>
+<blockquote>
+<p>Reference-counted shared pointer.
+when a variable references counter add 1
+when a variable is deleted counter subtract 1</p>
+</blockquote>
+<h2 id="string">string</h2>
 <p><code>string</code> store UTF-8 characters (maybe unicode).</p>
 <p>Study support memory management profiles/allocators</p>
 <ul>
@@ -224,9 +349,10 @@
 <p>readonly pointer to the beginning of the string.</p>
 <p>!!!TODO what type of pointer can be used for multibyte utf-8/unicode</p>
 </li>
-<li><p>[index]## Number types</p>
+<li><p>[index]</p>
 </li>
 </ul>
+<h2 id="number-types">Number types</h2>
 <p>Any number type has the following properties.</p>
 <ul>
 <li><p>.EPSILON</p>
@@ -255,9 +381,63 @@
 3 toward negative infinity</p>
 </li>
 <li><p>.NULL</p>
-<p>Default value for a not initialized number.## array</p>
+<p>Default value for a not initialized number.</p>
 </li>
 </ul>
+<h2 id="pointers">Pointers</h2>
+<p>Or rather smart pointers.</p>
+<p>There are four types of pointers: p1, p2, p3, p4.
+The only difference how much it jumps when <code>++</code> or <code>--</code> is applied.</p>
+<h3 id="members">members</h3>
+<ul>
+<li><p><code>size</code>:ui64</p>
+<p>memory allocated</p>
+</li>
+<li><p><code>start</code>:pointer</p>
+<p>low-level-pointer to the start</p>
+</li>
+<li><p><code>current</code>:pointer</p>
+<p>low-level-pointer to the current</p>
+</li>
+<li><p><code>references</code>:<strong>ui64</strong></p>
+</li>
+</ul>
+<h3 id="operators">operators</h3>
+<ul>
+<li><p><code>[ui64]</code></p>
+<p>Provides indexed access to the managed array</p>
+</li>
+<li><p><code>++</code> &amp; <code>--</code> &amp; <code>+</code> &amp; <code>-</code></p>
+<p>Increment/Decrement current position given X bytes.</p>
+<p>If overflow occurs will raise a runtime-error.</p>
+</li>
+</ul>
+<p>Examples</p>
+<pre><code>
+var x = new ui8[10]; // array
+var y:p1 = new ui8[10]; // pointer
+
+x[0] = 10;
+y[0] = 10;
+y[1] = 11;
+
+log x; // stdout: 10
+
+// get value
+log y; // stdout: 10
+log y[0]; // stdout: 10
+// get memory address, need casting
+log y[0] as p1; // stdout: 0xXXXX
+
+++y;
+log y; // stdout: 11
+
+var z = y[0]; // z will be ui8, as reference
+z = 12;
+log y; // stdout: 12
+
+delete z; // compilation error: &quot;z do not own memory&quot;
+</code></pre><h2 id="array">array</h2>
 <p>Note: Arrays are always dense.
 Note: Assign a pointer to something in the array it&#39;s only possible if fixed_size = true</p>
 <h3 id="initialization">Initialization</h3>
@@ -267,12 +447,12 @@ Note: Assign a pointer to something in the array it&#39;s only possible if fixed
 <li>fixed_size: cannot be resized</li>
 </ul>
 <pre><code>var ar1 = [];
-var ar2 = array(5 /*ui64 length*/)
+var ar2 = new number[5];
 var ar3 = clone other_array;
 var ar4 = [x, y, z]; // x y &amp; z must have the same type.
 
 
-ar1[3] = 0;
+ar1[3] = 0; // compiler not know the implicit type
 ar1.toJSON(); // [null, null, null, 0]
 </code></pre><p>The compiler will decide the type of the array with a simple rule: Type of the first insertion.</p>
 <ul>
@@ -280,20 +460,29 @@ ar1.toJSON(); // [null, null, null, 0]
 </ul>
 <h3 id="instances-properties">Instances properties</h3>
 <ul>
-<li>.length // readonly</li>
-<li>.last // pointer to the last object, no more array[array.length -1]</li>
-<li>[index]</li>
+<li><p><code>length</code></p>
+<p>readonly. Number of elements.</p>
+</li>
+<li><p><code>size</code></p>
+<p>readonly. Reserved memory.</p>
+</li>
+<li><p><code>last</code></p>
+<p>Last element in the array, no more array[array.length -1]</p>
+</li>
+<li><p>[<strong>index</strong>:<strong>ui64</strong>]</p>
+<p>Access to given index.</p>
+</li>
 </ul>
 <h3 id="transformations">Transformations</h3>
 <ul>
-<li><p>toString</p>
+<li><p><code>toString</code></p>
 <p>Return the JSON representation.</p>
 </li>
-<li><p>toNumber</p>
+<li><p><code>toNumber</code></p>
 <p>Return the length.</p>
-<p>[STUDY] This could lead to problems but avoid check against .length</p>
+<p>[<strong>STUDY</strong>] This could lead to problems but could avoid check against <code>array.length</code></p>
 </li>
-<li><p>toObject</p>
+<li><p><code>toObject</code></p>
 <p>Return a new Object will keys as Ids</p>
 <p>// change id-property and returned as Object</p>
 </li>
@@ -301,88 +490,217 @@ ar1.toJSON(); // [null, null, null, 0]
 <p>.for: -&gt; raise runtime error
 .switch: -&gt; raise runtime error
 .is: // memory position check -&gt; check length. if the same, loop every item and do <code>this[i] is that[i]</code></p>
-<p>.concat // create a new array concatenathing this+that
-.join // implode array calling toString of every item joined by given glue
-.lastIndexOf</p>
-<p>.indexOf
-.contains</p>
-<p>// loops
-.every
-.filter
-.forEach|.each
-.map
-.reduce
-.reduceRight
-.reverse
-.some
-.sort
-.splice</p>
-<p>.shift
-.slice
-.pop
-.push
-.unshift</p>
-<p>Notes</p>
+<ul>
+<li><p><code>concat</code> (<strong>other</strong>:<strong>array</strong>)</p>
+<p>Returns a new array comprised of the array on which it is called joined with the array(s) and/or value(s) provided as arguments.</p>
+<p>Must have at least one argument, use <code>clone</code> instead.</p>
+</li>
+<li><p><code>append</code></p>
+<p>Returns current array joined with the array(s) and/or value(s) provided as arguments.</p>
+</li>
+<li><p><code>join</code> (<strong>separator</strong>:<strong>string</strong>)</p>
+<p>Return a string resulting of join all elements with given separator.</p>
+</li>
+</ul>
+<p><code>last_index_of</code>(<strong>search_element</strong>:void, <strong>from_index</strong>:<strong>ui64</strong> = length)</p>
+<p>  Returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex (length by default)</p>
+<ul>
+<li><p><code>index_of</code>(<strong>search_element</strong>: void, <strong>from_index</strong>:ui64 = 0)</p>
+<p>Returns the first index at which a given element can be found in the array, or -1 if it is not present.</p>
+</li>
+<li><p><code>has_any</code>(<strong>searchArray</strong>: array)</p>
+<p>Returns if any of the values in searchArray is contained in the array.</p>
+</li>
+<li><p><code>reverse</code>()</p>
+</li>
+<li><code>sort</code>()</li>
+<li><p><code>splice</code>(<strong>index</strong>:ui64, <strong>howMany</strong>:ui64, <strong>elements</strong>:array ...)</p>
+<p>Changes the content of an array, adding new elements while removing old elements</p>
+</li>
+<li><p><code>shift</code>()
+Removes the first element from an array and returns that element. This method changes the length of the array</p>
+</li>
+<li><p><code>slice</code>(<strong>begin</strong>:ui64, <strong>end</strong>:ui64 = length)
+Returns a shallow copy of a portion of an array into a new array object</p>
+</li>
+<li><p><code>pop</code>()</p>
+<p>Removes the last element from an array and returns that element</p>
+</li>
+<li><p><code>push</code>(<strong>elements</strong>:array ...)</p>
+<p>Adds one or more elements to the end of an array and returns the new length of the array</p>
+</li>
+<li><p><code>unshift</code>(<strong>elements</strong>:array ...)</p>
+<p>Adds one or more elements to the beginning of an array and returns the new length of the array.</p>
+</li>
+</ul>
+<h3 id="loping">loping</h3>
+<p>For evey function listed here if the function is anonymously declared, the compiler will transform them into a blocks for performance.</p>
+<ul>
+<li><p><code>every</code> (<strong>callback</strong>: function)</p>
+<p>Tests whether all elements in the array pass the test implemented by the provided function.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
+</li>
+<li><p><code>filter</code> (<strong>calback</strong>: function)</p>
+<p>creates a new array (with the original length) with all elements that pass the test implemented by the provided function.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
+</li>
+<li><p><code>for_each</code>  (<strong>calback</strong>: function)</p>
+</li>
+<li><p><code>each</code> (<strong>calback</strong>: function)</p>
+<p>Executes a provided function once per array element</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array.</p>
+</li>
+<li><p><code>map</code>(<strong>calback</strong>: function)</p>
+<p>creates a new array with the results of calling a provided function on every element in this array.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return the same value that the array contains.</p>
+</li>
+<li><p><code>mapme</code>(<strong>calback</strong>: function)</p>
+<p>Same as map but without array creation.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return the same value that the array contains.</p>
+</li>
+<li><p><code>reduce</code>(<strong>calback</strong>: function)</p>
+<p>Applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.</p>
+<p>The callback will recieve 4 parameters: <strong>previousValue</strong>:void, <strong>currentValue</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. Returned value is defined by the callback itself.</p>
+</li>
+<li><p><code>reduceRight</code>(<strong>calback</strong>: function)</p>
+<p>Applies a function against an accumulator and each value of the array (from right-to-left) has to reduce it to a single value</p>
+<p>The callback will recieve 4 parameters: <strong>previousValue</strong>:void, <strong>currentValue</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. Returned value is defined by the callback itself.</p>
+</li>
+<li><p><code>some</code>(<strong>calback</strong>: function)</p>
+<p>Tests whether some element in the array passes the test implemented by the provided function</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
+</li>
+</ul>
+<h3 id="notes">Notes</h3>
 <ul>
 <li>if type is defined, when enter a switch gives a compile error.</li>
 </ul>
-<h3 id="filter">filter</h3>
-<h3 id="indexof">indexOf</h3>
-<h3 id="contains-iterable">contains# Iterable</h3>
-<p>Object, Arrays and Y..X#Observers</p>
+<h2 id="struct">struct</h2>
+<p>Complex data type declaration that defines a physically grouped list of variables and functions to be placed under one name in a block of memory.</p>
+<p>Function have direct access to those variables in the group by their name.</p>
+<p>Pointer variables can be reserved, resized but not deleted. The memory is owned by the struct, and memory will be freed when the struct is deleted. If you need to free a pointer memory inside a struct, use resize with 0 length.</p>
+<pre><code>struct identifier {
+  member: type = initialization;
+  //...
+  method = fn [self] [arguments] {
+    // self must be first, and cannot be overriden like other languages
+    // remember that this does not exist
+  }; // this time, semiclon is mandatory (atm)
+};
+</code></pre><p>Examples:</p>
+<pre><code>struct v2 {
+  x:number = 0;
+  y = 0; // implicit type -&gt; number
+  add = fn _x, _y { // if nothing is retrurned
+    x += _x;
+    _y += _y;
+  }
+};
+</code></pre><h2 id="block">block</h2>
+<p>It&#39;s the same as struct but memory continuous.</p>
+<p>The advantage in performance has a counter part of fixed size. A single pointer cannot be resized after the first reserve.</p>
+<pre><code>block identifier [, pointer_name] {
+  // variables
+  // functions
+};
+</code></pre><p>Example</p>
+<pre><code>block blk ptr1, ptr2 { // specify the order, if leave it blank, declaration order will be asumed
+  &quot;ptr1&quot;: p1,
+  &quot;ptr1&quot;: p2,
+};
+
+var x = new blk[10, 10];
+// can be resized as a group
+resize x[15, 10]; // this will allocate, copy and free the old memory.
+
+resize x.ptr1[15]; // compilation error
+resize x.ptr1[0]; // compilation error
+delete x.ptr1[15]; // compilation error
+</code></pre><h2 id="objects">Objects</h2>
+<p>Abstract data type composed of a collection of (key, value) pairs.</p>
+<p>Keys are always a unique string, number cannot be assigned without casting.</p>
+<p>Values are pointers and can be repeated.</p>
+<p>Objects are declared using JSON-like format.
+Last comma is required (atm) for version control system cleaning.</p>
+<p>var xxx = {
+  &quot;hello&quot;: &quot;world&quot;,
+  &quot;world&quot;: hello(), // function
+  &quot;world&quot;: variable, // variable, dont forget the last comma!
+};</p>
+<h3 id="methods">methods</h3>
+<ul>
+<li><p><code>#has</code>(<strong>key</strong>:<strong>string</strong>) : <strong>boolean</strong></p>
+<p>Return if given key is defined. </p>
+</li>
+<li><p><code>#keys</code>() : <strong>array</strong></p>
+<p>Returned keys are always sorted. </p>
+</li>
+<li><p><code>#get</code>(<strong>key</strong>:<strong>string</strong>, <strong>safe</strong>:<strong>boolean</strong> = false) : <strong>pointer</strong></p>
+<p>Get value, if <code>safe=false</code> will raise a run-time-error</p>
+</li>
+<li><p><code>#set</code>(<strong>key</strong>:<strong>string</strong>, <strong>value</strong>:<strong>pointer</strong>) : <strong>boolean</strong></p>
+<p>Set/overwrite given key with given value. </p>
+</li>
+<li><p><code>#delete</code>(<strong>key</strong>:<strong>string</strong>) : <strong>pointer</strong></p>
+<p>Remove given key and return pointer or null.</p>
+</li>
+<li><p><code>#setter</code>(<strong>sttr</strong>: <strong>function</strong> = null) : <strong>function</strong></p>
+<p>Set a setter function that will be called before each set. </p>
+</li>
+<li><p><code>#getter</code>(<strong>gttr</strong>: <strong>function</strong> = null) : <strong>function</strong></p>
+<p>Set a getter function that will be called before each get.</p>
+</li>
+</ul>
+<h2 id="test-if-key-exist-">test if key exist (?)</h2>
+<p>Object has a special method <code>`#has</code> but it recommended to use the <code>?</code> operator.</p>
+<pre><code>if xxx.hello? { // expanded to xxx.#has(&quot;hello&quot;)
+  // do something
+}
+
+if xxx.hello? == 10 { // expanded to xxx.#has(&quot;hello&quot;) &amp;&amp; xxx.hello == 10
+  // do something
+}
+</code></pre><h2 id="safe-asignament">safe asignament</h2>
+<p><code>?</code> operator can be used in assignament expressions. Compiler will expand your code to make sure no runtime-error.</p>
+<pre><code>? xxx.first.second.third = &quot;just a string&quot;;
+
+// expanded...
+if (!xxx.#has(&quot;first&quot;)) error &quot;undefined xxx.first&quot;;
+if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;)) error &quot;invalid type of xxx.first&quot;;
+
+if (!xxx.#get(&quot;first&quot;).#has(&quot;second&quot;)) error &quot;undefined xxx.first&quot;;
+if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;).#get(&quot;second&quot;)) error &quot;invalid type of xxx.first.second&quot;;
+
+//...
+xxx.#get(&quot;first&quot;).#get(&quot;second&quot;).#get(&quot;third&quot;)[0] = &quot;just a string&quot;;
+</code></pre><p>Because key in objects are always string, safe assignaments will initialize arrays if a number is found.</p>
+<pre><code>? xxx.first.second.third[0] = &quot;just a string&quot;;
+
+// expanded...
+if (!xxx.#has(&quot;first&quot;)) error &quot;undefined xxx.first&quot;;
+if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;)) error &quot;invalid type of xxx.first&quot;;
+
+if (!xxx.#get(&quot;first&quot;).#has(&quot;second&quot;)) error &quot;undefined xxx.first&quot;;
+if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;).#get(&quot;second&quot;)) error &quot;invalid type of xxx.first.second&quot;;
+
+//...
+xxx.#get(&quot;first&quot;).#get(&quot;second&quot;).#get(&quot;third&quot;)[0] = &quot;just a string&quot;;
+</code></pre><h1 id="iterable">Iterable</h1>
+<p>Object, Arrays and Y..X</p>
+<h1 id="observers">Observers</h1>
 <p>Observers listen changes in variables, it only works on debug mode, on release this code will be removed.</p>
 <pre><code>observer(var).on(fn(String action[assignament|access], Mixed value) {...})
-
-```# Functions
-
-
-
-## #run
-
-Compile time function running# Listeners
-
-Listeners can be attached to functions at compile time.
-</code></pre><h1 id="listener-fn-before-fn-function_name-arguments-stack-">listener(fn).before(fn(function_name, arguments, stack))</h1>
-<h1 id="listener-fn-beforeoff-fn-">listener(fn).beforeOff(fn)</h1>
-<h1 id="listener-fn-after-fn-function_name-arguments-return_value-error_value-stack-">listener(fn).after(fn(function_name, arguments, return_value, error_value, stack))</h1>
-<h1 id="listener-fn-afteroff-fn-">listener(fn).afterOff(fn)</h1>
-<h1 id="listener-fn-removeall">listener(fn).removeAll</h1>
-<pre><code>## for
-
-### Classic
-</code></pre><p>for [init;]condition; after_loop {</p>
-<p>} [else {
-    // executed if condition fails the first time
-}]</p>
-<pre><code>
-
-### for in
-</code></pre><p>for [key, ] value in iterable {</p>
-<p>} [else {
-    // executed if condition fails the first time
-}]</p>
-<pre><code>
-### for till
-</code></pre><p>for variable|number till number {</p>
-<p>} [else {
-    // executed if condition fails the first time
-}]</p>
-<pre><code>
-### for to
-</code></pre><p>for variable|number to number {</p>
-<p>} [else {
-    // executed if condition fails the first time
-}]</p>
-<pre><code>
-### short for
-</code></pre><p>for iterable {
-    $iterable // value: is automatically declared
-    $iterable // key: is automatically declared
-    // cannot be nested!
-} [else {
-    // executed if condition fails the first time
-}]
-```## if</p>
+</code></pre><h1 id="functions">Functions</h1>
+<h2 id="-run">#run</h2>
+<p>Compile time function running</p>
+<h1 id="listeners">Listeners</h1>
+<p>Listeners can be attached to functions at compile time.</p>
+<pre><code>#listener(fn).before(fn(function_name, arguments, stack))
+#listener(fn).beforeOff(fn)
+#listener(fn).after(fn(function_name, arguments, return_value, error_value, stack))
+#listener(fn).afterOff(fn)
+#listener(fn).removeAll
+</code></pre><h2 id="if">if</h2>
 <pre><code>if test {
     // note: braces are mandatory, event for empty-statements
 } [else if test {
@@ -390,17 +708,7 @@ Listeners can be attached to functions at compile time.
 } [else {
 
 }]
-</code></pre><h2 id="swap">swap</h2>
-<p>swap variable names.</p>
-<p>swap x y;</p>
-<h3 id="swap-ast">swap AST</h3>
-<pre><code class="lang-json">SwapStatement &lt;: Statement {
-    &quot;type&quot;: &quot;swap-statement&quot;,
-    &quot;left&quot;: Idenfier,
-    &quot;right&quot;: Idenfier
-}
-</code></pre>
-<h2 id="switch-case-break-fallthrough-">switch (case, break, fallthrough)</h2>
+</code></pre><h2 id="switch-case-break-fallthrough-">switch (case, break, fallthrough)</h2>
 <p>&quot;Switch&quot; statements provide multi-way execution.
 An expression or type specifier is compared to the &quot;cases&quot; inside the &quot;switch&quot; to determine which branch to execute.</p>
 <p><code>switch</code> is very special in plee in comparison with other languages.</p>
@@ -472,7 +780,100 @@ nok is found!
 
         break;
 }
-</code></pre><h1 id="testing">Testing</h1>
+</code></pre><h2 id="for">for</h2>
+<h3 id="for-classic">for-classic</h3>
+<pre><code>for [init;]condition; after_loop {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><h3 id="for-in">for-in</h3>
+<p>for-in won&#39;t clone the iterable. The iterator will behave if something is removed.</p>
+<p>Iterator behavior:</p>
+<ul>
+<li>If current value is removed (splice) the next value will have the same key and next value.</li>
+<li>If a value before the current is removed the next value will have the same key and next value.</li>
+<li>If a value after the current is removed won&#39;t appear in the loop.</li>
+</ul>
+<pre><code>for [key, ] value in iterable {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><h3 id="for-in-slice">for-in-slice</h3>
+<p>for-in-slice wont clone the iterable part. The iterator will behave if something is removed.</p>
+<p>Iterator behavior:</p>
+<ul>
+<li>If current value is removed (splice) the next value will have the same key and next value.</li>
+<li>If a value before the current is removed the next value will have the same key and next value.</li>
+<li>If a value after the current is removed won&#39;t appear in the loop.</li>
+<li>It will iterate (max - min) times regardless removals or reach iterable.length</li>
+</ul>
+<pre><code>for [key, ] value in iterable[3,5] {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><h3 id="for-till-shrink-">for-till (shrink)</h3>
+<pre><code>for variable|number till number {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><p>Compiler will translate for-till with the folowing rules:</p>
+<blockquote>
+<p>for i till 10 -&gt; for ; i &lt; 10; ++i</p>
+<p>for var i till 10 -&gt; for i=0; i &lt; 10; ++i</p>
+<p>for i=1 till 10 -&gt; for i=1; i &lt; 10; ++i</p>
+</blockquote>
+<h3 id="for-to-shrink-">for-to  (shrink)</h3>
+<pre><code>for variable|number to number {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><p>Compiler will translate for-to with the folowing rules:</p>
+<blockquote>
+<p>for i to 10 -&gt; for ; i &lt;= 10; ++i</p>
+<p>for var i to 10 -&gt; for i = 0; i &lt;= 10; ++i</p>
+<p>for i=1 to 10 -&gt; for ; i &lt;= 10; ++i</p>
+</blockquote>
+<h3 id="for-iterable-shrink-">for-iterable (shrink)</h3>
+<p>for-iterable don&#39;t clone the iterable.</p>
+<p>Cannot be nested with the same iterable variable-name. You can alias a variable and nest both for-iterables.</p>
+<pre><code>for iterable {
+    iterable.value // will be aliased, can be used outside the loop!
+    iterable.key // will be aliased, can be used outside the loop!
+    //
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><p>Compiler will translate for-iterable with for-in.</p>
+<h2 id="while">while</h2>
+<h3 id="while">while</h3>
+<p>Allows code to be executed repeatedly based on a given boolean condition.</p>
+<p>If condition is never else block will be executed if exists.</p>
+<pre><code>while test {
+  // block
+} [else {
+}]
+</code></pre><h2 id="do-while">do-while</h2>
+<p>Executes a block of code at least once, and then repeatedly executes the block,
+or not, depending on a given Boolean condition at the end of the block.</p>
+<pre><code>do {
+  // block
+} while test;
+</code></pre><h2 id="swap">swap</h2>
+<p>swap variable names.</p>
+<p>swap x y;</p>
+<h3 id="swap-ast">swap AST</h3>
+<pre><code class="lang-json">SwapStatement &lt;: Statement {
+    &quot;type&quot;: &quot;swap-statement&quot;,
+    &quot;left&quot;: Idenfier,
+    &quot;right&quot;: Idenfier
+}
+</code></pre>
+<h1 id="testing">Testing</h1>
 <p>Testing can be done in two stages. Runtime (specific build) and compile time.</p>
 <h2 id="testing-runtime">Testing runtime</h2>
 <p>Code will be isolated in a specific build. So no testing code will be in the real executable.</p>
