@@ -7,10 +7,7 @@ var fs = require("fs"),
 console.log("tmp-dir", tmp);
 
 var files = {
-
     "readme.markdown": "index.html",
-    "memory-management.markdown": "memory-management.html",
-
 
     "types/_intro.markdown": "types.html",
     "types/string.markdown": "string.html",
@@ -31,6 +28,9 @@ var files = {
     "statements/for.markdown": "for-statement.html",
     "statements/while.markdown": "while-statement.html",
     "statements/swap.markdown": "swap-statement.html",
+
+    "memory-management.markdown": "memory-management.html",
+    "modules.markdown": "modules.html",
 
     "testing/testing.markdown": "testing.html",
 

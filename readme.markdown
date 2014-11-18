@@ -21,7 +21,7 @@ Things that you should now before the shocking news.
 
 * Braces are mandatory everywhere but you can avoid using parenthesis :)
 
-* Everything is a reference to improve performance. You can clone everything easily.
+* *pass-by-reference* to improve performance. You can clone everything easily.
 
 * No uppercases. Everything is lowercased and case sensitive. False is not false.
 

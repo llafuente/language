@@ -117,6 +117,11 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 
   Adds one or more elements to the beginning of an array and returns the new length of the array.
 
+* `fill`(**value**:any ...)
+
+  Fill the array (all size reserved) with the given value.
+
+
 
 ### loping
 

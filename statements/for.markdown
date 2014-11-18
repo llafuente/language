@@ -61,9 +61,11 @@ for variable|number till number {
 Compiler will translate for-till with the folowing rules:
 > for i till 10 -> for ; i < 10; ++i
 
-> for var i till 10 -> for i=0; i < 10; ++i
+> for var i till 10 -> for var i=0; i < 10; ++i
 
 > for i=1 till 10 -> for i=1; i < 10; ++i
+
+> for var i=1 till 10 -> for var i=1; i < 10; ++i
 
 ### for-to  (shrink)
 
@@ -78,9 +80,11 @@ for variable|number to number {
 Compiler will translate for-to with the folowing rules:
 > for i to 10 -> for ; i <= 10; ++i
 
-> for var i to 10 -> for i = 0; i <= 10; ++i
+> for var i to 10 -> for var i = 0; i <= 10; ++i
 
-> for i=1 to 10 -> for ; i <= 10; ++i
+> for i=1 to 10 -> for i=1; i <= 10; ++i
+
+> for var i=1 to 10 -> for var i=1; i <= 10; ++i
 
 ### for-iterable (shrink)
 
