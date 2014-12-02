@@ -48,7 +48,7 @@ for [key, ] value in iterable[3,5] {
 }]
 ```
 
-### for-till (shrink)
+### for-till (shorthand)
 
 ```
 for variable|number till number {
@@ -67,7 +67,7 @@ Compiler will translate for-till with the folowing rules:
 
 > for var i=1 till 10 -> for var i=1; i < 10; ++i
 
-### for-to  (shrink)
+### for-to  (shorthand)
 
 ```
 for variable|number to number {
@@ -86,7 +86,7 @@ Compiler will translate for-to with the folowing rules:
 
 > for var i=1 to 10 -> for var i=1; i <= 10; ++i
 
-### for-iterable (shrink)
+### for-iterable (shorthand)
 
 for-iterable don't clone the iterable.
 

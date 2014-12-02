@@ -28,6 +28,8 @@ var files = {
     "statements/for.markdown": "for-statement.html",
     "statements/while.markdown": "while-statement.html",
     "statements/swap.markdown": "swap-statement.html",
+    "statements/break.markdown": "break-statement.html",
+    "statements/repeat.markdown": "repeat-statement.html",
 
     "memory-management.markdown": "memory-management.html",
     "modules.markdown": "modules.html",

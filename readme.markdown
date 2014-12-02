@@ -21,8 +21,10 @@ Things that you should now before the shocking news.
 
 * Braces are mandatory everywhere but you can avoid using parenthesis :)
 
-* *pass-by-reference* to improve performance. You can clone everything easily.
+* *pass-by-reference* everywhere to improve performance. You can clone everything easily.
 
 * No uppercases. Everything is lowercased and case sensitive. False is not false.
 
 * Every type has a `null` value.
+
+* Lazy typed (mix between dynamically typed and strong typed)

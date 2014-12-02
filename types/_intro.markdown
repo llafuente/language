@@ -2,6 +2,12 @@
 
 Types are case sensitive. All types in the language and functions are lowercased.
 
+#### Variable identifier/name rules
+
+* Cannot start with a number
+* Cannot start with a $
+* Any UTF-8 valid character
+
 #### Primitives
 
 * **bool**
@@ -108,7 +114,14 @@ Types are case sensitive. All types in the language and functions are lowercased
 
   Wrapper for a given subtype that allow processing in chunks.
 
-* **null**
+* **null** & **nil**
+
+  `null` is prefered as `nil` is introduce it just for laziness.
+
+* **fnblock**
+
+  Block of code. it could be considered as a function-body.
+
 
 #### Type properties
 
