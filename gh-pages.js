@@ -4,10 +4,13 @@ var fs = require("fs"),
   mktemp = require('mktemp'),
   tmp = mktemp.createDirSync('XXXXX.tmp');
 
-console.log("tmp-dir", tmp);
+console.log("tmp-dir:", tmp + "/index.html");
 
 var files = {
     "readme.markdown": "index.html",
+    "hello-world-example.markdown": "hello-world.html",
+
+    "operators.markdown": "operators.html",
 
     "types/_intro.markdown": "types.html",
     "types/string.markdown": "string.html",
@@ -22,6 +25,8 @@ var files = {
 
     "functions/_intro.markdown": "functions.html",
     "functions/listeners.markdown": "functions-listeners.html",
+
+    "error-handling.markdown": "error-handling.html",
 
     "statements/if.markdown": "if-statement.html",
     "statements/switch.markdown": "switch-statement.html",
@@ -70,4 +75,3 @@ marked(source, function(err, content) {
 
   fs.writeFileSync(path.join(tmp, "index.html"), content);
 });
-

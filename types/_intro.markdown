@@ -1,11 +1,94 @@
-### Types
+### Types.
 
-Types are case sensitive. All types in the language and functions are lowercased.
+* Variable declaration require the keyword **var**.
+Some languages allow declaration of variables prefixed its type,
+that could be messy, and not easy to read.
+For readability plee enforce the use **var** or **const**
+* Lazy typed: plee is a *strong type* language, the compiler will identify
+your types from the code you write or complain when something is missing.
+* All types in the language lowercased.
+
+#### Type inference.
+
+* Initialization
+
+  ```
+  var a = 0; // i64
+  var b = 0.0; // float
+  var c = [1, 2, ""]; // compile-error, 3rd parameter is incompatible with the other
+  var d = [1, 2, 3]; // array of i64, size=3
+  var e = a; // also: i64
+  ```
+
+* Operators
+
+  Resolve the type based on operation over the variable.
+
+  ```
+  var x = 0, y = 0; //i64
+  var z = x + y;
+  ```
+
+* function arguments
+
+  ```
+  fn sum ui8 x, ui8 y : ui8 {
+      return x + y;
+  }
+  ```
+
+
+#### implicit type conversion
+
+A type can only grow in precision.
+
+```
+var x = 0; // ui64
+var y = 0.1; // float
+var z = x + y; // float
+```
+
+#### explicit type
+
+```
+var i64 x;
+var string str;
+```
+
+#### explicit type conversion
+
+* Using type operators, parenthesis is required most of the times...
+
+```
+ui64 x = (ui64 0.0);
+```
+
+* `to_*` functions
+
+```
+ui64 x = to_ui64(0.0);
+
+```
+
+#### invalid explicit conversions
+
+| from | to | description |
+|---|---|---|
+| array | string | compiler will complain an offer a solution: use join |
+| function | * | functions cannot be casted |
+| string | function | compiler will complain an offer a solution: use call operator |
+| object | array | not allowed **TODO** study |
+| object | block | compiler will complain an offer a solution: use copy operator |
+| block | object | compiler will complain an offer a solution: use call operator |
+| block | * | not allowed |
+| struct | block | compiler will complain an offer a solution: use copy operator |
+
 
 #### Variable identifier/name rules
 
 * Cannot start with a number
-* Cannot start with a $
+* Cannot contains: `$`, `.`, `(`, `)`, `[`, `]`, `{`, `}`, `"`, `'`, `@`
+* Cannot be a reserved word
 * Any UTF-8 valid character
 
 #### Primitives
@@ -13,6 +96,14 @@ Types are case sensitive. All types in the language and functions are lowercased
 * **bool**
 
   There are only two Boolean values, `true` and `false`.
+
+  But there some aliases:
+
+  * `true`: `on` & `yes`
+
+  * `false`: `of` & `no`
+
+  Those aliases give more expressiveness to the language.
 
 * **number**
 
@@ -22,13 +113,13 @@ Types are case sensitive. All types in the language and functions are lowercased
 
   Note: If any calculation produces and error `nan` (`not a number`) will be returned.
 
-* **i8, i16, i32, i64(int), ui8, ui16, ui32, ui64**
+* **i8, i16, i32, i64 (int), ui8, ui16, ui32, ui64 (uint)**
 
   Integers and unsigned integers of different sizes.
 
   Note: If any calculation produces and error `nan` (`not a number`) will be returned.
 
-* **f32(float) & f64**
+* **f32 (float) & f64**
 
   Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.
 
@@ -106,6 +197,7 @@ Types are case sensitive. All types in the language and functions are lowercased
   * realloc / resize
   * copy
 
+<!--
 * **bin[X]**
 
   binary data of given number of bytes.
@@ -113,27 +205,41 @@ Types are case sensitive. All types in the language and functions are lowercased
 * **stream:type**
 
   Wrapper for a given subtype that allow processing in chunks.
+-->
 
 * **null** & **nil**
 
   `null` is prefered as `nil` is introduce it just for laziness.
 
+<!--
 * **fnblock**
 
   Block of code. it could be considered as a function-body.
-
+-->
 
 #### Type properties
 
 **iterable**
-> has some special methods like: each, filter, reduce...
+> Has some special methods like: each, filter, reduce...
+
 > Can be directly used inside a `for-in` loop
 
 **thread-block**
 > A thread can block the usage for the rest of the threads.
+
 > When a thread want to use it, first must wait the lock.
 
 **shared-ptr**
 > Reference-counted shared pointer.
+
 > when a variable references counter add 1
+
 > when a variable is deleted counter subtract 1
+
+#### functions in modules.
+
+Just as a brief introduction, variable in modules has special keyword
+to specify their behavior.
+
+* `export var` allow a variable to be accessed outside the module
+* There is no way to export a *readonly* variable.

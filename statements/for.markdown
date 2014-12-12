@@ -17,7 +17,7 @@ for-in won't clone the iterable. The iterator will behave if something is remove
 
 Iterator behavior:
 
-* If current value is removed (splice) the next value will have the same key and next value.
+* If current value is removed (splice) the next value will have the same key and next value. if end is reached just break.
 * If a value before the current is removed the next value will have the same key and next value.
 * If a value after the current is removed won't appear in the loop.
 

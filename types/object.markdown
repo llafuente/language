@@ -2,79 +2,96 @@
 
 Abstract data type composed of a collection of (key, value) pairs.
 
-Keys are always a unique string, number cannot be assigned without casting.
+Keys are always a unique string.
+Numbers cannot be assigned without casting. Because `!` operator need to be sure of what type are involved ([see below](#!operator)).
 
 Values are pointers and can be repeated.
 
 Objects are declared using JSON-like format.
 Last comma is required (atm) for version control system cleaning.
 
+```
+var d;
 var xxx = {
-  "hello": "world",
-  "world": hello(), // function
-  "world": variable, // variable, dont forget the last comma!
+  "a": "world",
+  "b": hello(), // function
+  "c": variable, // variable, dont forget the last comma!
+  d: hello(), // variable as key :)
 };
+```
 
 ### methods
-* `#has`(**key**:**string**) : **boolean**
+* `$has` (*string* **key**) : *bool*
 
-  Return if given key is defined. 
+  Return if given key is defined.
 
-* `#keys`() : **array**
+* `$keys` () : *array*
 
-  Returned keys are always sorted. 
+  Returned keys are always sorted.
 
-* `#get`(**key**:**string**, **safe**:**boolean** = false) : **pointer**
+* `$get` (*string* **key**, *bool* **safe** = false) : *any*
 
   Get value, if `safe=false` will raise a run-time-error
 
-* `#set`(**key**:**string**, **value**:**pointer**) : **boolean**
+* `$set` (*string* **key**, **pointer** **value**) : *bool*
 
-  Set/overwrite given key with given value. 
+  Set/overwrite given key with given value.
 
-* `#delete`(**key**:**string**) : **pointer**
+  if the key stats with `$` a runtime error is raised.
+
+* `$delete`(*string* **key**) : *any*
 
   Remove given key and return pointer or null.
 
-* `#setter`(**sttr**: **function** = null) : **function**
+* `$setter`(*fn* **sttr** = null) : **function**
 
-  Set a setter function that will be called before each set. 
+  Set a setter function that will be called before each set.
 
-* `#getter`(**gttr**: **function** = null) : **function**
+* `$getter`(*fn* **gttr** = null) : **function**
 
   Set a getter function that will be called before each get.
 
 
-## test if key exist (?)
+## `?` exits operator (nested `$has` shorthand)
 
-Object has a special method ``#has` but it recommended to use the `?` operator.
+Object has a special method `$has` but it recommended to use the `?` operator for readability purposes.
 
 ```
-if xxx.hello? { // expanded to xxx.#has("hello")
+if xxx.say.hello? {
   // do something
 }
 
-if xxx.hello? == 10 { // expanded to xxx.#has("hello") && xxx.hello == 10
+if xxx.hello? == 10 { // expanded to xxx.$has("hello") && xxx.hello == 10
   // do something
 }
 ```
 
-## safe asignament
+Compiler will expand this operator using $has
 
-`?` operator can be used in assignament expressions. Compiler will expand your code to make sure no runtime-error.
+> xxx.say.hello?
 
 ```
-? xxx.first.second.third = "just a string";
+xxx.$has("say") ? (xxx.say.$has("hello") ? xxx.say.hello : null)  : null
+```
 
-// expanded...
-if (!xxx.#has("first")) error "undefined xxx.first";
-if ("object" === typeof xxx.#get("first")) error "invalid type of xxx.first";
+**TODO** review, this operator is maybe safe at the begining.
 
-if (!xxx.#get("first").#has("second")) error "undefined xxx.first";
-if ("object" === typeof xxx.#get("first").#get("second")) error "invalid type of xxx.first.second";
+## `?` safe asignament
+
+`?` operator can be used in assignment expressions.
+Compiler will expand your code and give you a reasonable collection of runtime-errors.
+
+> xxx.first.second.third? = "just a string";
+
+```
+if (!xxx.$has("first")) error "xxx has no index 'first'";
+if ("object" === typeof xxx.$get("first")) error "invalid type of xxx.first";
+
+if (!xxx.$get("first").$has("second")) error "undefined xxx.first";
+if ("object" === typeof xxx.$get("first").$get("second")) error "invalid type of xxx.first.second";
 
 //...
-xxx.#get("first").#get("second").#get("third")[0] = "just a string";
+xxx.$get("first").$get("second").$get("third")[0] = "just a string";
 ```
 
 Because key in objects are always string, safe assignaments will initialize arrays if a number is found.
@@ -83,14 +100,30 @@ Because key in objects are always string, safe assignaments will initialize arra
 ? xxx.first.second.third[0] = "just a string";
 
 // expanded...
-if (!xxx.#has("first")) error "undefined xxx.first";
-if ("object" === typeof xxx.#get("first")) error "invalid type of xxx.first";
+if (!xxx.$has("first")) error "undefined xxx.first";
+if ("object" === typeof xxx.$get("first")) error "invalid type of xxx.first";
 
-if (!xxx.#get("first").#has("second")) error "undefined xxx.first";
-if ("object" === typeof xxx.#get("first").#get("second")) error "invalid type of xxx.first.second";
+if (!xxx.$get("first").$has("second")) error "undefined xxx.first";
+if ("object" === typeof xxx.$get("first").$get("second")) error "invalid type of xxx.first.second";
 
 //...
-xxx.#get("first").#get("second").#get("third")[0] = "just a string";
+xxx.$get("first").$get("second").$get("third")[0] = "just a string";
 ```
 
+<a name="!operator"></a>
+## `!` force asignament
 
+A more inteligent compiler should now how to assign complex things based just on knowing the first one.
+
+```
+var obj = {};
+
+obj.say.hello! = "hola";
+
+log typeof obj.say;
+// stdout: object
+log typeof obj.say.hello;
+// stdout: string
+
+
+```

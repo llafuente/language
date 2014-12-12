@@ -2,25 +2,19 @@
 
 Any number type has the following properties.
 
-* .EPSILON
+* .infinity
 
-  This is a mutable value, but default is always 0, for every type.
+* .minfinity
 
-  Designed to avoid floating-points errors, you should set EPISILON in your main file to your desired/app specific value. And you can happily do == in floating points numbers.
-
-* .INFINITY
-
-* .MINFINITY
-
-* .MAX
+* .max
 
   Maximum number represented
 
-* .MIN
+* .min
 
   Minimum number represented
 
-* .MIN_RES
+* .min_resolution
 
   Minimum resolution.
 
@@ -28,13 +22,26 @@ Any number type has the following properties.
 
   [STUDY] f32 & f64
 
-* .ROUND
+* .round
+
+  round function behavior.
 
   0 toward zero
   1 to nearest
   2 toward positive infinity
   3 toward negative infinity
 
-* .NULL
+* .null
 
   Default value for a not initialized number.
+
+
+Number with decimals has special properties
+
+* *epsilon* = 0
+
+  epsilon can be modified at compile time.
+
+  If you set epsilon many times in your program, the last one prevail. So it's recommended to do it in the configuration file.
+
+  When set, modify `a == b` to `-epsilon < (a - b) < epsilon`, So there is a performance hit, but avoid floating points errors.

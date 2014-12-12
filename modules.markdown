@@ -2,88 +2,129 @@
 
 Modules in plee are the way to mimic classes without following any related paradigm.
 
+### Module name/identifier
 
-Example
+* cannot start with a number.
+* cannot contains spaces.
+* cannot contains uppercases.
+* Cannot start with a $
+* Any UTF-8 valid character (TODO **study** could be better to just allow ASCII)
+
+
+### Syntax
+
+**Module file**
+
+Module declaration (first statement!)
+
+> **module** *identifier*;
+
+Export a `variable`
+
+> export var secret = "x";
+
+Export a `constant`
+
+> export const other_secret = "y";
+
+Export a `function`
+
+> export fn get_secret() {}
+
+**Your program**
+
+Module import
+
+> **import** [, *what_to_import*] *module-name*[@*semver*] [**as** *mod_a*];
+
+Declaration example:
 ```
-
-//module 'xxxx' as new; // instanciable module
-module 'xxxx'; // by reference
+// file: cia.plee
+// module must be the first non-comment statement
+module cia;
 
 var hidden = "secret";
 
-fn get_secret {
+export fn get_secret {
+  return hidden;
+}
+
+```
+
+Module usage:
+```
+// encapsulated, this is the preferred way
+import cia@latest as mod_a;
+log mod_a.get_secret(); // stdout: secret
+
+// leaked to current scope, not preferred but accepted
+import cia;
+log get_secret(); // stdout: secret
+
+// partial import encapsulated
+import get_secret cia@1.0.0 as mod_b;
+log mod_b.get_secret(); // stdout: secret
+
+// partial import leaked to current scope
+import get_secret cia@0.0.1;
+log mod_b.get_secret(); // stdout: secret
+
+```
+
+
+### instance-able module (class-like)
+
+As was said, classes are not needed, because modules can be instanced.
+*modules* are a good, plain, simple and also painless to think in classes.
+
+
+Definition:
+
+```
+module mymod;
+
+var hidden = "";
+
+export fn new(str) {
+    hidden = str;
+}
+
+export fn get_secret {
   return hidden;
 }
 
 ```
 
 Usage:
-```
-
-import 'xxxx';
-
-log get_secret(); // stdout: secret
 
 ```
+import mymod as mod;
 
+mod.get_secret(); // compile-error: module need to be instanced
 
+var m = new mod("no more secrets");
+log m.get_secret(); // stdout: no more secrets
 
-### import module by reference
-
-```
-import 'file-src'; // import all functions
-import [, function] from 'file-src'; // import selected ones
-
-// module from the repository ?
-
-import 'module-name';
-import [, function] from 'module-name';
-
-// you could have different module versions, you may want a specific function from one
-
-import 'module-name'@0.0.0;
-import [, function] from 'module-name'@0.0.0;
-```
-
-### import module and instance it.
-
-```
-var mod = import 'file-src';
-new mod;
 ```
 
 ### Special functions
 
-#### new function
+#### `fn new`
 
-  could be considered as constructor.
+  module constructor.
 
-#### delete function
+#### `fn delete`
 
-  could be considered as destructor.
+  module destructor.
 
-### Compiler implementation notes.
+### Implementation
 
-Modules will be implemented using `structs`.
+**TODO** when backend is defined, we need to review this.
 
-#### reference-able module transformation
-
-* Add a unique namespace to the whole file to avoid variable leacking to global scope.
-* Transform any access to those functions to use that unique namespace.
-
-#### instance-able module transformation
-
-* Global variables transformation:
-  * append an internal token to make them inaccesible.
-  * Add them to the module struct.
-* Function declarations transformation.
-  * prepend as first argument a raw-pointer to the module struct.
-  * Prepend the struct variable pointer to any ocurrence of the global variables.
-  
-#### new module
-* new the struct
-* call new function if exists.
-
-#### delete module
-* call delete function if exists.
-* delete the struct
+* Modules name will be used as *namespace* to avoid collisions.
+* Modules will be implemented using `structs` with `functions`.
+* if module has *new* or *delete* functions, must be instanced.
+* if a function does not access to any variable at module-program level,
+it could be called outside regardless the module has *new* or *delete*.
+* when instanced, *new* function is called if exists and instance the struct.
+* when deleted, *delete* function is called if exists and destroy the struct.

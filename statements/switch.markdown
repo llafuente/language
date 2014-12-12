@@ -7,7 +7,7 @@ An expression or type specifier is compared to the "cases" inside the "switch" t
 
 Most common languages choose to break by default, and it's resonable, they provide `fallthrough` as error prone replacement of `break`
 
-Plee goes a bit beyond while provide `fallthrough` also provide `break` but the default behavior is continue testing the next cases. So you can reuse code easily.
+Plee goes a bit beyond while provide `fallthrough` also provide `break` but the default behavior is continue testing the next cases. So you can reuse code easily. Also default will be the last to test, regardless the position. In fact is recommended to be the first.
 
 
 There are two types of switch: expression switch and comparison switch.
@@ -88,14 +88,14 @@ switch {
     case test == "ok": // test == "ok"
         echo "ok is found!";
 
-        // fall thought
+        // fall thought, but test each case
     case test == "nok": // test == "nok"
         echo "nok is found!";
-        break;
+        break; // exit
 
     case test == "ok" || test == "nice": // test == "ok" || test == "nice"
         echo "ok or nice is found!";
 
-        break;
+        break; // exit
 }
 ```

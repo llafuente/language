@@ -2,34 +2,49 @@
 
 `string` store UTF-8 characters (maybe unicode).
 
-Study support memory management profiles/allocators
-- continuous pool
-- on demand
-
 ### instance properties
 
-* ui64 size = 0 [readonly]
+* *ui64* size = 0 [readonly]
 
-  bytes allocated, remember that utf-8 is multibyte.
+  bytes allocated, remember that UTF-8 is multibyte.
 
-* ui64 used = 0 [readonly]
+* *ui64* used = 0 [readonly]
 
-  byte in use.
+  bytes currently in use.
 
-* ui64 length = 0 [readonly]
+* *ui64* length = 0 [readonly]
 
   Number of characters
 
+### operators
+
+* `[]` access to a single character first byte.
+* `+` concatenate two strings
+* `>` & `<` compare two strings
+* `=` overwrite lhs and resize if needed
 
 ### instance methods
 
-* [] access to a single character
+* **substr** (*string* str, *ui64* start, *ui64* length = infinity)
 
-* substr
-* substring
-* concat
-* resize
+  The substr method takes three arguments, and returns str modified, result of
+  starting from position start and running for length code units
+  (or through the end of the string). If start is negative,
+  it is treated as (str.length + start).
 
+* **substring** (*string* str, *ui64* start, *ui64* end)
+
+* **_concat** (*string* str, *string* str2)
+
+  `+` alias.
+
+* **concat** (*string* str, *string* str2)
+
+  Return str modified, result of concatenate str and str2.
+
+* **resize** (*string* str, *ui64* size)
+
+  Reallocate memory.
 
 * charAt
 * charCodeAt
@@ -66,11 +81,9 @@ Study support memory management profiles/allocators
 
 * [nl2br](http://php.net/manual/en/function.nl2br.php)
 
-
   Calculates the crc32 polynomial of a string
 
-
-  One-way string hashing
+One-way string hashing
 
 * [ord](http://php.net/manual/en/function.ord.php)
 * parse_http_get
@@ -83,52 +96,42 @@ Study support memory management profiles/allocators
 * [crc32](http://php.net/manual/en/function.crc32.php)
 
 
-#### study
-* ord, make sense ? will be utf-16
-* base64 where?
-* number_format where?
-* currency_format where?
+### string properties (under study)
 
-
-### string properties:
-
-* ui64 pool_size = 1m [mutable]
+* *ui64* pool_size = 1m [mutable]
 
   Determine the minimum memory reserved anytime for string operations.
 
-* ui64 max_size = 2m [mutable]
+* *ui64* max_size = 2m [mutable]
 
   From this point memory will be released if destruction happens, and meet certain criteria.
 
-* ui32 deallocations [readonly]
+* *ui32* deallocations [readonly]
 
   Counter
 
-* ui32 .allocations [readonly]
+* *ui32* .allocations [readonly]
 
   Counter
 
-* f32 .fragmentation [readonly] [TODO-study]
+* *f32* .fragmentation [readonly]
 
   Fragmentation factor.
 
 
-Functions:
+### string allocation function (under study)
 
-* .defrag [TODO-study]
+* .defrag **TODO** study more
 
   Sort all memory strings in a new place.
 
-Instances properties
+**TODO** Study more.
 
-* ui32 length
+support memory management profiles/allocators?
+* continuous pool
+* on demand
 
-  readonly length
-
-* pX .p
-
-  readonly pointer to the beginning of the string.
-
-  !!!TODO what type of pointer can be used for multibyte utf-8/unicode
-
-* [index]
+* ord, make sense ? will be utf-16
+* base64 where?
+* number_format where?
+* currency_format where?

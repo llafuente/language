@@ -1,7 +1,8 @@
 ## array
 
-Note: Arrays are always dense.
-Note: Assign a pointer to something in the array it's only possible if fixed_size = true
+* Arrays are always dense.
+* Arrays always contains a common type.
+* Assign a pointer to something in the array it's only possible if fixed size.
 
 ### Initialization
 
@@ -16,8 +17,8 @@ array [ui64:length] [bool:fixed_size]
 var ar1 = [];
 var ar2 = new number[5];
 var ar3 = clone other_array;
-var ar4 = [x, y, z]; // x y & z must have the same type.
-
+var ar4 = [x, y, z]; // x, y & z must have the same type.
+var ui8[] ar5 = new array(5, true); // fixed, ui8 (x5)
 
 ar1[3] = 0; // compiler not know the implicit type
 ar1.toJSON(); // [null, null, null, 0]
@@ -47,17 +48,17 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 
 ### Transformations
 
-* `toString`
+* `to_string`
 
   Return the JSON representation.
 
-* `toNumber`
+* `to_number`
 
   Return the length.
 
   [**STUDY**] This could lead to problems but could avoid check against `array.length`
 
-* `toObject`
+* `to_object`
 
   Return a new Object will keys as Ids
 
