@@ -1,41 +1,1869 @@
 <!DOCTYPE html>
 <html lang="en" id="top">
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="cleartype" content="on" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,initial-scale=1,user-scalable=yes">
+
   <title>Plee</title>
 
-  <link rel="stylesheet" href="bower_components/github-markdown-css/github-markdown.css" >
+  <style>
+
+  pre, code, blockquote {
+    background: none repeat scroll 0 0 rgba(1, 1, 1, 0.1);
+    border: 1px solid #808080;
+    border-radius: 4px;
+    padding: 1px 2px;
+    font-family: monospace;
+  }
+  pre {
+    padding: 8px;
+  }
+  pre code {
+    border: 0;
+    background: none;
+  }
+  * {
+    color: #222;
+  }
+  strong, th {
+    color: #000;
+  }
+  h1, h2, h3, h4, h5 {
+    color: #cb3837;
+  }
+  body {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  </style>
 </head>
 <body class="markdown-body">
     <h1 id="plee-language">plee language</h1>
-<p>Things that the compiler must do.</p>
+<p>Things that the compiler <em>must do</em>.</p>
 <ul>
-<li><p>Continuous integration. Nowadays is mandatory. This also add some responsibility in the language that need to support a basic-extendable testing system.</p>
+<li><p>Continuous integration. Nowadays is mandatory. This also add some
+responsibility in the language that need to support a basic-extendable
+testing system.</p>
 </li>
-<li><p>Code coverage. Extracting the information from ci generate a report of the dangers in the code.</p>
+<li><p>Code coverage. Extracting the information from ci generate a report of
+the dangers in the code.</p>
 </li>
-<li><p>Documentation. Basic and extendable. Fill the gaps with information from compiler.</p>
+<li><p>Documentation. Basic and extendable. Fill the gaps with information
+from compiler.</p>
+</li>
+<li><p>Export module interface in a clean file.</p>
 </li>
 <li><p>Benchmarks. Once again, basic and extendable.</p>
 </li>
+<li><p>Code expansion, beautifier. Most of the shorthands in plee require compiler
+to generate code, better the user to see full code.</p>
+</li>
 </ul>
-<p>Things that you should now before the shocking news.</p>
+<p>Things that you should now before the <em>shocking news</em>.</p>
 <ul>
-<li><p>No classes. The concept of classes is not necessary in plee, you will see why, soon enough.</p>
+<li><p>No classes hierarchy. plee propose modules as replacement.
+Also, do not expect <code>this</code> as reserved word...</p>
 </li>
 <li><p>Function scope rather than block scope.</p>
 </li>
-<li><p>Robust memory management, focus on no leaks a proper error display for easy debugging.</p>
+<li><p>Robust memory management, focus on no leaks a proper error display
+for easy debugging.</p>
 </li>
 <li><p>Braces are mandatory everywhere but you can avoid using parenthesis :)</p>
 </li>
-<li><p>Everything is a reference to improve performance. You can clone everything easily.</p>
+<li><p><em>pass-by-reference</em> everything to improve performance. You can clone
+everything easily.</p>
 </li>
-<li><p>No uppercases. Everything is lowercased and case sensitive. False is not false.</p>
+<li><p>No uppercases. Everything is lowercased and <em>case sensitive</em>.
+<em>False</em> is not <em>false</em>.</p>
 </li>
 <li><p>Every type has a <code>null</code> value.</p>
 </li>
+<li><p>Lazy typed (mix between dynamically typed and strong typed)</p>
+</li>
+<li><p>Comments are part of the language, cannot be everywhere,
+only at statement level.</p>
+</li>
 </ul>
-<h2 id="memory-management">Memory management</h2>
+<p>Philosophy</p>
+<ul>
+<li><p>Error prone. If something is powerful but introduce errors,
+need to be reconsidered at least.</p>
+</li>
+<li><p>We don&#39;t worry much about so many reserved words, because clarify things.</p>
+</li>
+<li><p>Easy to code, easy to be lazy, readability &amp; version control friendly.</p>
+</li>
+</ul>
+<h2 id="hello-world-example">Hello world example</h2>
+<p>file: hello-world.plee</p>
+<pre><code>log &quot;Hello world&quot;;
+</code></pre><p>Execution from terminal</p>
+<pre><code class="lang-bash">plee hello-world.plee
+</code></pre>
+<h2 id="operators">Operators</h2>
+<table>
+<thead>
+<tr>
+<th>Precedence</th>
+<th>Operator type</th>
+<th>Associativity</th>
+<th>Individual operators</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Grouping</td>
+<td>n/a</td>
+<td>( … )</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Member Access</td>
+<td>left-to-right</td>
+<td><em>lhs</em> <strong>.</strong> <em>rhs</em></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Computed Member Access</td>
+<td>left-to-right</td>
+<td><em>lhs</em> [ … ]</td>
+</tr>
+<tr>
+<td>1</td>
+<td>new (with argument list)</td>
+<td>n/a</td>
+<td>new … ( … )</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Function Call</td>
+<td>left-to-right</td>
+<td><em>lhs</em> (…)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>new (without argument list)</td>
+<td>right-to-left</td>
+<td>new <em>rhs</em></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Postfix Increment</td>
+<td>n/a</td>
+<td><em>lhs</em> ++</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Postfix Decrement</td>
+<td>n/a</td>
+<td><em>lhs</em> --</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Logical NOT</td>
+<td>right-to-left</td>
+<td>! <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bitwise NOT</td>
+<td>right-to-left</td>
+<td>~ <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Unary Plus</td>
+<td>right-to-left</td>
+<td>+ <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Unary Negation</td>
+<td>right-to-left</td>
+<td>- <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Prefix Increment</td>
+<td>right-to-left</td>
+<td>++ <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Prefix Decrement</td>
+<td>right-to-left</td>
+<td>-- <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>typeof</td>
+<td>right-to-left</td>
+<td>typeof <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>delete</td>
+<td>right-to-left</td>
+<td>delete <em>rhs</em></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Multiplication</td>
+<td>left-to-right</td>
+<td><em>lhs</em> * <em>rhs</em></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Division</td>
+<td>left-to-right</td>
+<td><em>lhs</em> / <em>rhs</em></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Remainder</td>
+<td>left-to-right</td>
+<td><em>lhs</em> % <em>rhs</em></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Addition</td>
+<td>left-to-right</td>
+<td><em>lhs</em> + <em>rhs</em></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Subtraction</td>
+<td>left-to-right</td>
+<td><em>lhs</em> - <em>rhs</em></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Bitwise Left Shift</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &lt;&lt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Bitwise Right Shift</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &gt;&gt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Bitwise Unsigned Right Shift</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &gt;&gt;&gt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Less Than</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &lt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Less Than Or Equal</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &lt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Greater Than</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &gt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Greater Than Or Equal</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &gt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>in</td>
+<td>left-to-right</td>
+<td><em>lhs</em> in <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>instanceof</td>
+<td>left-to-right</td>
+<td><em>lhs</em> instanceof <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Exits operator &amp; safe assignment</td>
+<td>left-to-right</td>
+<td><em>rhs</em> ?</td>
+</tr>
+<tr>
+<td>8</td>
+<td>force assignment</td>
+<td>left-to-right</td>
+<td><em>rhs</em> !</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Equality</td>
+<td>left-to-right</td>
+<td><em>lhs</em> == <em>rhs</em></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Inequality</td>
+<td>left-to-right</td>
+<td><em>lhs</em> != <em>rhs</em></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Bitwise AND</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &amp; <em>rhs</em></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Bitwise XOR</td>
+<td>left-to-right</td>
+<td><em>lhs</em> ^ <em>rhs</em></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Bitwise OR</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &#124; <em>rhs</em></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Logical AND</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &amp;&amp; <em>rhs</em></td>
+</tr>
+<tr>
+<td>14</td>
+<td>Logical OR</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &#124;&#124; <em>rhs</em></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Conditional</td>
+<td>right-to-left</td>
+<td><em>lhs</em> ? … : <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> = <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> += <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> -= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> <em>= </em>rhs*</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> /= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> %= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &lt;&lt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &gt;&gt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &gt;&gt;&gt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &amp;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> ^= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &#124;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>17</td>
+<td>Spread</td>
+<td>n/a</td>
+<td>... …</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Comma / Sequence</td>
+<td>left-to-right</td>
+<td><em>lhs</em> , <em>rhs</em></td>
+<td></tbody></td>
+</tr>
+</tbody>
+</table>
+<!--
+| 4 | void | right-to-left | void *rhs* |
+| 9 | Strict Equality | left-to-right | *lhs* === *rhs* |
+| 9 | Strict Inequality | left-to-right | *lhs* !== *rhs* |
+| 17 | yield | right-to-left | yield *rhs* |
+-->
+
+
+<p>Mathematical operators need to be separated by <code>space</code> for readability
+purposes and fully support UTF-8 as identifier.</p>
+<pre><code>var x = y+z; // invalid: parsing-error if `y+z` variable is not defined!
+var x = y + z; // ok
+</code></pre><h3 id="types-">Types.</h3>
+<ul>
+<li>Variable declaration require the keyword <strong>var</strong>.
+Some languages allow declaration of variables prefixed its type,
+that could be messy, and not easy to read.
+For readability plee enforce the use <strong>var</strong> or <strong>const</strong></li>
+<li>Lazy typed: plee is a <em>strong type</em> language, the compiler will identify
+your types from the code you write or complain when something is missing.</li>
+<li>All types in the language lowercased.</li>
+</ul>
+<h4 id="type-inference-">Type inference.</h4>
+<ul>
+<li><p>Initialization</p>
+<pre><code>var a = 0; // i64
+var b = 0.0; // float
+var c = [1, 2, &quot;&quot;]; // compile-error, 3rd parameter is incompatible with the other
+var d = [1, 2, 3]; // array of i64, size=3
+var e = a; // also: i64
+</code></pre></li>
+<li><p>Operators</p>
+<p>Resolve the type based on operation over the variable.</p>
+<pre><code>var x = 0, y = 0; //i64
+var z = x + y;
+</code></pre></li>
+<li><p>function arguments</p>
+<pre><code>fn sum ui8 x, ui8 y : ui8 {
+    return x + y;
+}
+</code></pre></li>
+</ul>
+<h4 id="implicit-type-conversion">implicit type conversion</h4>
+<p>A type can only grow in precision.</p>
+<pre><code>var x = 0; // ui64
+var y = 0.1; // float
+var z = x + y; // float
+</code></pre><h4 id="explicit-type">explicit type</h4>
+<pre><code>var i64 x;
+var string str;
+</code></pre><h4 id="explicit-type-conversion">explicit type conversion</h4>
+<ul>
+<li>Using type operators, parenthesis is required most of the times...</li>
+</ul>
+<pre><code>ui64 x = (ui64 0.0);
+</code></pre><ul>
+<li><code>to_*</code> functions</li>
+</ul>
+<pre><code>ui64 x = to_ui64(0.0);
+</code></pre><h4 id="invalid-explicit-conversions">invalid explicit conversions</h4>
+<table>
+<thead>
+<tr>
+<th>from</th>
+<th>to</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>string</td>
+<td>compiler will complain an offer a solution: use join</td>
+</tr>
+<tr>
+<td>function</td>
+<td>*</td>
+<td>functions cannot be casted</td>
+</tr>
+<tr>
+<td>string</td>
+<td>function</td>
+<td>compiler will complain an offer a solution: use call operator</td>
+</tr>
+<tr>
+<td>object</td>
+<td>array</td>
+<td>not allowed <strong>TODO</strong> study</td>
+</tr>
+<tr>
+<td>object</td>
+<td>block</td>
+<td>compiler will complain an offer a solution: use copy operator</td>
+</tr>
+<tr>
+<td>block</td>
+<td>object</td>
+<td>compiler will complain an offer a solution: use call operator</td>
+</tr>
+<tr>
+<td>block</td>
+<td>*</td>
+<td>not allowed</td>
+</tr>
+<tr>
+<td>struct</td>
+<td>block</td>
+<td>compiler will complain an offer a solution: use copy operator</td>
+</tr>
+</tbody>
+</table>
+<h4 id="variable-identifier-name-rules">Variable identifier/name rules</h4>
+<ul>
+<li>Cannot start with a number</li>
+<li>Cannot contains: <code>$</code>, <code>.</code>, <code>(</code>, <code>)</code>, <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code>, <code>&quot;</code>, <code>&#39;</code>, <code>@</code></li>
+<li>Cannot be a reserved word</li>
+<li>Any UTF-8 valid character</li>
+</ul>
+<h4 id="primitives">Primitives</h4>
+<ul>
+<li><p><strong>bool</strong></p>
+<p>There are only two Boolean values, <code>true</code> and <code>false</code>.</p>
+<p>But there some aliases:</p>
+<ul>
+<li><p><code>true</code>: <code>on</code> &amp; <code>yes</code></p>
+</li>
+<li><p><code>false</code>: <code>of</code> &amp; <code>no</code></p>
+</li>
+</ul>
+<p>Those aliases give more expressiveness to the language.</p>
+</li>
+<li><p><strong>number</strong></p>
+<p>Mutable-multipuporse number. Increase it&#39;s size as needed / overflow happens.</p>
+<p>Will be i64 until floating point is needed and change it&#39;s type to f64.</p>
+<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
+</li>
+<li><p><strong>i8, i16, i32, i64 (int), ui8, ui16, ui32, ui64 (uint)</strong></p>
+<p>Integers and unsigned integers of different sizes.</p>
+<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
+</li>
+<li><p><strong>f32 (float) &amp; f64</strong></p>
+<p>Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.</p>
+<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
+</li>
+<li><p><strong>function</strong></p>
+<p>Function as type. Unlike other languages arguments doesn&#39;t matter.</p>
+</li>
+<li><p><strong>string</strong></p>
+<p>Primitive value that is a finite ordered sequence of zero or more 16-bit unsigned integer</p>
+<p><em>Properties:</em></p>
+<ul>
+<li>iterable</li>
+<li>shared-ptr</li>
+</ul>
+</li>
+</ul>
+<h4 id="data-aggregation-complex-types-">Data aggregation, complex types.</h4>
+<ul>
+<li><p><strong>array</strong></p>
+<p>List of things, this is continuous memory and should have a defined type, cannot contains different things (unless pointers are stored).</p>
+<p><em>Properties:</em></p>
+<ul>
+<li>iterable</li>
+<li>thread-block</li>
+<li>shared-ptr</li>
+</ul>
+</li>
+<li><p><strong>struct</strong></p>
+<p>Constant structured data.</p>
+<p><em>Properties:</em></p>
+<ul>
+<li>iterable</li>
+<li>thread-block</li>
+<li>shared-ptr</li>
+</ul>
+</li>
+<li><p><strong>block</strong></p>
+<p>It&#39;s the same as struct but memory continuous.</p>
+<p>When you allocate a block you must specify every length in the block.</p>
+<p><em>Properties:</em></p>
+<ul>
+<li>iterable</li>
+<li>thread-block</li>
+<li>shared-ptr</li>
+</ul>
+</li>
+<li><p><strong>object</strong></p>
+<p>Mutable structured data. You could add/remove members.</p>
+<p><em>Properties</em></p>
+<ul>
+<li>iterable</li>
+<li>thread-block</li>
+<li>shared-ptr</li>
+</ul>
+</li>
+<li><p><strong>p1, p2, p3, p4</strong></p>
+<p>Pointer of different sizes (bytes).</p>
+<p>There are two types of pointer.</p>
+<ul>
+<li>Pointer to iterate, those that use memory already allocated.</li>
+<li>Pointer to mange memory, those that allocate memory</li>
+</ul>
+<p><em>Members:</em></p>
+<ul>
+<li>.start</li>
+<li>.end</li>
+<li>.length</li>
+</ul>
+<p><em>Properties:</em></p>
+<ul>
+<li>alloc / new</li>
+<li>dealloc / delete</li>
+<li>realloc / resize</li>
+<li>copy</li>
+</ul>
+</li>
+</ul>
+<!--
+* **bin[X]**
+
+  binary data of given number of bytes.
+
+* **stream:type**
+
+  Wrapper for a given subtype that allow processing in chunks.
+-->
+
+<ul>
+<li><p><strong>null</strong> &amp; <strong>nil</strong></p>
+<p><code>null</code> is prefered as <code>nil</code> is introduce it just for laziness.</p>
+</li>
+</ul>
+<!--
+* **fnblock**
+
+  Block of code. it could be considered as a function-body.
+-->
+
+<h4 id="type-properties">Type properties</h4>
+<p><strong>iterable</strong></p>
+<blockquote>
+<p>Has some special methods like: each, filter, reduce...</p>
+<p>Can be directly used inside a <code>for-in</code> loop</p>
+</blockquote>
+<p><strong>thread-block</strong></p>
+<blockquote>
+<p>A thread can block the usage for the rest of the threads.</p>
+<p>When a thread want to use it, first must wait the lock.</p>
+</blockquote>
+<p><strong>shared-ptr</strong></p>
+<blockquote>
+<p>Reference-counted shared pointer.</p>
+<p>when a variable references counter add 1</p>
+<p>when a variable is deleted counter subtract 1</p>
+</blockquote>
+<h4 id="functions-in-modules-">functions in modules.</h4>
+<p>Just as a brief introduction, variable in modules has special keyword
+to specify their behavior.</p>
+<ul>
+<li><code>export var</code> allow a variable to be accessed outside the module</li>
+<li>There is no way to export a <em>readonly</em> variable.</li>
+</ul>
+<h2 id="string">string</h2>
+<p><code>string</code> store UTF-8 characters (maybe unicode).</p>
+<h3 id="instance-properties">instance properties</h3>
+<ul>
+<li><p><em>ui64</em> size = 0 [readonly]</p>
+<p>bytes allocated, remember that UTF-8 is multibyte.</p>
+</li>
+<li><p><em>ui64</em> used = 0 [readonly]</p>
+<p>bytes currently in use.</p>
+</li>
+<li><p><em>ui64</em> length = 0 [readonly]</p>
+<p>Number of characters</p>
+</li>
+</ul>
+<h3 id="operators">operators</h3>
+<ul>
+<li><code>[]</code> access to a single character first byte.</li>
+<li><code>+</code> concatenate two strings</li>
+<li><code>&gt;</code> &amp; <code>&lt;</code> compare two strings</li>
+<li><code>=</code> overwrite lhs and resize if needed</li>
+</ul>
+<h3 id="instance-methods">instance methods</h3>
+<ul>
+<li><p><strong>substr</strong> (<em>string</em> str, <em>ui64</em> start, <em>ui64</em> length = infinity)</p>
+<p>The substr method takes three arguments, and returns str modified, result of
+starting from position start and running for length code units
+(or through the end of the string). If start is negative,
+it is treated as (str.length + start).</p>
+</li>
+<li><p><strong>substring</strong> (<em>string</em> str, <em>ui64</em> start, <em>ui64</em> end)</p>
+</li>
+<li><p><strong>_concat</strong> (<em>string</em> str, <em>string</em> str2)</p>
+<p><code>+</code> alias.</p>
+</li>
+<li><p><strong>concat</strong> (<em>string</em> str, <em>string</em> str2)</p>
+<p>Return str modified, result of concatenate str and str2.</p>
+</li>
+<li><p><strong>resize</strong> (<em>string</em> str, <em>ui64</em> size)</p>
+<p>Reallocate memory.</p>
+</li>
+<li><p>charAt</p>
+</li>
+<li>charCodeAt</li>
+<li>codePointAt</li>
+<li>contains</li>
+<li>concat</li>
+<li>indexOf</li>
+<li>lastIndexOf</li>
+<li>length</li>
+<li>localeCompare</li>
+<li>match</li>
+<li>replace</li>
+<li>search</li>
+<li>slice</li>
+<li>split|explode</li>
+<li>substr</li>
+<li>substring</li>
+<li>toLocaleLowerCase</li>
+<li>toLocaleUpperCase</li>
+<li>toLowerCase</li>
+<li>toUpperCase</li>
+<li>trim</li>
+<li>trimLeft</li>
+<li><p>trimRight</p>
+</li>
+<li><p>lcfirst</p>
+</li>
+<li><p>ucfirst</p>
+</li>
+<li><p>chunk_split</p>
+<p>Split a string into smaller chunks</p>
+<p><code>string chunk_split ( string $body [, int $chunklen = 76 [, string $end = &quot;\r\n&quot; ]] )</code></p>
+</li>
+<li><p><a href="http://php.net/manual/en/function.nl2br.php">nl2br</a></p>
+<p>Calculates the crc32 polynomial of a string</p>
+</li>
+</ul>
+<p>One-way string hashing</p>
+<ul>
+<li><a href="http://php.net/manual/en/function.ord.php">ord</a></li>
+<li>parse_http_get</li>
+</ul>
+<h4 id="crypto-related">crypto related</h4>
+<ul>
+<li><a href="http://php.net/manual/en/function.crypt.php">crypt</a></li>
+<li><a href="http://php.net/manual/en/function.sha1.php">sha1</a></li>
+<li><a href="http://php.net/manual/en/function.md5.php">md5</a></li>
+<li><a href="http://php.net/manual/en/function.crc32.php">crc32</a></li>
+</ul>
+<h3 id="string-properties-under-study-">string properties (under study)</h3>
+<ul>
+<li><p><em>ui64</em> pool_size = 1m [mutable]</p>
+<p>Determine the minimum memory reserved anytime for string operations.</p>
+</li>
+<li><p><em>ui64</em> max_size = 2m [mutable]</p>
+<p>From this point memory will be released if destruction happens, and meet certain criteria.</p>
+</li>
+<li><p><em>ui32</em> deallocations [readonly]</p>
+<p>Counter</p>
+</li>
+<li><p><em>ui32</em> .allocations [readonly]</p>
+<p>Counter</p>
+</li>
+<li><p><em>f32</em> .fragmentation [readonly]</p>
+<p>Fragmentation factor.</p>
+</li>
+</ul>
+<h3 id="string-allocation-function-under-study-">string allocation function (under study)</h3>
+<ul>
+<li><p>.defrag <strong>TODO</strong> study more</p>
+<p>Sort all memory strings in a new place.</p>
+</li>
+</ul>
+<p><strong>TODO</strong> Study more.</p>
+<p>support memory management profiles/allocators?</p>
+<ul>
+<li>continuous pool</li>
+<li><p>on demand</p>
+</li>
+<li><p>ord, make sense ? will be utf-16</p>
+</li>
+<li>base64 where?</li>
+<li>number_format where?</li>
+<li>currency_format where?</li>
+</ul>
+<h2 id="number-types">Number types</h2>
+<p>Any number type has the following properties.</p>
+<ul>
+<li><p>.infinity</p>
+</li>
+<li><p>.minfinity</p>
+</li>
+<li><p>.max</p>
+<p>Maximum number represented</p>
+</li>
+<li><p>.min</p>
+<p>Minimum number represented</p>
+</li>
+<li><p>.min_resolution</p>
+<p>Minimum resolution.</p>
+<p>1 for integers</p>
+<p>[STUDY] f32 &amp; f64</p>
+</li>
+<li><p>.round</p>
+<p>round function behavior.</p>
+<p>0 toward zero
+1 to nearest
+2 toward positive infinity
+3 toward negative infinity</p>
+</li>
+<li><p>.null</p>
+<p>Default value for a not initialized number.</p>
+</li>
+</ul>
+<p>Number with decimals has special properties</p>
+<ul>
+<li><p><em>epsilon</em> = 0</p>
+<p>epsilon can be modified at compile time.</p>
+<p>If you set epsilon many times in your program, the last one prevail. So it&#39;s recommended to do it in the configuration file.</p>
+<p>When set, modify <code>a == b</code> to <code>-epsilon &lt; (a - b) &lt; epsilon</code>, So there is a performance hit, but avoid floating points errors.</p>
+</li>
+</ul>
+<h2 id="pointers">Pointers</h2>
+<p>There many types of pointers.</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>target</th>
+<th>can move?</th>
+<th>own memory</th>
+<th>dereferenced</th>
+<th>safe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ptr</code></td>
+<td>single</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>array</code></td>
+<td>multiple</td>
+<td>no</td>
+<td>yes</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>pitr</code></td>
+<td>multiple</td>
+<td>yes</td>
+<td>no</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>rawp</code></td>
+<td>multiple</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="-ptr-"><code>ptr</code></h3>
+<p>Points to a single memory address, is dereferenced because there
+is no operation that can be perform on the pointer apart from assign to a memory.</p>
+<pre><code>var a = 1; // ui8
+var b = 5; // ui8
+
+var pa = &amp;a; // pointer to ui8
+var pb = &amp;b; // pointer to ui8
+
+
+// and now, what means dereferenced.
+a = a + pb;
+log a; // stdout: 6
+
+
+pa = pb; // assign value
+log a; // stdout: 5
+
+pa = &amp;pb; // now pa and pb points to a
+
+log (&amp;pa === &amp;pb) === a;
+</code></pre><h3 id="-array-"><code>array</code></h3>
+<p>Yeah an array is considered a pointer!</p>
+<p>examples:</p>
+<pre><code>var a = [1,2,3];
+var b = new ui8[3];
+
+b copy a; // copy a onto b
+assert a[0] == b[0] &quot;a and b aren&#39;t the same!&quot;;
+
+
+var c = &amp;a; // reference
+
+delete a; // even if a own the memory also c
+
+log c[0]; // 1
+</code></pre><h3 id="-pitr-"><code>pitr</code></h3>
+<p>Pointer(memory) iterator.</p>
+<p>Properties</p>
+<ul>
+<li><p><code>length</code>:<strong>ui64</strong></p>
+<p>readonly.</p>
+</li>
+<li><p><code>start</code>:<strong>rawp</strong></p>
+<p>readonly.</p>
+</li>
+<li><p><code>end</code>:<strong>rawp</strong></p>
+<p>readonly.</p>
+</li>
+<li><p><code>current</code>:<strong>rawp</strong></p>
+<p>readonly.</p>
+<p>current is dereferenced by the compiler.</p>
+</li>
+<li><p><code>next</code>:<strong>any</strong> or ``</p>
+<p>readonly.</p>
+</li>
+<li><p><code>prev</code>:<strong>any</strong> or ``</p>
+<p>readonly.</p>
+</li>
+</ul>
+<p>Operator</p>
+<ul>
+<li><p>operator++</p>
+<p>same as next();</p>
+</li>
+<li><p>operator--</p>
+<p>same as prev();</p>
+</li>
+<li><p>operator+ amount:ui64</p>
+<p>same as next(amount)</p>
+</li>
+<li><p>operator+= amount:ui64</p>
+<p>same as next(amount)</p>
+</li>
+<li><p>operator- amount:ui64</p>
+<p>same as next(amount)</p>
+</li>
+<li><p>operator-= amount:ui64</p>
+<p>same as prev(amount)</p>
+</li>
+</ul>
+<p>Members</p>
+<ul>
+<li><p><code>reset</code></p>
+<p>back to start</p>
+</li>
+<li><p><code>next</code>(<strong>amount</strong>:ui64 = 1)</p>
+<p>go to next and return false if the end reached or no action is performed.</p>
+</li>
+<li><p><code>prev</code>(<strong>amount</strong>:ui64 = 1)</p>
+<p>go to previous and return false if the beginning reached or no action is performed.</p>
+</li>
+</ul>
+<p>Examples</p>
+<pre><code>var l = new array[10];
+l.fill(10);
+
+var itr = l.iterator();
+
+while (itr.next()) {
+    log itr.current; // stdout (10 times): 10
+}
+
+assert &amp;itr.current == &amp;itr.last &quot;end reached&quot;;
+
+delete itr; // do not delete l memory
+</code></pre><h3 id="-rawp-"><code>rawp</code></h3>
+<p>Raw C-like pointer, for maximum performance.
+It&#39;s not safe to use because has no bounds check.</p>
+<p>Use it with caution.</p>
+<p>Compiler notes:</p>
+<ul>
+<li><code>var x:rawp = new ui8[1];</code> raise a compilation error</li>
+</ul>
+<h2 id="array">array</h2>
+<ul>
+<li>Arrays are always dense.</li>
+<li>Arrays always contains a common type.</li>
+<li>Assign a pointer to something in the array it&#39;s only possible if fixed size.</li>
+</ul>
+<h3 id="initialization">Initialization</h3>
+<pre><code>array [ui64:length] [bool:fixed_size]
+</code></pre><ul>
+<li>length: initial length</li>
+<li>fixed_size: cannot be resized</li>
+</ul>
+<pre><code>var ar1 = [];
+var ar2 = new number[5];
+var ar3 = clone other_array;
+var ar4 = [x, y, z]; // x, y &amp; z must have the same type.
+var ui8[] ar5 = new array(5, true); // fixed, ui8 (x5)
+
+ar1[3] = 0; // compiler not know the implicit type
+ar1.toJSON(); // [null, null, null, 0]
+</code></pre><p>The compiler will decide the type of the array with a simple rule: Type of the first insertion.</p>
+<ul>
+<li>Will raise a warning if no implicit conversion is made, when possible information loss. for example: ui64 -&gt; ui32</li>
+</ul>
+<h3 id="instances-properties">Instances properties</h3>
+<ul>
+<li><p><code>length</code></p>
+<p>readonly. Number of elements.</p>
+</li>
+<li><p><code>size</code></p>
+<p>readonly. Reserved memory.</p>
+</li>
+<li><p><code>last</code></p>
+<p>Last element in the array, no more array[array.length -1]</p>
+</li>
+<li><p>[<strong>index</strong>:<strong>ui64</strong>]</p>
+<p>Access to given index.</p>
+</li>
+</ul>
+<h3 id="transformations">Transformations</h3>
+<ul>
+<li><p><code>to_string</code></p>
+<p>Return the JSON representation.</p>
+</li>
+<li><p><code>to_number</code></p>
+<p>Return the length.</p>
+<p>[<strong>STUDY</strong>] This could lead to problems but could avoid check against <code>array.length</code></p>
+</li>
+<li><p><code>to_object</code></p>
+<p>Return a new Object will keys as Ids</p>
+<p>// change id-property and returned as Object</p>
+</li>
+</ul>
+<p>.for: -&gt; raise runtime error
+.switch: -&gt; raise runtime error
+.is: // memory position check -&gt; check length. if the same, loop every item and do <code>this[i] is that[i]</code></p>
+<ul>
+<li><p><code>concat</code> (<strong>other</strong>:<strong>array</strong>)</p>
+<p>Returns a new array comprised of the array on which it is called joined with the array(s) and/or value(s) provided as arguments.</p>
+<p>Must have at least one argument, use <code>clone</code> instead.</p>
+</li>
+<li><p><code>append</code></p>
+<p>Returns current array joined with the array(s) and/or value(s) provided as arguments.</p>
+</li>
+<li><p><code>join</code> (<strong>separator</strong>:<strong>string</strong>)</p>
+<p>Return a string resulting of join all elements with given separator.</p>
+</li>
+</ul>
+<p><code>last_index_of</code>(<strong>search_element</strong>:void, <strong>from_index</strong>:<strong>ui64</strong> = length)</p>
+<p>  Returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex (length by default)</p>
+<ul>
+<li><p><code>index_of</code>(<strong>search_element</strong>: void, <strong>from_index</strong>:ui64 = 0)</p>
+<p>Returns the first index at which a given element can be found in the array, or -1 if it is not present.</p>
+</li>
+<li><p><code>has_any</code>(<strong>searchArray</strong>: array)</p>
+<p>Returns if any of the values in searchArray is contained in the array.</p>
+</li>
+<li><p><code>reverse</code>()</p>
+</li>
+<li><code>sort</code>()</li>
+<li><p><code>splice</code>(<strong>index</strong>:ui64, <strong>howMany</strong>:ui64, <strong>elements</strong>:array ...)</p>
+<p>Changes the content of an array, adding new elements while removing old elements</p>
+</li>
+<li><p><code>shift</code>()
+Removes the first element from an array and returns that element. This method changes the length of the array</p>
+</li>
+<li><p><code>slice</code>(<strong>begin</strong>:ui64, <strong>end</strong>:ui64 = length)
+Returns a shallow copy of a portion of an array into a new array object</p>
+</li>
+<li><p><code>pop</code>()</p>
+<p>Removes the last element from an array and returns that element</p>
+</li>
+<li><p><code>push</code>(<strong>elements</strong>:array ...)</p>
+<p>Adds one or more elements to the end of an array and returns the new length of the array</p>
+</li>
+<li><p><code>unshift</code>(<strong>elements</strong>:array ...)</p>
+<p>Adds one or more elements to the beginning of an array and returns the new length of the array.</p>
+</li>
+<li><p><code>fill</code>(<strong>value</strong>:any ...)</p>
+<p>Fill the array (all size reserved) with the given value.</p>
+</li>
+</ul>
+<h3 id="loping">loping</h3>
+<p>For evey function listed here if the function is anonymously declared, the compiler will transform them into a blocks for performance.</p>
+<ul>
+<li><p><code>every</code> (<strong>callback</strong>: function)</p>
+<p>Tests whether all elements in the array pass the test implemented by the provided function.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
+</li>
+<li><p><code>filter</code> (<strong>calback</strong>: function)</p>
+<p>creates a new array (with the original length) with all elements that pass the test implemented by the provided function.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
+</li>
+<li><p><code>for_each</code>  (<strong>calback</strong>: function)</p>
+</li>
+<li><p><code>each</code> (<strong>calback</strong>: function)</p>
+<p>Executes a provided function once per array element</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array.</p>
+</li>
+<li><p><code>map</code>(<strong>calback</strong>: function)</p>
+<p>creates a new array with the results of calling a provided function on every element in this array.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return the same value that the array contains.</p>
+</li>
+<li><p><code>mapme</code>(<strong>calback</strong>: function)</p>
+<p>Same as map but without array creation.</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return the same value that the array contains.</p>
+</li>
+<li><p><code>reduce</code>(<strong>calback</strong>: function)</p>
+<p>Applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.</p>
+<p>The callback will recieve 4 parameters: <strong>previousValue</strong>:void, <strong>currentValue</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. Returned value is defined by the callback itself.</p>
+</li>
+<li><p><code>reduceRight</code>(<strong>calback</strong>: function)</p>
+<p>Applies a function against an accumulator and each value of the array (from right-to-left) has to reduce it to a single value</p>
+<p>The callback will recieve 4 parameters: <strong>previousValue</strong>:void, <strong>currentValue</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. Returned value is defined by the callback itself.</p>
+</li>
+<li><p><code>some</code>(<strong>calback</strong>: function)</p>
+<p>Tests whether some element in the array passes the test implemented by the provided function</p>
+<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
+</li>
+</ul>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>if type is defined, when enter a switch gives a compile error.</li>
+</ul>
+<h2 id="struct">struct</h2>
+<p>Complex data type declaration that defines a physically grouped list
+of variables and functions to be placed under one name in a block of memory.</p>
+<p>Function have direct access to those variables in the group by their name.</p>
+<p>Pointer variables can be reserved, resized but not deleted. The memory is
+owned by the struct, and memory will be freed when the struct is deleted.
+If you need to free a pointer memory inside a struct, use resize with 0 length.</p>
+<p>Syntax</p>
+<blockquote>
+<p><strong>struct</strong> <em>struct_identifier</em> {</p>
+<p>// Variable declaration</p>
+<p> <strong>var</strong> [<em>type</em>] <em>var_identifier</em>[ = <em>initialization</em>]<strong>;</strong></p>
+<p>// Function declaration</p>
+<p> <strong>fn</strong> <em>fn_identifier</em> [<em>arguments</em>] {</p>
+<p> }<strong>;</strong></p>
+<p>};</p>
+</blockquote>
+<p>Examples:</p>
+<pre><code>var x = 0;
+
+struct v2 {
+  var number x = 0;
+  var y = 0; // implicit type -&gt; number
+  fn add _x, _y {
+    // notice that v2.x point to x member and not the global variable.
+    v2.x += _x;
+
+    _y += _y;
+  };
+};
+</code></pre><h2 id="block">block</h2>
+<p>It&#39;s the same as struct but memory continuous.</p>
+<p>The advantage in performance has a counter part of fixed size. A single pointer cannot be resized after the first reserve.</p>
+<pre><code>block identifier [, pointer_name] {
+  // variables
+  // functions
+};
+</code></pre><p>Example</p>
+<pre><code>block blk ptr1, ptr2 { // specify the order, if leave it blank, declaration order will be asumed
+  &quot;ptr1&quot;: p1,
+  &quot;ptr1&quot;: p2,
+};
+
+var x = new blk[10, 10];
+// can be resized as a group
+resize x[15, 10]; // this will allocate, copy and free the old memory.
+
+resize x.ptr1[15]; // compilation error
+resize x.ptr1[0]; // compilation error
+delete x.ptr1[15]; // compilation error
+</code></pre><h2 id="objects">Objects</h2>
+<p>Abstract data type composed of a collection of (key, value) pairs.</p>
+<p>Keys are always a unique string.
+Numbers cannot be assigned without casting. Because <code>!</code> operator need to be sure of what type are involved (<a href="#!operator">see below</a>).</p>
+<p>Values are pointers and can be repeated.</p>
+<p>Objects are declared using JSON-like format.
+Last comma is required (atm) for version control system cleaning.</p>
+<pre><code>var d;
+var xxx = {
+  &quot;a&quot;: &quot;world&quot;,
+  &quot;b&quot;: hello(), // function
+  &quot;c&quot;: variable, // variable, dont forget the last comma!
+  d: hello(), // variable as key :)
+};
+</code></pre><h3 id="methods">methods</h3>
+<ul>
+<li><p><code>$has</code> (<em>string</em> <strong>key</strong>) : <em>bool</em></p>
+<p>Return if given key is defined.</p>
+</li>
+<li><p><code>$keys</code> () : <em>array</em></p>
+<p>Returned keys are always sorted.</p>
+</li>
+<li><p><code>$get</code> (<em>string</em> <strong>key</strong>, <em>bool</em> <strong>safe</strong> = false) : <em>any</em></p>
+<p>Get value, if <code>safe=false</code> will raise a run-time-error</p>
+</li>
+<li><p><code>$set</code> (<em>string</em> <strong>key</strong>, <strong>pointer</strong> <strong>value</strong>) : <em>bool</em></p>
+<p>Set/overwrite given key with given value.</p>
+<p>if the key stats with <code>$</code> a runtime error is raised.</p>
+</li>
+<li><p><code>$delete</code>(<em>string</em> <strong>key</strong>) : <em>any</em></p>
+<p>Remove given key and return pointer or null.</p>
+</li>
+<li><p><code>$setter</code>(<em>fn</em> <strong>sttr</strong> = null) : <strong>function</strong></p>
+<p>Set a setter function that will be called before each set.</p>
+</li>
+<li><p><code>$getter</code>(<em>fn</em> <strong>gttr</strong> = null) : <strong>function</strong></p>
+<p>Set a getter function that will be called before each get.</p>
+</li>
+</ul>
+<h2 id="-exits-operator-nested-has-shorthand-"><code>?</code> exits operator (nested <code>$has</code> shorthand)</h2>
+<p>Object has a special method <code>$has</code> but it recommended to use the <code>?</code> operator for readability purposes.</p>
+<pre><code>if xxx.say.hello? {
+  // do something
+}
+
+if xxx.hello? == 10 { // expanded to xxx.$has(&quot;hello&quot;) &amp;&amp; xxx.hello == 10
+  // do something
+}
+</code></pre><p>Compiler will expand this operator using $has</p>
+<blockquote>
+<p>xxx.say.hello?</p>
+</blockquote>
+<pre><code>xxx.$has(&quot;say&quot;) ? (xxx.say.$has(&quot;hello&quot;) ? xxx.say.hello : null)  : null
+</code></pre><p><strong>TODO</strong> review, this operator is maybe safe at the begining.</p>
+<h2 id="-safe-asignament"><code>?</code> safe asignament</h2>
+<p><code>?</code> operator can be used in assignment expressions.
+Compiler will expand your code and give you a reasonable collection of runtime-errors.</p>
+<blockquote>
+<p>xxx.first.second.third? = &quot;just a string&quot;;</p>
+</blockquote>
+<pre><code>if (!xxx.$has(&quot;first&quot;)) error &quot;xxx has no index &#39;first&#39;&quot;;
+if (&quot;object&quot; === typeof xxx.$get(&quot;first&quot;)) error &quot;invalid type of xxx.first&quot;;
+
+if (!xxx.$get(&quot;first&quot;).$has(&quot;second&quot;)) error &quot;undefined xxx.first&quot;;
+if (&quot;object&quot; === typeof xxx.$get(&quot;first&quot;).$get(&quot;second&quot;)) error &quot;invalid type of xxx.first.second&quot;;
+
+//...
+xxx.$get(&quot;first&quot;).$get(&quot;second&quot;).$get(&quot;third&quot;)[0] = &quot;just a string&quot;;
+</code></pre><p>Because key in objects are always string, safe assignaments will initialize arrays if a number is found.</p>
+<pre><code>? xxx.first.second.third[0] = &quot;just a string&quot;;
+
+// expanded...
+if (!xxx.$has(&quot;first&quot;)) error &quot;undefined xxx.first&quot;;
+if (&quot;object&quot; === typeof xxx.$get(&quot;first&quot;)) error &quot;invalid type of xxx.first&quot;;
+
+if (!xxx.$get(&quot;first&quot;).$has(&quot;second&quot;)) error &quot;undefined xxx.first&quot;;
+if (&quot;object&quot; === typeof xxx.$get(&quot;first&quot;).$get(&quot;second&quot;)) error &quot;invalid type of xxx.first.second&quot;;
+
+//...
+xxx.$get(&quot;first&quot;).$get(&quot;second&quot;).$get(&quot;third&quot;)[0] = &quot;just a string&quot;;
+</code></pre><p><a name="!operator"></a></p>
+<h2 id="-force-asignament"><code>!</code> force asignament</h2>
+<p>A more inteligent compiler should now how to assign complex things based just on knowing the first one.</p>
+<pre><code>var obj = {};
+
+obj.say.hello! = &quot;hola&quot;;
+
+log typeof obj.say;
+// stdout: object
+log typeof obj.say.hello;
+// stdout: string
+</code></pre><h1 id="iterable">Iterable</h1>
+<p>Object, Arrays and Y..X</p>
+<h1 id="observers">Observers</h1>
+<p>Observers listen changes in variables, it only works on debug mode, on release this code will be removed.</p>
+<pre><code>observer(var).on(fn(String action[assignament|access], Mixed value) {...})
+</code></pre><h1 id="functions">Functions</h1>
+<p>Main philosophy behind:</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Function_overloading">Function overloading</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Anonymous_function">Anonymous function</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Variadic_function">Variadic function</a></li>
+<li>Everything is sent by reference, hence <em>Multiple Return Values</em> is not needed-supported.</li>
+<li>There is no <code>this</code> concept. <code>this</code> introduce many memory management problems so it&#39;s removed.</li>
+<li>Argument types are optional (sometimes)</li>
+<li>Return type is optional (sometimes). If no return statement is found, <code>null</code> will be returned.</li>
+<li><code>fn</code> is an alias <code>function</code>, for lazy people.</li>
+<li>Parenthesis are not required, braces are.</li>
+</ul>
+<h2 id="functions-identifier-name-rules">Functions identifier/name rules</h2>
+<ul>
+<li>Cannot start with a number</li>
+<li>Cannot start with a $</li>
+<li>Any UTF-8 valid character</li>
+</ul>
+<p>Can I use <code>+</code> as function name... The answer is: <em>Yes</em>, we can.</p>
+<h2 id="function-declaration">Function declaration</h2>
+<blockquote>
+<p><strong>fn</strong>|<strong>function</strong> <em>identifier</em> [,<em>arguments</em>]* [: <em>return_type</em>] {}</p>
+</blockquote>
+<pre><code>fn giveme x {
+    return x;
+}
+log giveme(0); // stdout: 0
+</code></pre><p>Compiler will try expand to its full form (with types and return), or complain if something is missing or unknown.</p>
+<p>Compiler will also generate multiple versions of the same function if every type is compatible.</p>
+<pre><code>fn sum x,  y {
+  return x + y;
+}
+// will be initialy expanded to:
+function sum(number x, number y) -&gt; number {
+  return x + y;
+}
+var ui8 x = 5, y = 7;
+log sum(5, 7);
+
+// will generate another function with ui8 as inputs and output.
+function sum(ui8 x, ui8 y) -&gt; ui8 {
+  return x + y;
+}
+</code></pre><p>Compiler don&#39;t generate functions if precision would be lost.</p>
+<h2 id="function-calls">function calls</h2>
+<p>There are two ways to call a function: Classic and ~Prototypes/Objects like (first argument as class-like).</p>
+<pre><code>log sum(5, 6);
+// stdout 11
+
+log 5.sum(6);
+// stdout 11
+</code></pre><p>That allow compiler to use tail-call-recursion.</p>
+<p>The first argument can be used as a classy-method-prototype.</p>
+<p>Compiler will translate those <em>lazy forms</em> to the full.</p>
+<h2 id="argument-default">Argument default</h2>
+<p>Common syntax.</p>
+<pre><code>fn sum ui8 a, ui8 b = 1 {
+
+}
+</code></pre><h2 id="argument-assertion-shorthand-">Argument assertion (shorthand)</h2>
+<p>Assertion is a common use to check arguments invalid ranges/value.</p>
+<p>You could use any check comparison to create an assertion</p>
+<pre><code>// default: 1
+// assert if negative
+// assert if is null
+fn sum ui8 a, ui8 b = 1 &lt; 0 == null {
+
+}
+</code></pre><h2 id="argument-call-expansion">Argument call expansion</h2>
+<p>Sometime functions could receive a lot of parameters, with many optional/default values. In those cases reading or even writing the call could be painful.</p>
+<p>For that you can specify what arguments are you passing.</p>
+<pre><code>fn sum ui8 a, ui8 b {
+
+}
+
+
+// and you can define the same function, with different argument names.
+fn sum ui8 c, ui8 b {
+
+}
+
+sum(5 as b, 6 as a);
+sum(5, 6); // compiler-error, argument expansion is required found two compatible functions: ...
+</code></pre><h2 id="variadic-function">Variadic function</h2>
+<p>Variadic functions allow you to receive any number of arguments of the same type.</p>
+<pre><code>
+// this function recieve many ui8
+fn sumall ui8... {
+    var sum = 0;
+
+    arguments.each({ sum+=$0;})
+
+    return sum;
+}
+
+// this is not allowed
+fn glue string start, string to_join..., string end {
+
+}
+</code></pre><p><strong>TODO</strong> Study support for multiple Variadic</p>
+<h2 id="operator-functions">Operator functions</h2>
+<p>Operator function can be used as a shorthand with two purposes:</p>
+<ul>
+<li>Modify the first argument</li>
+<li>Return a new Argument</li>
+</ul>
+<p>Operator functions doesn&#39;t require <code>.</code> (dot).</p>
+<p>Operator list (<strong>TODO</strong> study to add more but this should be
+enough, and do not introduce so much errors )</p>
+<ul>
+<li>+</li>
+<li>-</li>
+<li>*</li>
+<li>/</li>
+<li>=</li>
+</ul>
+<pre><code>var vec2 = require(&quot;v2&quot;); // mod type is v2
+var va = new vec2(1, 1);
+var v_ra = new vec2(1, 1);
+var v_rb = new vec2(1, 1);
+
+fn +(x:v2, y:v2) {
+    x.x += y.x;
+    x.y += y.y;
+}
+
+fn +(x:v2, y:v2) -&gt; v2 {
+    x.x += y.x + 10;
+    x.y += y.y;
+
+    return /*clone */ x;
+}
+// call first function (no return)
+va + va; // v will be modified now (2,2)
+
+// call second function (with return)
+v_ra = v_ra + v_rb; // v will be modified now (12,2)
+</code></pre><h2 id="arguments-by-value">Arguments by value</h2>
+<p><code>clone</code> operator is used before an argument to specify that you want to clone it.</p>
+<pre><code>function mod_all(clone x, y) {
+    x = 1;
+    y = 1;
+}
+var x = 0;
+var y = 0;
+mod_all(x, y);
+
+log x; // stdout: 0
+log y; // stdout: 1
+</code></pre><h2 id="-function-as-arguments"><code>function</code> as arguments</h2>
+<p>A function is divided into header and body.
+A callback function could have a default header that will be used is at call-expression
+is not used.</p>
+<pre><code>// declaration
+function each ar:array, code:function($0, string $1)) {
+    var i = 0,
+        max = ar.lenth;
+
+    for (i = 0; i &lt; max; ++i) {
+        code(ar[i], i);
+    }
+
+}
+
+// execution
+
+var arr = [1, 2, 3, 4];
+
+// avoid header on call, default header will be used.
+arr.each({
+    var value = $0;
+    var key = $1;
+
+    log key, &quot;-&quot;, value;
+});
+// stdout: 1-1
+// stdout: 2-2
+// stdout: 3-3
+// stdout: 4-4
+</code></pre><p>Compile will expand the call</p>
+<pre><code>arr.each(fn ($0, string $1) {
+  var value = $0;
+  var key = $1;
+
+  log key, &quot;-&quot;, value;
+});
+</code></pre><h2 id="name-collision-resolution">Name collision/resolution</h2>
+<p>Because the first argument will have a pseudo-method, functions with the same name
+cannot have the same arguments. To avoid collision we introduce a &quot;do not export&quot;</p>
+<h2 id="functions-in-modules-">functions in modules.</h2>
+<p>Just as a brief introduction, functions in modules has special keyword to specify
+their behavior.</p>
+<ul>
+<li><code>export fn</code> allow a function to be used outside the module</li>
+<li><code>export fn new</code> constructor of the module</li>
+<li><code>export fn delete</code> destructor of the module</li>
+</ul>
+<h2 id="documentation">documentation</h2>
+<p>Compiler can generate documentation based on comments preceding a functions, also can get types.</p>
+<p>The following two examples are identical</p>
+<pre><code>/**
+* @param ui8 x
+* @param ui8 y
+*/
+fn x, y {
+
+}
+</code></pre><pre><code>fn ui8 x, ui8 y {
+
+}
+</code></pre><h2 id="-run">#run</h2>
+<p>Compile time function running</p>
+<h1 id="listeners">Listeners</h1>
+<p>Listeners can be attached to functions at compile time.</p>
+<pre><code>#listener(fn).before(fn(function_name, arguments, stack))
+#listener(fn).beforeOff(fn)
+#listener(fn).after(fn(function_name, arguments, return_value, error_value, stack))
+#listener(fn).afterOff(fn)
+#listener(fn).removeAll
+</code></pre><h2 id="error-handling">Error handling</h2>
+<p>Manage exceptions is in plee is very peculiar. Like C, there is not real exceptions class to throw. You throw anything <code>not null</code>.</p>
+<p>it&#39;s recomended to use <code>exception()</code> function to throw.</p>
+<h3 id="exception">exception</h3>
+<p><code>exception</code> it&#39;s a reserved word so the compiler can track line and file.
+But it should be considered as a function with the following header.</p>
+<blockquote>
+<p><strong>exception</strong>(<em>string</em> type, <em>string</em> message, <em>ui64</em> code, <em>object</em> user_data) : <em>object</em> {</p>
+<p>var object to_throw = {
+  &quot;type&quot;: type,
+  &quot;message&quot;: message,
+  &quot;code&quot;: code,
+  &quot;user_data&quot;: user_data,
+};</p>
+<p> return to_throw;</p>
+<p>}</p>
+</blockquote>
+<pre><code>var err = exception &quot;invalid-auth&quot;, &quot;pwd-failed&quot;, 501;
+</code></pre><p><strong>TODO</strong> review, exception needs to be a reserved word ?</p>
+<h3 id="throw">throw</h3>
+<p>throw a new exception up.</p>
+<pre><code>throw &quot;invalid-auth&quot;, &quot;pwd-failed&quot;, 501;
+</code></pre><h3 id="raise">raise</h3>
+<p><code>raise</code> is a convenient way to throw an exception if a variable is not null.</p>
+<pre><code>var exp = null;
+raise exp; // do not throw
+exp = {&quot;error&quot;: &quot;my message&quot;}
+raise exp; // but this will
+</code></pre><h3 id="manage-an-exception">manage an exception</h3>
+<p><code>exceptions</code> are managed by functions that you can setup at function call.</p>
+<p>Exceptions manager are functions with a compatible header:</p>
+<ul>
+<li>First argument: object</li>
+<li>Returns: ui8</li>
+</ul>
+<p>Returns code behavior.</p>
+<ul>
+<li>0 (false) exit program with given code</li>
+<li>1 (true) continue program execution.
+The function will return null and continue.</li>
+<li>2 don&#39;t caught &quot;re-throw&quot;</li>
+<li>3 retry</li>
+</ul>
+<pre><code>function manage_error(object err) : ui8 {
+  log err.type;
+  log err.message;
+
+  return false;
+}
+
+function div x, y :i64 {
+  return x / y;
+}
+
+log div(0, 0) @manage_error;
+
+// stdout: runtime-error
+// stdout: division by 0
+</code></pre><h3 id="error-stack">error stack</h3>
+<p>throw/raise exceptions are good for single exceptions and specific use cases.
+For a more general tailor made solution that you can customize use the error
+stack functions.</p>
+<blockquote>
+<p>push_error()</p>
+<p>has_error()</p>
+<p>pop_error()</p>
+<p>error_message()</p>
+<p>error_no()</p>
+<p>error_list()</p>
+</blockquote>
+<h2 id="if">if</h2>
+<h3 id="if-classic">if-classic</h3>
+<pre><code>if test {
+    // note: braces are mandatory, event for empty-statements
+} [else if test {
+
+} [else {
+
+}]
+</code></pre><h3 id="if-return">if-return</h3>
+<pre><code>var x = if test {
+  10; // result of the last statement is used.
+} else {
+  var z = 10 + 7;
+  z; // result of the last statement is used.
+}
+</code></pre><h3 id="if-as-modifier-shorthand-">if as modifier (shorthand)</h3>
+<p>Another lazy form to avoid curly braces.</p>
+<pre><code>log &quot;no-curly-braces&quot; if i_am_lazy; // i_am_lazy must be defined :)
+</code></pre><h3 id="unless-as-modifier-shorthand-">unless as modifier (shorthand)</h3>
+<p>For expressiveness this time, because <code>unless</code> is much larger than <code>if !</code>.</p>
+<pre><code>log &quot;this is a small file&quot; unless __LINE__ &gt; 500;
+</code></pre><h3 id="chained-comparisons">Chained Comparisons</h3>
+<p>For making it easy to test if a value falls within a certain range.</p>
+<p>Syntax:</p>
+<blockquote>
+<p>x (&lt;|&gt;) y [(&lt;|&gt;) z]</p>
+</blockquote>
+<p>Compiler expansion:</p>
+<blockquote>
+<p>(x &lt; y) &amp;&amp; (y &lt; z)</p>
+</blockquote>
+<h2 id="switch-case-break-fallthrough-">switch (case, break, fallthrough)</h2>
+<p>&quot;Switch&quot; statements provide multi-way execution.
+An expression or type specifier is compared to the &quot;cases&quot; inside the &quot;switch&quot; to determine which branch to execute.</p>
+<p><code>switch</code> is very special in plee in comparison with other languages.</p>
+<p>Most common languages choose to break by default, and it&#39;s resonable, they provide <code>fallthrough</code> as error prone replacement of <code>break</code></p>
+<p>Plee goes a bit beyond while provide <code>fallthrough</code> also provide <code>break</code> but the default behavior is continue testing the next cases. So you can reuse code easily. Also default will be the last to test, regardless the position. In fact is recommended to be the first.</p>
+<p>There are two types of switch: expression switch and comparison switch.</p>
+<h3 id="comparison-switch">comparison switch</h3>
+<p>Compare all case against one value.</p>
+<p>This example illustrate the usage of comparison switch</p>
+<pre><code>var test = &quot;ok&quot;;
+
+switch(test) {
+    default: return &quot;i will be the last&quot;;
+
+    case &quot;ok&quot;: // test == &quot;ok&quot;
+        echo &quot;ok is found!&quot;;
+
+        // continue testing by default
+    case &quot;nok&quot;: // test == &quot;nok&quot;
+        echo &quot;nok is found!&quot;;
+
+        break; // to stop
+    case &quot;ok&quot;,&quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
+        echo &quot;ok or nice is found!&quot;;
+
+        break;
+}
+</code></pre><p>output will be:</p>
+<pre><code>ok is found!
+ok or nice is found!
+</code></pre><p>You may expect &quot;nok is found!&quot; to be part of the output. But that&#39;s not the <code>case</code> and you didn&#39;t read the intro...</p>
+<p>Fall-through in a switch is a common error for programmers that forget to <code>break</code>,
+to avoid this undesired behavior even if the switch is falling-though case comparison must be meet.
+If is desired you must specify it with the reserved word: <code>fallthrough</code>.</p>
+<pre><code>var test = &quot;ok&quot;;
+
+switch(test) {
+    default: return &quot;i will be the last&quot;;
+
+    case &quot;ok&quot;: // test == &quot;ok&quot;
+        echo &quot;ok is found!&quot;;
+
+        fallthrough; // don&#39;t mind continue testing, enter in the next
+    case &quot;nok&quot;: // test == &quot;nok&quot;
+        echo &quot;nok is found!&quot;;
+        break;
+
+    case &quot;ok&quot;,&quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
+        echo &quot;ok or nice is found!&quot;;
+
+        break;
+}
+</code></pre><pre><code>ok is found!
+nok is found!
+</code></pre><h3 id="expression-switch">expression switch</h3>
+<pre><code>switch {
+    default: return &quot;i will be the last&quot;;
+
+    case test == &quot;ok&quot;: // test == &quot;ok&quot;
+        echo &quot;ok is found!&quot;;
+
+        // fall thought, but test each case
+    case test == &quot;nok&quot;: // test == &quot;nok&quot;
+        echo &quot;nok is found!&quot;;
+        break; // exit
+
+    case test == &quot;ok&quot; || test == &quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
+        echo &quot;ok or nice is found!&quot;;
+
+        break; // exit
+}
+</code></pre><h2 id="for">for</h2>
+<h3 id="for-classic">for-classic</h3>
+<pre><code>for [init;]condition; after_loop {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><h3 id="for-in">for-in</h3>
+<p>for-in won&#39;t clone the iterable. The iterator will behave if something is removed.</p>
+<p>Iterator behavior:</p>
+<ul>
+<li>If current value is removed (splice) the next value will have the same key and next value. if end is reached just break.</li>
+<li>If a value before the current is removed the next value will have the same key and next value.</li>
+<li>If a value after the current is removed won&#39;t appear in the loop.</li>
+</ul>
+<pre><code>for [key, ] value in iterable {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><h3 id="for-in-slice">for-in-slice</h3>
+<p>for-in-slice wont clone the iterable part. The iterator will behave if something is removed.</p>
+<p>Iterator behavior:</p>
+<ul>
+<li>If current value is removed (splice) the next value will have the same key and next value.</li>
+<li>If a value before the current is removed the next value will have the same key and next value.</li>
+<li>If a value after the current is removed won&#39;t appear in the loop.</li>
+<li>It will iterate (max - min) times regardless removals or reach iterable.length</li>
+</ul>
+<pre><code>for [key, ] value in iterable[3,5] {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><h3 id="for-till-shorthand-">for-till (shorthand)</h3>
+<pre><code>for variable|number till number {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><p>Compiler will translate for-till with the folowing rules:</p>
+<blockquote>
+<p>for i till 10 -&gt; for ; i &lt; 10; ++i</p>
+<p>for var i till 10 -&gt; for var i=0; i &lt; 10; ++i</p>
+<p>for i=1 till 10 -&gt; for i=1; i &lt; 10; ++i</p>
+<p>for var i=1 till 10 -&gt; for var i=1; i &lt; 10; ++i</p>
+</blockquote>
+<h3 id="for-to-shorthand-">for-to  (shorthand)</h3>
+<pre><code>for variable|number to number {
+
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><p>Compiler will translate for-to with the folowing rules:</p>
+<blockquote>
+<p>for i to 10 -&gt; for ; i &lt;= 10; ++i</p>
+<p>for var i to 10 -&gt; for var i = 0; i &lt;= 10; ++i</p>
+<p>for i=1 to 10 -&gt; for i=1; i &lt;= 10; ++i</p>
+<p>for var i=1 to 10 -&gt; for var i=1; i &lt;= 10; ++i</p>
+</blockquote>
+<h3 id="for-iterable-shorthand-">for-iterable (shorthand)</h3>
+<p>for-iterable don&#39;t clone the iterable.</p>
+<p>Cannot be nested with the same iterable variable-name. You can alias a variable and nest both for-iterables.</p>
+<pre><code>for iterable {
+    iterable.value // will be aliased, can be used outside the loop!
+    iterable.key // will be aliased, can be used outside the loop!
+    //
+} [else {
+    // executed if condition fails the first time
+}]
+</code></pre><p>Compiler will translate for-iterable with for-in.</p>
+<h2 id="while">while</h2>
+<h3 id="while">while</h3>
+<p>Allows code to be executed repeatedly based on a given boolean condition.</p>
+<p>If condition is never else block will be executed if exists.</p>
+<pre><code>while test {
+  // block
+} [else {
+}]
+</code></pre><h2 id="do-while">do-while</h2>
+<p>Executes a block of code at least once, and then repeatedly executes the block,
+or not, depending on a given Boolean condition at the end of the block.</p>
+<pre><code>do {
+  // block
+} while test;
+</code></pre><h2 id="swap">swap</h2>
+<p>swap variable names.</p>
+<p>swap x y;</p>
+<h3 id="swap-ast">swap AST</h3>
+<pre><code class="lang-json">SwapStatement &lt;: Statement {
+    &quot;type&quot;: &quot;swap-statement&quot;,
+    &quot;left&quot;: Idenfier,
+    &quot;right&quot;: Idenfier
+}
+</code></pre>
+<h2 id="break">break</h2>
+<h3 id="break-inside-loops">break inside loops</h3>
+<p>When <code>break</code> is reached, the nearest loop is immediately terminated and program continue with the next statement to the loop.</p>
+<pre><code>for var i .. 10 {
+    break;
+
+    log i;
+}
+// no stdout
+</code></pre><h3 id="break-inside-switch">break inside switch</h3>
+<p>Jump to the next statement with given label</p>
+<pre><code>for var i .. 10 {
+    break;
+
+    log i;
+}
+// no stdout
+</code></pre><h3 id="break-with-number">break with number</h3>
+<p>You can specify other than the nearest loop/switch given the break the number of jumps.</p>
+<pre><code>for var i .. 10 {
+    for var j .. 10 {
+        break 2; // will break for-i
+        log j;
+    }
+    log i;
+}
+// no stdout
+</code></pre><h3 id="break-with-label">break with label</h3>
+<p>Jump to the next statement with given label.</p>
+<pre><code>var found = false;
+
+// ...
+
+break id-label;
+
+id-label: if (found) {
+    //
+}
+</code></pre><h2 id="repeat">repeat</h2>
+<p>Repeat allow to <code>repeat</code> nearest loop again.</p>
+<p>Example:</p>
+<pre><code>
+var i,
+    once = false;
+for i .. 3 {
+    if (!once &amp;&amp; i == 2) {
+        once = true;
+        repeat;
+    }
+
+    log i;
+}
+// stdout: 0
+// stdout: 1
+// stdout: 0
+// stdout: 1
+// stdout: 2
+</code></pre><h2 id="memory-management">Memory management</h2>
 <h3 id="new">new</h3>
 <p>Allocate memory.
 Memory will be deleted at the end of the block if the variable that own that memory is destroyed.</p>
@@ -113,766 +1941,103 @@ log arr.size; // stdout: 10
 </code></pre><h3 id="avoid-memory-leaks">avoid memory leaks</h3>
 <p>Most of the time, leaks comes when allocating arrays. Array is implement like shared
 pointer so when anybody reference it, it will automatically be deleted.</p>
-<h3 id="types">Types</h3>
-<p>Types are case sensitive. All types in the language and functions are lowercased.</p>
-<h4 id="primitives">Primitives</h4>
+<h2 id="modules">Modules</h2>
+<p>Modules in plee are the way to mimic classes without following any related paradigm.</p>
+<h3 id="module-name-identifier">Module name/identifier</h3>
 <ul>
-<li><p><strong>bool</strong></p>
-<p>There are only two Boolean values, <code>true</code> and <code>false</code>.</p>
-</li>
-<li><p><strong>number</strong></p>
-<p>Mutable-multipuporse number. Increase it&#39;s size as needed / overflow happens.</p>
-<p>Will be i64 until floating point is needed and change it&#39;s type to f64.</p>
-<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
-</li>
-<li><p><strong>i8, i16, i32, i64(int), ui8, ui16, ui32, ui64</strong></p>
-<p>Integers and unsigned integers of different sizes.</p>
-<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
-</li>
-<li><p><strong>f32(float) &amp; f64</strong></p>
-<p>Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.</p>
-<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
-</li>
-<li><p><strong>function</strong></p>
-<p>Function as type. Unlike other languages arguments doesn&#39;t matter.</p>
-</li>
-<li><p><strong>string</strong></p>
-<p>Primitive value that is a finite ordered sequence of zero or more 16-bit unsigned integer</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>shared-ptr</li>
+<li>cannot start with a number.</li>
+<li>cannot contains spaces.</li>
+<li>cannot contains uppercases.</li>
+<li>Cannot start with a $</li>
+<li>Any UTF-8 valid character (TODO <strong>study</strong> could be better to just allow ASCII)</li>
 </ul>
-</li>
-</ul>
-<h4 id="data-aggregation-complex-types-">Data aggregation, complex types.</h4>
-<ul>
-<li><p><strong>array</strong></p>
-<p>List of things, this is continuous memory and should have a defined type, cannot contains different things (unless pointers are stored).</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
-</ul>
-</li>
-<li><p><strong>struct</strong></p>
-<p>Constant structured data.</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
-</ul>
-</li>
-<li><p><strong>block</strong></p>
-<p>It&#39;s the same as struct but memory continuous.</p>
-<p>When you allocate a block you must specify every length in the block.</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
-</ul>
-</li>
-<li><p><strong>object</strong></p>
-<p>Mutable structured data. You could add/remove members.</p>
-<p><em>Properties</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
-</ul>
-</li>
-<li><p><strong>p1, p2, p3, p4</strong></p>
-<p>Pointer of different sizes (bytes).</p>
-<p>There are two types of pointer.</p>
-<ul>
-<li>Pointer to iterate, those that use memory already allocated.</li>
-<li>Pointer to mange memory, those that allocate memory</li>
-</ul>
-<p><em>Members:</em></p>
-<ul>
-<li>.start</li>
-<li>.end</li>
-<li>.length</li>
-</ul>
-<p><em>Properties:</em></p>
-<ul>
-<li>alloc / new</li>
-<li>dealloc / delete</li>
-<li>realloc / resize</li>
-<li>copy</li>
-</ul>
-</li>
-<li><p><strong>bin[X]</strong></p>
-<p>binary data of given number of bytes.</p>
-</li>
-<li><p><strong>stream:type</strong></p>
-<p>Wrapper for a given subtype that allow processing in chunks.</p>
-</li>
-<li><p><strong>null</strong></p>
-</li>
-</ul>
-<h4 id="type-properties">Type properties</h4>
-<p><strong>iterable</strong></p>
+<h3 id="syntax">Syntax</h3>
+<p><strong>Module file</strong></p>
+<p>Module declaration (first statement!)</p>
 <blockquote>
-<p>has some special methods like: each, filter, reduce...
-Can be directly used inside a <code>for-in</code> loop</p>
+<p><strong>module</strong> <em>identifier</em>;</p>
 </blockquote>
-<p><strong>thread-block</strong></p>
+<p>Export a <code>variable</code></p>
 <blockquote>
-<p>A thread can block the usage for the rest of the threads.
-When a thread want to use it, first must wait the lock.</p>
+<p>export var secret = &quot;x&quot;;</p>
 </blockquote>
-<p><strong>shared-ptr</strong></p>
+<p>Export a <code>constant</code></p>
 <blockquote>
-<p>Reference-counted shared pointer.
-when a variable references counter add 1
-when a variable is deleted counter subtract 1</p>
+<p>export const other_secret = &quot;y&quot;;</p>
 </blockquote>
-<h2 id="string">string</h2>
-<p><code>string</code> store UTF-8 characters (maybe unicode).</p>
-<p>Study support memory management profiles/allocators</p>
-<ul>
-<li>continuous pool</li>
-<li>on demand</li>
-</ul>
-<h3 id="instance-properties">instance properties</h3>
-<ul>
-<li><p>ui64 size = 0 [readonly]</p>
-<p>bytes allocated, remember that utf-8 is multibyte.</p>
-</li>
-<li><p>ui64 used = 0 [readonly]</p>
-<p>byte in use.</p>
-</li>
-<li><p>ui64 length = 0 [readonly]</p>
-<p>Number of characters</p>
-</li>
-</ul>
-<h3 id="instance-methods">instance methods</h3>
-<ul>
-<li><p>[] access to a single character</p>
-</li>
-<li><p>substr</p>
-</li>
-<li>substring</li>
-<li>concat</li>
-<li>resize</li>
-</ul>
-<ul>
-<li>charAt</li>
-<li>charCodeAt</li>
-<li>codePointAt</li>
-<li>contains</li>
-<li>concat</li>
-<li>indexOf</li>
-<li>lastIndexOf</li>
-<li>length</li>
-<li>localeCompare</li>
-<li>match</li>
-<li>replace</li>
-<li>search</li>
-<li>slice</li>
-<li>split|explode</li>
-<li>substr</li>
-<li>substring</li>
-<li>toLocaleLowerCase</li>
-<li>toLocaleUpperCase</li>
-<li>toLowerCase</li>
-<li>toUpperCase</li>
-<li>trim</li>
-<li>trimLeft</li>
-<li><p>trimRight</p>
-</li>
-<li><p>lcfirst</p>
-</li>
-<li><p>ucfirst</p>
-</li>
-<li><p>chunk_split</p>
-<p>Split a string into smaller chunks</p>
-<p><code>string chunk_split ( string $body [, int $chunklen = 76 [, string $end = &quot;\r\n&quot; ]] )</code></p>
-</li>
-<li><p><a href="http://php.net/manual/en/function.nl2br.php">nl2br</a></p>
-</li>
-</ul>
-<p>  Calculates the crc32 polynomial of a string</p>
-<p>  One-way string hashing</p>
-<ul>
-<li><a href="http://php.net/manual/en/function.ord.php">ord</a></li>
-<li>parse_http_get</li>
-</ul>
-<h4 id="crypto-related">crypto related</h4>
-<ul>
-<li><a href="http://php.net/manual/en/function.crypt.php">crypt</a></li>
-<li><a href="http://php.net/manual/en/function.sha1.php">sha1</a></li>
-<li><a href="http://php.net/manual/en/function.md5.php">md5</a></li>
-<li><a href="http://php.net/manual/en/function.crc32.php">crc32</a></li>
-</ul>
-<h4 id="study">study</h4>
-<ul>
-<li>ord, make sense ? will be utf-16</li>
-<li>base64 where?</li>
-<li>number_format where?</li>
-<li>currency_format where?</li>
-</ul>
-<h3 id="string-properties-">string properties:</h3>
-<ul>
-<li><p>ui64 pool_size = 1m [mutable]</p>
-<p>Determine the minimum memory reserved anytime for string operations.</p>
-</li>
-<li><p>ui64 max_size = 2m [mutable]</p>
-<p>From this point memory will be released if destruction happens, and meet certain criteria.</p>
-</li>
-<li><p>ui32 deallocations [readonly]</p>
-<p>Counter</p>
-</li>
-<li><p>ui32 .allocations [readonly]</p>
-<p>Counter</p>
-</li>
-<li><p>f32 .fragmentation [readonly] [TODO-study]</p>
-<p>Fragmentation factor.</p>
-</li>
-</ul>
-<p>Functions:</p>
-<ul>
-<li><p>.defrag [TODO-study]</p>
-<p>Sort all memory strings in a new place.</p>
-</li>
-</ul>
-<p>Instances properties</p>
-<ul>
-<li><p>ui32 length</p>
-<p>readonly length</p>
-</li>
-<li><p>pX .p</p>
-<p>readonly pointer to the beginning of the string.</p>
-<p>!!!TODO what type of pointer can be used for multibyte utf-8/unicode</p>
-</li>
-<li><p>[index]</p>
-</li>
-</ul>
-<h2 id="number-types">Number types</h2>
-<p>Any number type has the following properties.</p>
-<ul>
-<li><p>.EPSILON</p>
-<p>This is a mutable value, but default is always 0, for every type.</p>
-<p>Designed to avoid floating-points errors, you should set EPISILON in your main file to your desired/app specific value. And you can happily do == in floating points numbers.</p>
-</li>
-<li><p>.INFINITY</p>
-</li>
-<li><p>.MINFINITY</p>
-</li>
-<li><p>.MAX</p>
-<p>Maximum number represented</p>
-</li>
-<li><p>.MIN</p>
-<p>Minimum number represented</p>
-</li>
-<li><p>.MIN_RES</p>
-<p>Minimum resolution.</p>
-<p>1 for integers</p>
-<p>[STUDY] f32 &amp; f64</p>
-</li>
-<li><p>.ROUND</p>
-<p>0 toward zero
-1 to nearest
-2 toward positive infinity
-3 toward negative infinity</p>
-</li>
-<li><p>.NULL</p>
-<p>Default value for a not initialized number.</p>
-</li>
-</ul>
-<h2 id="pointers">Pointers</h2>
-<p>Or rather smart pointers.</p>
-<p>There are four types of pointers: p1, p2, p3, p4.
-The only difference how much it jumps when <code>++</code> or <code>--</code> is applied.</p>
-<h3 id="members">members</h3>
-<ul>
-<li><p><code>size</code>:ui64</p>
-<p>memory allocated</p>
-</li>
-<li><p><code>start</code>:pointer</p>
-<p>low-level-pointer to the start</p>
-</li>
-<li><p><code>current</code>:pointer</p>
-<p>low-level-pointer to the current</p>
-</li>
-<li><p><code>references</code>:<strong>ui64</strong></p>
-</li>
-</ul>
-<h3 id="operators">operators</h3>
-<ul>
-<li><p><code>[ui64]</code></p>
-<p>Provides indexed access to the managed array</p>
-</li>
-<li><p><code>++</code> &amp; <code>--</code> &amp; <code>+</code> &amp; <code>-</code></p>
-<p>Increment/Decrement current position given X bytes.</p>
-<p>If overflow occurs will raise a runtime-error.</p>
-</li>
-</ul>
-<p>Examples</p>
-<pre><code>
-var x = new ui8[10]; // array
-var y:p1 = new ui8[10]; // pointer
-
-x[0] = 10;
-y[0] = 10;
-y[1] = 11;
-
-log x; // stdout: 10
-
-// get value
-log y; // stdout: 10
-log y[0]; // stdout: 10
-// get memory address, need casting
-log y[0] as p1; // stdout: 0xXXXX
-
-++y;
-log y; // stdout: 11
-
-var z = y[0]; // z will be ui8, as reference
-z = 12;
-log y; // stdout: 12
-
-delete z; // compilation error: &quot;z do not own memory&quot;
-</code></pre><h2 id="array">array</h2>
-<p>Note: Arrays are always dense.
-Note: Assign a pointer to something in the array it&#39;s only possible if fixed_size = true</p>
-<h3 id="initialization">Initialization</h3>
-<pre><code>array [ui64:length] [bool:fixed_size]
-</code></pre><ul>
-<li>length: initial length</li>
-<li>fixed_size: cannot be resized</li>
-</ul>
-<pre><code>var ar1 = [];
-var ar2 = new number[5];
-var ar3 = clone other_array;
-var ar4 = [x, y, z]; // x y &amp; z must have the same type.
-
-
-ar1[3] = 0; // compiler not know the implicit type
-ar1.toJSON(); // [null, null, null, 0]
-</code></pre><p>The compiler will decide the type of the array with a simple rule: Type of the first insertion.</p>
-<ul>
-<li>Will raise a warning if no implicit conversion is made, when possible information loss. for example: ui64 -&gt; ui32</li>
-</ul>
-<h3 id="instances-properties">Instances properties</h3>
-<ul>
-<li><p><code>length</code></p>
-<p>readonly. Number of elements.</p>
-</li>
-<li><p><code>size</code></p>
-<p>readonly. Reserved memory.</p>
-</li>
-<li><p><code>last</code></p>
-<p>Last element in the array, no more array[array.length -1]</p>
-</li>
-<li><p>[<strong>index</strong>:<strong>ui64</strong>]</p>
-<p>Access to given index.</p>
-</li>
-</ul>
-<h3 id="transformations">Transformations</h3>
-<ul>
-<li><p><code>toString</code></p>
-<p>Return the JSON representation.</p>
-</li>
-<li><p><code>toNumber</code></p>
-<p>Return the length.</p>
-<p>[<strong>STUDY</strong>] This could lead to problems but could avoid check against <code>array.length</code></p>
-</li>
-<li><p><code>toObject</code></p>
-<p>Return a new Object will keys as Ids</p>
-<p>// change id-property and returned as Object</p>
-</li>
-</ul>
-<p>.for: -&gt; raise runtime error
-.switch: -&gt; raise runtime error
-.is: // memory position check -&gt; check length. if the same, loop every item and do <code>this[i] is that[i]</code></p>
-<ul>
-<li><p><code>concat</code> (<strong>other</strong>:<strong>array</strong>)</p>
-<p>Returns a new array comprised of the array on which it is called joined with the array(s) and/or value(s) provided as arguments.</p>
-<p>Must have at least one argument, use <code>clone</code> instead.</p>
-</li>
-<li><p><code>append</code></p>
-<p>Returns current array joined with the array(s) and/or value(s) provided as arguments.</p>
-</li>
-<li><p><code>join</code> (<strong>separator</strong>:<strong>string</strong>)</p>
-<p>Return a string resulting of join all elements with given separator.</p>
-</li>
-</ul>
-<p><code>last_index_of</code>(<strong>search_element</strong>:void, <strong>from_index</strong>:<strong>ui64</strong> = length)</p>
-<p>  Returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex (length by default)</p>
-<ul>
-<li><p><code>index_of</code>(<strong>search_element</strong>: void, <strong>from_index</strong>:ui64 = 0)</p>
-<p>Returns the first index at which a given element can be found in the array, or -1 if it is not present.</p>
-</li>
-<li><p><code>has_any</code>(<strong>searchArray</strong>: array)</p>
-<p>Returns if any of the values in searchArray is contained in the array.</p>
-</li>
-<li><p><code>reverse</code>()</p>
-</li>
-<li><code>sort</code>()</li>
-<li><p><code>splice</code>(<strong>index</strong>:ui64, <strong>howMany</strong>:ui64, <strong>elements</strong>:array ...)</p>
-<p>Changes the content of an array, adding new elements while removing old elements</p>
-</li>
-<li><p><code>shift</code>()
-Removes the first element from an array and returns that element. This method changes the length of the array</p>
-</li>
-<li><p><code>slice</code>(<strong>begin</strong>:ui64, <strong>end</strong>:ui64 = length)
-Returns a shallow copy of a portion of an array into a new array object</p>
-</li>
-<li><p><code>pop</code>()</p>
-<p>Removes the last element from an array and returns that element</p>
-</li>
-<li><p><code>push</code>(<strong>elements</strong>:array ...)</p>
-<p>Adds one or more elements to the end of an array and returns the new length of the array</p>
-</li>
-<li><p><code>unshift</code>(<strong>elements</strong>:array ...)</p>
-<p>Adds one or more elements to the beginning of an array and returns the new length of the array.</p>
-</li>
-</ul>
-<h3 id="loping">loping</h3>
-<p>For evey function listed here if the function is anonymously declared, the compiler will transform them into a blocks for performance.</p>
-<ul>
-<li><p><code>every</code> (<strong>callback</strong>: function)</p>
-<p>Tests whether all elements in the array pass the test implemented by the provided function.</p>
-<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
-</li>
-<li><p><code>filter</code> (<strong>calback</strong>: function)</p>
-<p>creates a new array (with the original length) with all elements that pass the test implemented by the provided function.</p>
-<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
-</li>
-<li><p><code>for_each</code>  (<strong>calback</strong>: function)</p>
-</li>
-<li><p><code>each</code> (<strong>calback</strong>: function)</p>
-<p>Executes a provided function once per array element</p>
-<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array.</p>
-</li>
-<li><p><code>map</code>(<strong>calback</strong>: function)</p>
-<p>creates a new array with the results of calling a provided function on every element in this array.</p>
-<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return the same value that the array contains.</p>
-</li>
-<li><p><code>mapme</code>(<strong>calback</strong>: function)</p>
-<p>Same as map but without array creation.</p>
-<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return the same value that the array contains.</p>
-</li>
-<li><p><code>reduce</code>(<strong>calback</strong>: function)</p>
-<p>Applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.</p>
-<p>The callback will recieve 4 parameters: <strong>previousValue</strong>:void, <strong>currentValue</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. Returned value is defined by the callback itself.</p>
-</li>
-<li><p><code>reduceRight</code>(<strong>calback</strong>: function)</p>
-<p>Applies a function against an accumulator and each value of the array (from right-to-left) has to reduce it to a single value</p>
-<p>The callback will recieve 4 parameters: <strong>previousValue</strong>:void, <strong>currentValue</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. Returned value is defined by the callback itself.</p>
-</li>
-<li><p><code>some</code>(<strong>calback</strong>: function)</p>
-<p>Tests whether some element in the array passes the test implemented by the provided function</p>
-<p>The callback will recieve 3 parameters: <strong>element</strong>:void, <strong>index</strong>:ui64, <strong>array</strong>:array. And must return a boolean.</p>
-</li>
-</ul>
-<h3 id="notes">Notes</h3>
-<ul>
-<li>if type is defined, when enter a switch gives a compile error.</li>
-</ul>
-<h2 id="struct">struct</h2>
-<p>Complex data type declaration that defines a physically grouped list of variables and functions to be placed under one name in a block of memory.</p>
-<p>Function have direct access to those variables in the group by their name.</p>
-<p>Pointer variables can be reserved, resized but not deleted. The memory is owned by the struct, and memory will be freed when the struct is deleted. If you need to free a pointer memory inside a struct, use resize with 0 length.</p>
-<pre><code>struct identifier {
-  member: type = initialization;
-  //...
-  method = fn [self] [arguments] {
-    // self must be first, and cannot be overriden like other languages
-    // remember that this does not exist
-  }; // this time, semiclon is mandatory (atm)
-};
-</code></pre><p>Examples:</p>
-<pre><code>struct v2 {
-  x:number = 0;
-  y = 0; // implicit type -&gt; number
-  add = fn _x, _y { // if nothing is retrurned
-    x += _x;
-    _y += _y;
-  }
-};
-</code></pre><h2 id="block">block</h2>
-<p>It&#39;s the same as struct but memory continuous.</p>
-<p>The advantage in performance has a counter part of fixed size. A single pointer cannot be resized after the first reserve.</p>
-<pre><code>block identifier [, pointer_name] {
-  // variables
-  // functions
-};
-</code></pre><p>Example</p>
-<pre><code>block blk ptr1, ptr2 { // specify the order, if leave it blank, declaration order will be asumed
-  &quot;ptr1&quot;: p1,
-  &quot;ptr1&quot;: p2,
-};
-
-var x = new blk[10, 10];
-// can be resized as a group
-resize x[15, 10]; // this will allocate, copy and free the old memory.
-
-resize x.ptr1[15]; // compilation error
-resize x.ptr1[0]; // compilation error
-delete x.ptr1[15]; // compilation error
-</code></pre><h2 id="objects">Objects</h2>
-<p>Abstract data type composed of a collection of (key, value) pairs.</p>
-<p>Keys are always a unique string, number cannot be assigned without casting.</p>
-<p>Values are pointers and can be repeated.</p>
-<p>Objects are declared using JSON-like format.
-Last comma is required (atm) for version control system cleaning.</p>
-<p>var xxx = {
-  &quot;hello&quot;: &quot;world&quot;,
-  &quot;world&quot;: hello(), // function
-  &quot;world&quot;: variable, // variable, dont forget the last comma!
-};</p>
-<h3 id="methods">methods</h3>
-<ul>
-<li><p><code>#has</code>(<strong>key</strong>:<strong>string</strong>) : <strong>boolean</strong></p>
-<p>Return if given key is defined. </p>
-</li>
-<li><p><code>#keys</code>() : <strong>array</strong></p>
-<p>Returned keys are always sorted. </p>
-</li>
-<li><p><code>#get</code>(<strong>key</strong>:<strong>string</strong>, <strong>safe</strong>:<strong>boolean</strong> = false) : <strong>pointer</strong></p>
-<p>Get value, if <code>safe=false</code> will raise a run-time-error</p>
-</li>
-<li><p><code>#set</code>(<strong>key</strong>:<strong>string</strong>, <strong>value</strong>:<strong>pointer</strong>) : <strong>boolean</strong></p>
-<p>Set/overwrite given key with given value. </p>
-</li>
-<li><p><code>#delete</code>(<strong>key</strong>:<strong>string</strong>) : <strong>pointer</strong></p>
-<p>Remove given key and return pointer or null.</p>
-</li>
-<li><p><code>#setter</code>(<strong>sttr</strong>: <strong>function</strong> = null) : <strong>function</strong></p>
-<p>Set a setter function that will be called before each set. </p>
-</li>
-<li><p><code>#getter</code>(<strong>gttr</strong>: <strong>function</strong> = null) : <strong>function</strong></p>
-<p>Set a getter function that will be called before each get.</p>
-</li>
-</ul>
-<h2 id="test-if-key-exist-">test if key exist (?)</h2>
-<p>Object has a special method <code>`#has</code> but it recommended to use the <code>?</code> operator.</p>
-<pre><code>if xxx.hello? { // expanded to xxx.#has(&quot;hello&quot;)
-  // do something
-}
-
-if xxx.hello? == 10 { // expanded to xxx.#has(&quot;hello&quot;) &amp;&amp; xxx.hello == 10
-  // do something
-}
-</code></pre><h2 id="safe-asignament">safe asignament</h2>
-<p><code>?</code> operator can be used in assignament expressions. Compiler will expand your code to make sure no runtime-error.</p>
-<pre><code>? xxx.first.second.third = &quot;just a string&quot;;
-
-// expanded...
-if (!xxx.#has(&quot;first&quot;)) error &quot;undefined xxx.first&quot;;
-if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;)) error &quot;invalid type of xxx.first&quot;;
-
-if (!xxx.#get(&quot;first&quot;).#has(&quot;second&quot;)) error &quot;undefined xxx.first&quot;;
-if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;).#get(&quot;second&quot;)) error &quot;invalid type of xxx.first.second&quot;;
-
-//...
-xxx.#get(&quot;first&quot;).#get(&quot;second&quot;).#get(&quot;third&quot;)[0] = &quot;just a string&quot;;
-</code></pre><p>Because key in objects are always string, safe assignaments will initialize arrays if a number is found.</p>
-<pre><code>? xxx.first.second.third[0] = &quot;just a string&quot;;
-
-// expanded...
-if (!xxx.#has(&quot;first&quot;)) error &quot;undefined xxx.first&quot;;
-if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;)) error &quot;invalid type of xxx.first&quot;;
-
-if (!xxx.#get(&quot;first&quot;).#has(&quot;second&quot;)) error &quot;undefined xxx.first&quot;;
-if (&quot;object&quot; === typeof xxx.#get(&quot;first&quot;).#get(&quot;second&quot;)) error &quot;invalid type of xxx.first.second&quot;;
-
-//...
-xxx.#get(&quot;first&quot;).#get(&quot;second&quot;).#get(&quot;third&quot;)[0] = &quot;just a string&quot;;
-</code></pre><h1 id="iterable">Iterable</h1>
-<p>Object, Arrays and Y..X</p>
-<h1 id="observers">Observers</h1>
-<p>Observers listen changes in variables, it only works on debug mode, on release this code will be removed.</p>
-<pre><code>observer(var).on(fn(String action[assignament|access], Mixed value) {...})
-</code></pre><h1 id="functions">Functions</h1>
-<h2 id="-run">#run</h2>
-<p>Compile time function running</p>
-<h1 id="listeners">Listeners</h1>
-<p>Listeners can be attached to functions at compile time.</p>
-<pre><code>#listener(fn).before(fn(function_name, arguments, stack))
-#listener(fn).beforeOff(fn)
-#listener(fn).after(fn(function_name, arguments, return_value, error_value, stack))
-#listener(fn).afterOff(fn)
-#listener(fn).removeAll
-</code></pre><h2 id="if">if</h2>
-<pre><code>if test {
-    // note: braces are mandatory, event for empty-statements
-} [else if test {
-
-} [else {
-
-}]
-</code></pre><h2 id="switch-case-break-fallthrough-">switch (case, break, fallthrough)</h2>
-<p>&quot;Switch&quot; statements provide multi-way execution.
-An expression or type specifier is compared to the &quot;cases&quot; inside the &quot;switch&quot; to determine which branch to execute.</p>
-<p><code>switch</code> is very special in plee in comparison with other languages.</p>
-<p>Most common languages choose to break by default, and it&#39;s resonable, they provide <code>fallthrough</code> as error prone replacement of <code>break</code></p>
-<p>Plee goes a bit beyond while provide <code>fallthrough</code> also provide <code>break</code> but the default behavior is continue testing the next cases. So you can reuse code easily.</p>
-<p>There are two types of switch: expression switch and comparison switch.</p>
-<h3 id="comparison-switch">comparison switch</h3>
-<p>Compare all case against one value.</p>
-<p>This example illustrate the usage of comparison switch</p>
-<pre><code>var test = &quot;ok&quot;;
-
-switch(test) {
-    default: return &quot;i will be the last&quot;;
-
-    case &quot;ok&quot;: // test == &quot;ok&quot;
-        echo &quot;ok is found!&quot;;
-
-        // continue testing by default
-    case &quot;nok&quot;: // test == &quot;nok&quot;
-        echo &quot;nok is found!&quot;;
-
-        break; // to stop
-    case &quot;ok&quot;,&quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
-        echo &quot;ok or nice is found!&quot;;
-
-        break;
-}
-</code></pre><p>output will be:</p>
-<pre><code>ok is found!
-ok or nice is found!
-</code></pre><p>You may expect &quot;nok is found!&quot; to be part of the output. But that&#39;s not the <code>case</code> and you didn&#39;t read the intro...</p>
-<p>Fall-through in a switch is a common error for programmers that forget to <code>break</code>,
-to avoid this undesired behavior even if the switch is falling-though case comparison must be meet.
-If is desired you must specify it with the reserved word: <code>fallthrough</code>.</p>
-<pre><code>var test = &quot;ok&quot;;
-
-switch(test) {
-    default: return &quot;i will be the last&quot;;
-
-    case &quot;ok&quot;: // test == &quot;ok&quot;
-        echo &quot;ok is found!&quot;;
-
-        fallthrough; // don&#39;t mind continue testing, enter in the next
-    case &quot;nok&quot;: // test == &quot;nok&quot;
-        echo &quot;nok is found!&quot;;
-        break;
-
-    case &quot;ok&quot;,&quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
-        echo &quot;ok or nice is found!&quot;;
-
-        break;
-}
-</code></pre><pre><code>ok is found!
-nok is found!
-</code></pre><h3 id="expression-switch">expression switch</h3>
-<pre><code>switch {
-    default: return &quot;i will be the last&quot;;
-
-    case test == &quot;ok&quot;: // test == &quot;ok&quot;
-        echo &quot;ok is found!&quot;;
-
-        // fall thought
-    case test == &quot;nok&quot;: // test == &quot;nok&quot;
-        echo &quot;nok is found!&quot;;
-        break;
-
-    case test == &quot;ok&quot; || test == &quot;nice&quot;: // test == &quot;ok&quot; || test == &quot;nice&quot;
-        echo &quot;ok or nice is found!&quot;;
-
-        break;
-}
-</code></pre><h2 id="for">for</h2>
-<h3 id="for-classic">for-classic</h3>
-<pre><code>for [init;]condition; after_loop {
-
-} [else {
-    // executed if condition fails the first time
-}]
-</code></pre><h3 id="for-in">for-in</h3>
-<p>for-in won&#39;t clone the iterable. The iterator will behave if something is removed.</p>
-<p>Iterator behavior:</p>
-<ul>
-<li>If current value is removed (splice) the next value will have the same key and next value.</li>
-<li>If a value before the current is removed the next value will have the same key and next value.</li>
-<li>If a value after the current is removed won&#39;t appear in the loop.</li>
-</ul>
-<pre><code>for [key, ] value in iterable {
-
-} [else {
-    // executed if condition fails the first time
-}]
-</code></pre><h3 id="for-in-slice">for-in-slice</h3>
-<p>for-in-slice wont clone the iterable part. The iterator will behave if something is removed.</p>
-<p>Iterator behavior:</p>
-<ul>
-<li>If current value is removed (splice) the next value will have the same key and next value.</li>
-<li>If a value before the current is removed the next value will have the same key and next value.</li>
-<li>If a value after the current is removed won&#39;t appear in the loop.</li>
-<li>It will iterate (max - min) times regardless removals or reach iterable.length</li>
-</ul>
-<pre><code>for [key, ] value in iterable[3,5] {
-
-} [else {
-    // executed if condition fails the first time
-}]
-</code></pre><h3 id="for-till-shrink-">for-till (shrink)</h3>
-<pre><code>for variable|number till number {
-
-} [else {
-    // executed if condition fails the first time
-}]
-</code></pre><p>Compiler will translate for-till with the folowing rules:</p>
+<p>Export a <code>function</code></p>
 <blockquote>
-<p>for i till 10 -&gt; for ; i &lt; 10; ++i</p>
-<p>for var i till 10 -&gt; for i=0; i &lt; 10; ++i</p>
-<p>for i=1 till 10 -&gt; for i=1; i &lt; 10; ++i</p>
+<p>export fn get_secret() {}</p>
 </blockquote>
-<h3 id="for-to-shrink-">for-to  (shrink)</h3>
-<pre><code>for variable|number to number {
-
-} [else {
-    // executed if condition fails the first time
-}]
-</code></pre><p>Compiler will translate for-to with the folowing rules:</p>
+<p><strong>Your program</strong></p>
+<p>Module import</p>
 <blockquote>
-<p>for i to 10 -&gt; for ; i &lt;= 10; ++i</p>
-<p>for var i to 10 -&gt; for i = 0; i &lt;= 10; ++i</p>
-<p>for i=1 to 10 -&gt; for ; i &lt;= 10; ++i</p>
+<p><strong>import</strong> [, <em>what_to_import</em>] <em>module-name</em>[@<em>semver</em>] [<strong>as</strong> <em>mod_a</em>];</p>
 </blockquote>
-<h3 id="for-iterable-shrink-">for-iterable (shrink)</h3>
-<p>for-iterable don&#39;t clone the iterable.</p>
-<p>Cannot be nested with the same iterable variable-name. You can alias a variable and nest both for-iterables.</p>
-<pre><code>for iterable {
-    iterable.value // will be aliased, can be used outside the loop!
-    iterable.key // will be aliased, can be used outside the loop!
-    //
-} [else {
-    // executed if condition fails the first time
-}]
-</code></pre><p>Compiler will translate for-iterable with for-in.</p>
-<h2 id="while">while</h2>
-<h3 id="while">while</h3>
-<p>Allows code to be executed repeatedly based on a given boolean condition.</p>
-<p>If condition is never else block will be executed if exists.</p>
-<pre><code>while test {
-  // block
-} [else {
-}]
-</code></pre><h2 id="do-while">do-while</h2>
-<p>Executes a block of code at least once, and then repeatedly executes the block,
-or not, depending on a given Boolean condition at the end of the block.</p>
-<pre><code>do {
-  // block
-} while test;
-</code></pre><h2 id="swap">swap</h2>
-<p>swap variable names.</p>
-<p>swap x y;</p>
-<h3 id="swap-ast">swap AST</h3>
-<pre><code class="lang-json">SwapStatement &lt;: Statement {
-    &quot;type&quot;: &quot;swap-statement&quot;,
-    &quot;left&quot;: Idenfier,
-    &quot;right&quot;: Idenfier
+<p>Declaration example:</p>
+<pre><code>// file: cia.plee
+// module must be the first non-comment statement
+module cia;
+
+var hidden = &quot;secret&quot;;
+
+export fn get_secret {
+  return hidden;
 }
-</code></pre>
+</code></pre><p>Module usage:</p>
+<pre><code>// encapsulated, this is the preferred way
+import cia@latest as mod_a;
+log mod_a.get_secret(); // stdout: secret
+
+// leaked to current scope, not preferred but accepted
+import cia;
+log get_secret(); // stdout: secret
+
+// partial import encapsulated
+import get_secret cia@1.0.0 as mod_b;
+log mod_b.get_secret(); // stdout: secret
+
+// partial import leaked to current scope
+import get_secret cia@0.0.1;
+log mod_b.get_secret(); // stdout: secret
+</code></pre><h3 id="instance-able-module-class-like-">instance-able module (class-like)</h3>
+<p>As was said, classes are not needed, because modules can be instanced.
+<em>modules</em> are a good, plain, simple and also painless to think in classes.</p>
+<p>Definition:</p>
+<pre><code>module mymod;
+
+var hidden = &quot;&quot;;
+
+export fn new(str) {
+    hidden = str;
+}
+
+export fn get_secret {
+  return hidden;
+}
+</code></pre><p>Usage:</p>
+<pre><code>import mymod as mod;
+
+mod.get_secret(); // compile-error: module need to be instanced
+
+var m = new mod(&quot;no more secrets&quot;);
+log m.get_secret(); // stdout: no more secrets
+</code></pre><h3 id="special-functions">Special functions</h3>
+<h4 id="-fn-new-"><code>fn new</code></h4>
+<p>  module constructor.</p>
+<h4 id="-fn-delete-"><code>fn delete</code></h4>
+<p>  module destructor.</p>
+<h3 id="implementation">Implementation</h3>
+<p><strong>TODO</strong> when backend is defined, we need to review this.</p>
+<ul>
+<li>Modules name will be used as <em>namespace</em> to avoid collisions.</li>
+<li>Modules will be implemented using <code>structs</code> with <code>functions</code>.</li>
+<li>if module has <em>new</em> or <em>delete</em> functions, must be instanced.</li>
+<li>if a function does not access to any variable at module-program level,
+it could be called outside regardless the module has <em>new</em> or <em>delete</em>.</li>
+<li>when instanced, <em>new</em> function is called if exists and instance the struct.</li>
+<li>when deleted, <em>delete</em> function is called if exists and destroy the struct.</li>
+</ul>
 <h1 id="testing">Testing</h1>
 <p>Testing can be done in two stages. Runtime (specific build) and compile time.</p>
 <h2 id="testing-runtime">Testing runtime</h2>
