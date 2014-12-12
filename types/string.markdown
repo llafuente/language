@@ -1,6 +1,6 @@
 ## string
 
-`string` store UTF-8 characters (maybe unicode).
+`string` store UTF-8 characters.
 
 ### instance properties
 
@@ -25,36 +25,53 @@
 
 ### instance methods
 
-* **substr** (*string* str, *ui64* start, *ui64* length = infinity)
+* **substr** (*string* str, *ui64* start != nan, *ui64* length = infinity != nan)
 
   The substr method takes three arguments, and returns str modified, result of
   starting from position start and running for length code units
   (or through the end of the string). If start is negative,
   it is treated as (str.length + start).
 
-* **substring** (*string* str, *ui64* start, *ui64* end)
+* **substring** (*string* str, *ui64* start != nan < str.length, *ui64* end = str.length != nan < str.length)
 
-* **_concat** (*string* str, *string* str2)
-
-  `+` alias.
+  The substring method takes two arguments, start and end, and returns a substring
+  of the result of converting this object to a String, starting from character position
+  start and running to, but not including, character position end of the String
+  (or through the end of the String is end is undefined). The result is a String value,
+  not a String object
+  
+  If start is larger than end, they are swapped.
 
 * **concat** (*string* str, *string* str2)
 
   Return str modified, result of concatenate str and str2.
+  
+  Aliased to `operator +`
 
 * **resize** (*string* str, *ui64* size)
 
   Reallocate memory.
 
-* charAt
-* charCodeAt
-* codePointAt
+* **char_at** (*ui64* pos)
+
+  Returns a String containing the character at position pos in the String resulting from
+  converting this object to a String. If there is no character at that position, the result
+  is the empty String. The result is a String value, not a String object.
+  
+  Shorthand of: `substring(str, pos, pos+1)`
+
+* **char\_code_at** (*ui64* pos) : ui64
+
+  Returns a Number (a nonnegative integer less than 2<sup>16</sup>) representing the code
+  unit value of the character at position pos in the String resulting from converting this
+  object to a String. If there is no character at that position, the result is `nan`.
+
+* code\_point_at
 * contains
-* concat
-* indexOf
-* lastIndexOf
+* index_of
+* last\_index_of
 * length
-* localeCompare
+* locale_compare
 * match
 * replace
 * search
@@ -62,22 +79,29 @@
 * split|explode
 * substr
 * substring
-* toLocaleLowerCase
-* toLocaleUpperCase
-* toLowerCase
-* toUpperCase
-* trim
-* trimLeft
-* trimRight
+* to\_lower_locale
+* to\_upper_locale
+* lowercase
+* uppercase
 
-* lcfirst
-* ucfirst
+* **trim** (*string* str, *string* character_mask = " \t\n\r\0\x0B")
 
-* chunk_split
+  Strip whitespace (or given characters) from the beginning and end of a string
+
+* ltrim
+* rtrim
+
+* **lcfirst** ()
+
+  Lowercase first leter
+
+* **ucfirst**
+
+  Uppercase first leter
+
+* **chunk_split** (*string* body, *ui64* chunklen = 64, *string* end = "\r\n") : *array*
 
   Split a string into smaller chunks
-
-  `string chunk_split ( string $body [, int $chunklen = 76 [, string $end = "\r\n" ]] )`
 
 * [nl2br](http://php.net/manual/en/function.nl2br.php)
 
