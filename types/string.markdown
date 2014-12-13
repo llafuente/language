@@ -52,7 +52,7 @@
 
   Reallocate memory.
 
-* **char_at** (*ui64* pos)
+* **char_at** (*string* str, *ui64* pos)
 
   Returns a String containing the character at position pos in the String resulting from
   converting this object to a String. If there is no character at that position, the result
@@ -60,42 +60,70 @@
   
   Shorthand of: `substring(str, pos, pos+1)`
 
-* **char\_code_at** (*ui64* pos) : ui64
+* **char\_code_at** (*string* str, *ui64* pos) : ui64
 
   Returns a Number (a nonnegative integer less than 2<sup>16</sup>) representing the code
   unit value of the character at position pos in the String resulting from converting this
   object to a String. If there is no character at that position, the result is `nan`.
 
-* code\_point_at
-* contains
-* index_of
-* last\_index_of
-* length
-* locale_compare
-* match
-* replace
-* search
-* slice
-* split|explode
-* substr
-* substring
-* to\_lower_locale
-* to\_upper_locale
-* lowercase
-* uppercase
+* **code\_point_at**  i
+* **index_of**(*string* haystack, *string* needle, *ui64* offset = 0, *bool* case_insensitive = false) : *ui64*
+
+  Find the position of the first occurrence of a substring in a string
+
+* **contains** (*string* haystack, *string* needle, *bool* case_insensitive = false) : *bool*
+
+  Find if *needle* can be found into *haystack*.
+
+* **last\_index_of** (*string* haystack, *string* needle, *ui64* offset = 0, *bool* case_insensitive = false) : *bool*
+
+  Find the position of the last occurrence of a substring in a string.
+  
+  *offset*: If specified, search will start this number of characters counted from the beginning of the string.
+  If the value is negative, search will instead start from that many characters from the end of the string,
+  searching backwards. 
+
+* **replace** (*string* str, *string* search, *string* replace, *bool* case_insensitive = false, *ui64* count = null)
+* **replace** (*string* str, *array* search, *string* replace, *bool* case_insensitive = false, *ui64* count = null)
+* **replace** (*string* str, *array* search, *array* replace, *bool* case_insensitive = false, *ui64* count = null)
+
+  Replace all occurrences of the search string with the replacement string
+ 
+  *count* If passed, this will be set to the number of replacements performed. 
+
+* **locale_compare**
+* **match** (*string* str, *regexp* reg_exp, *ui64* start = 0, *ui64* end = str.lenght) : *bool*
+
+* **ocurrences** (*string* haystack, *string* needle) : array
+
+  Returns a list of index with the ocurrences of *needle* into *haystack*.
+  
+* **slice**
+* **split|explode**
+* **substr**
+* **substring**
+* **to\_lower_locale**
+* **to\_upper_locale**
+* **lowercase**
+* **uppercase**
 
 * **trim** (*string* str, *string* character_mask = " \t\n\r\0\x0B")
 
   Strip whitespace (or given characters) from the beginning and end of a string
 
-* ltrim
-* rtrim
+* **ltrim** (*string* str)
 
-* **lcfirst** ()
+  Strip whitespace (or given characters) from the beginning of a string
+
+* **rtrim** (*string* str)
+
+  Strip whitespace (or given characters) from the beginning and end-
+
+* **lcfirst** (*string* str)
 
   Lowercase first leter
 
-* **ucfirst**
+* **ucfirst** (*string* str)
 
   Uppercase first leter
 
