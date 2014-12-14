@@ -31,6 +31,8 @@
   starting from position start and running for length code units
   (or through the end of the string). If start is negative,
   it is treated as (str.length + start).
+  
+  Aliases: `slice`
 
 * **substring** (*string* str, *ui64* start != nan < str.length, *ui64* end = str.length != nan < str.length)
 
@@ -45,7 +47,11 @@
 * **concat** (*string* str, *string* str2)
 
   Return str modified, result of concatenate str and str2.
-  
+
+* **concat** (clone *string* str, *string* str2)
+
+  Return a new string, result of concatenate str and str2.
+
   Aliased to `operator +`
 
 * **resize** (*string* str, *ui64* size)
@@ -66,7 +72,7 @@
   unit value of the character at position pos in the String resulting from converting this
   object to a String. If there is no character at that position, the result is `nan`.
 
-* **code\_point_at**  i
+* **code\_point_at**
 * **index_of**(*string* haystack, *string* needle, *ui64* offset = 0, *bool* case_insensitive = false) : *ui64*
 
   Find the position of the first occurrence of a substring in a string
@@ -96,16 +102,32 @@
 
 * **ocurrences** (*string* haystack, *string* needle) : array
 
-  Returns a list of index with the ocurrences of *needle* into *haystack*.
+  Returns a list of indexes with the ocurrences of *needle* into *haystack*.
   
-* **slice**
-* **split|explode**
-* **substr**
-* **substring**
-* **to\_lower_locale**
-* **to\_upper_locale**
-* **lowercase**
+* **split** (*string* str, *string* delimiter, *ui64* limit = infinity) : *array*
+* **split** (*string* str, *regexp* delimiter, *ui64* limit = infinity) : *array*
+ 
+  Returns an array of strings, each of which is a substring of str formed by splitting
+it on boundaries formed by the string delimiter. 
+
+  If limit is set and positive, the returned array will contain a maximum of limit elements
+  with the last element containing the rest of string.
+  
+  If the limit parameter is negative, all components except the last -limit are returned.
+
+  alias: `explode`
+
+* **lowercase**(*string* str, *bool* use_locale = true)
+
+  Returns string with all alphabetic characters converted to lowercase.
+  
+  if *use_locale* is `true` use current locale options to lowercase. Otherwise locale "C" will be used.
+
 * **uppercase**
+
+  Returns string with all alphabetic characters converted to uppercase.
+  
+  if *use_locale* is `true` use current locale options to uppercase. Otherwise locale "C" will be used.
 
 * **trim** (*string* str, *string* character_mask = " \t\n\r\0\x0B")
 
@@ -131,9 +153,41 @@
 
   Split a string into smaller chunks
 
-* [nl2br](http://php.net/manual/en/function.nl2br.php)
+* **nl2br** (*string* string, *bool* is_xhtml = true): *string*
 
-  Calculates the crc32 polynomial of a string
+  Returns string with '<br />' (`is_xhtml = true`) or '<br>' (`is_xhtml = false`) inserted
+  before all newlines (`\r\n`, `\n\r`, `\n` and `\r`). 
+
+* **parse_qs** (*string* str): *array*
+
+  Parses str as if it were the query string passed via a URL.
+
+* **parse_url**(*string* str): *object*
+
+  This function parses a URL and returns an object containing any of the various
+  components of the URL that are present. 
+  
+  Returned *object*
+  ```
+  {
+    "scheme": string, // http, https, ftp...
+    "host": string, // clean host, no ended with "/"
+    "user": string,
+    "pass": string,
+    "path": string, // starts with "/"
+    "query": string, // querystring
+    "fragment": string,
+  }
+  ```
+  Parses str as if it were the query string passed via a URL.
+
+* **parse_csv** (*string* input, *string* delimiter = ",", *string* enclosure = '"', *string* escape = "\\"): *array*
+
+  Parses a string input for fields in CSV format and returns an array containing the fields read.
+  
+* **parse_json** (*string* input): *object*
+ 
+  **TODO** study, this return an object ?
 
 One-way string hashing
 
