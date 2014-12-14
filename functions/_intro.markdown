@@ -22,7 +22,7 @@ Can I use `+` as function name... The answer is: *Yes*, we can.
 
 ## Function declaration
 
-> **fn**|**function** *identifier* [,*arguments*]\* [: *return_type*] {}
+> **fn**|**function** *identifier* [,*arguments*]\* [: *return_type*] [**alias** identifier [, identifier]] {}
 
 ```
 fn giveme x {
@@ -48,16 +48,13 @@ function sum(number x, number y) -> number {
 var ui8 x = 5, y = 7;
 log sum(5, 7);
 
-// will generate another function with ui8 as inputs and output.
+// will generate another function with ui8 as inputs and output to optimize run-time execution.
 function sum(ui8 x, ui8 y) -> ui8 {
   return x + y;
 }
 ```
 
 Compiler don't generate functions if precision would be lost.
-
-
-
 
 ## function calls
 
