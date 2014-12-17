@@ -1,5 +1,7 @@
 ## Hello world example
 
+As every language, here is the `hello world`.
+
 file: hello-world.plee
 ```
 log "Hello world";
@@ -8,5 +10,5 @@ log "Hello world";
 Execution from terminal
 
 ```bash
-plee hello-world.plee
+plee -e hello-world.plee #direct execution
 ```

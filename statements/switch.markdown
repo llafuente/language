@@ -19,7 +19,7 @@ Compare all case against one value.
 
 This example illustrate the usage of comparison switch
 
-```
+```plee
 var test = "ok";
 
 switch(test) {
@@ -41,6 +41,7 @@ switch(test) {
 ```
 
 output will be:
+
 ```
 ok is found!
 ok or nice is found!
@@ -53,7 +54,7 @@ to avoid this undesired behavior even if the switch is falling-though case compa
 If is desired you must specify it with the reserved word: `fallthrough`.
 
 
-```
+```plee
 var test = "ok";
 
 switch(test) {
@@ -81,7 +82,7 @@ nok is found!
 
 ### expression switch
 
-```
+```plee
 switch {
     default: return "i will be the last";
 

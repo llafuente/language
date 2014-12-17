@@ -24,7 +24,8 @@ Can I use `+` as function name... The answer is: *Yes*, we can.
 
 > **fn**|**function** *identifier* [,*arguments*]\* [: *return_type*] [**alias** identifier [, identifier]] {}
 
-```
+
+```plee
 fn giveme x {
     return x;
 }
@@ -32,41 +33,22 @@ log giveme(0); // stdout: 0
 ```
 
 
+Argument types are optional. Compiler will try to fill the blanks and even generate different versions of the same function with different arguments to optimize run-time execution.
 
-Compiler will try expand to its full form (with types and return), or complain if something is missing or unknown.
-
-Compiler will also generate multiple versions of the same function if every type is compatible.
-
-```
-fn sum x,  y {
-  return x + y;
-}
-// will be initialy expanded to:
-function sum(number x, number y) -> number {
-  return x + y;
-}
-var ui8 x = 5, y = 7;
-log sum(5, 7);
-
-// will generate another function with ui8 as inputs and output to optimize run-time execution.
-function sum(ui8 x, ui8 y) -> ui8 {
-  return x + y;
-}
-```
-
-Compiler don't generate functions if precision would be lost.
 
 ## function calls
 
 There are two ways to call a function: Classic and ~Prototypes/Objects like (first argument as class-like).
 
-```
+<example>
+```plee
 log sum(5, 6);
 // stdout 11
 
 log 5.sum(6);
 // stdout 11
 ```
+</example>
 
 That allow compiler to use tail-call-recursion.
 
@@ -79,7 +61,7 @@ Compiler will translate those *lazy forms* to the full.
 
 Common syntax.
 
-```
+```plee
 fn sum ui8 a, ui8 b = 1 {
 
 }
@@ -91,7 +73,7 @@ Assertion is a common use to check arguments invalid ranges/value.
 
 You could use any check comparison to create an assertion
 
-```
+```plee
 // default: 1
 // assert if negative
 // assert if is null
@@ -107,7 +89,7 @@ Sometime functions could receive a lot of parameters, with many optional/default
 For that you can specify what arguments are you passing.
 
 
-```
+```plee
 fn sum ui8 a, ui8 b {
 
 }
@@ -126,8 +108,7 @@ sum(5, 6); // compiler-error, argument expansion is required found two compatibl
 
 Variadic functions allow you to receive any number of arguments of the same type.
 
-```
-
+```plee
 // this function recieve many ui8
 fn sumall ui8... {
     var sum = 0;
@@ -164,7 +145,7 @@ enough, and do not introduce so much errors )
 * /
 * =
 
-```
+```plee
 var vec2 = require("v2"); // mod type is v2
 var va = new vec2(1, 1);
 var v_ra = new vec2(1, 1);
@@ -193,7 +174,7 @@ v_ra = v_ra + v_rb; // v will be modified now (12,2)
 
 `clone` operator is used before an argument to specify that you want to clone it.
 
-```
+```plee
 function mod_all(clone x, y) {
     x = 1;
     y = 1;
@@ -214,7 +195,7 @@ is not used.
 
 
 
-```
+```plee
 // declaration
 function each ar:array, code:function($0, string $1)) {
     var i = 0,
@@ -246,7 +227,7 @@ arr.each({
 
 Compile will expand the call
 
-```
+```plee
 arr.each(fn ($0, string $1) {
   var value = $0;
   var key = $1;
@@ -275,7 +256,8 @@ their behavior.
 Compiler can generate documentation based on comments preceding a functions, also can get types.
 
 The following two examples are identical
-```
+
+```plee
 /**
 * @param ui8 x
 * @param ui8 y
@@ -285,7 +267,7 @@ fn x, y {
 }
 ```
 
-```
+```plee
 fn ui8 x, ui8 y {
 
 }

@@ -9,7 +9,7 @@ Code will be isolated in a specific build. So no testing code will be in the rea
 
 ### Testing single function
 
-```
+```plee
 test return_var[, error_var] fn function_name(arguments...) {
     assert return_var == true "it should be true";
     assert error_var == null "it should be null";
@@ -19,7 +19,7 @@ test return_var[, error_var] fn function_name(arguments...) {
 
 ### testing multiple functions
 
-```
+```plee
 test fn test_unique_name() {
     //  do your staff, test object will be available for you.
 }

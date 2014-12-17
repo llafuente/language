@@ -128,3 +128,10 @@ log m.get_secret(); // stdout: no more secrets
 it could be called outside regardless the module has *new* or *delete*.
 * when instanced, *new* function is called if exists and instance the struct.
 * when deleted, *delete* function is called if exists and destroy the struct.
+
+
+
+## Embedded modules
+
+There are some modules that are embebed into the application.
+like `call`... call function is in fact a module imported in every file.

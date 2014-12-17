@@ -4,7 +4,7 @@ It's the same as struct but memory continuous.
 
 The advantage in performance has a counter part of fixed size. A single pointer cannot be resized after the first reserve.
 
-```
+```plee
 block identifier [, pointer_name] {
   // variables
   // functions
@@ -12,7 +12,7 @@ block identifier [, pointer_name] {
 ```
 
 Example
-```
+```plee
 block blk ptr1, ptr2 { // specify the order, if leave it blank, declaration order will be asumed
   "ptr1": p1,
   "ptr1": p2,

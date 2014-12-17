@@ -4,14 +4,17 @@ var fs = require("fs"),
   mktemp = require('mktemp'),
   tmp = mktemp.createDirSync('XXXXX.tmp');
 
-console.log("tmp-dir:", tmp + "/index.html");
+console.log(tmp + "/index.html");
 
 var files = {
     "readme.markdown": "index.html",
     "hello-world-example.markdown": "hello-world.html",
 
-    "operators.markdown": "operators.html",
+    "compiler.markdown": "compiler.html",
 
+    "entry-point.markdown": "compiler.html",
+
+    "operators.markdown": "operators.html",
     "types/_intro.markdown": "types.html",
     "types/string.markdown": "string.html",
     "types/numbers.markdown": "numbers.html",
@@ -41,6 +44,8 @@ var files = {
 
     "testing/testing.markdown": "testing.html",
 
+    "implementation.markdown": "implementation.html",
+
 };
 /* multi-file
 var tpl = fs.readFileSync("./tpl.html", "utf-8");
@@ -68,10 +73,54 @@ Object.keys(files).forEach(function(source_file) {
 
 });
 
-marked(source, function(err, content) {
-  content = tpl.replace("%body%", content);
+var renderer = new marked.Renderer();
+var old_heading = renderer.heading;
+var last_level = 0;
+var headings = new Array(10);
 
-  console.log(err);
+renderer.heading = function (text, level) {
+  headings[level] = headings[level] || 0;
+
+  ++headings[level];
+
+  var ret = [],
+    i = 0,
+    head = [],
+    args = Array.prototype.slice.call(arguments);
+
+  while (++i <= level) {
+    head.push(headings[i]);
+  }
+
+  args[0] = head.join(".") + " " + args[0];
+
+  if (last_level < level) {
+    ret.push("<section>");
+  } else {
+    ret.push("</section>");
+    ret.push("<section>");
+  }
+
+  if (last_level > level) {
+    i = level;
+    while (++i <= 10) {
+      headings[i] = 0;
+    }
+  }
+
+  last_level = level;
+
+  ret.push(old_heading.apply(this, args));
+
+  return ret.join("\n");
+};
+marked(source, { renderer: renderer }, function(err, content) {
+  content = tpl.replace("%body%", content + "</section>");
+
+  //console.log(content);
+  //process.exit();
+
+  err && console.log(err);
 
   fs.writeFileSync(path.join(tmp, "index.html"), content);
 });

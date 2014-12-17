@@ -13,7 +13,7 @@ array [ui64:length] [bool:fixed_size]
 * length: initial length
 * fixed_size: cannot be resized
 
-```
+```plee
 var ar1 = [];
 var ar2 = new number[5];
 var ar3 = clone other_array;

@@ -2,7 +2,7 @@
 
 Listeners can be attached to functions at compile time.
 
-```
+```plee
 #listener(fn).before(fn(function_name, arguments, stack))
 #listener(fn).beforeOff(fn)
 #listener(fn).after(fn(function_name, arguments, return_value, error_value, stack))

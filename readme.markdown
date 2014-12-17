@@ -1,13 +1,13 @@
 # plee language
 
+What are you going to find here...
+Plee language documentation and compiler implementation notes.
+
+## Compiler (breaf intro)
+
 Things that the compiler *must do*.
 
-* Continuous integration. Nowadays is mandatory. This also add some
-responsibility in the language that need to support a basic-extendable
-testing system.
-
-* Code coverage. Extracting the information from ci generate a report of
-the dangers in the code.
+* Testing and continuous integration (CI) and code coverage at compile time.
 
 * Documentation. Basic and extendable. Fill the gaps with information
 from compiler.
@@ -45,11 +45,18 @@ everything easily.
 only at statement level.
 
 
-Philosophy
+## Philosophy behind the language
 
 * Error prone. If something is powerful but introduce errors,
 need to be reconsidered at least.
 
-* We don't worry much about so many reserved words, because clarify things.
+* Easy to learn. We don't worry much about so many reserved words, because clarify things.
 
-* Easy to code, easy to be lazy, readability & version control friendly.
+* Easy to code & be lazy.
+
+* Readability & version control friendly.
+
+* Powerfull extensive core.
+
+* No hierarchy (Object Oriented programming).
+Forget interfaces, abstract classes, protected methods, extends... Just plain and simple objects.

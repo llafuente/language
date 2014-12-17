@@ -6,7 +6,7 @@ swap x y;
 
 ### swap AST
 
-```json
+```ast
 SwapStatement <: Statement {
     "type": "swap-statement",
     "left": Idenfier,

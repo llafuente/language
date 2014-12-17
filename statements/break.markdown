@@ -5,7 +5,7 @@
 
 When `break` is reached, the nearest loop is immediately terminated and program continue with the next statement to the loop.
 
-```
+```plee
 for var i .. 10 {
     break;
 
@@ -19,7 +19,7 @@ for var i .. 10 {
 Jump to the next statement with given label
 
 
-```
+```plee
 for var i .. 10 {
     break;
 
@@ -32,7 +32,7 @@ for var i .. 10 {
 
 You can specify other than the nearest loop/switch given the break the number of jumps.
 
-```
+```plee
 for var i .. 10 {
     for var j .. 10 {
         break 2; // will break for-i
@@ -47,7 +47,7 @@ for var i .. 10 {
 
 Jump to the next statement with given label.
 
-```
+```plee
 var found = false;
 
 // ...

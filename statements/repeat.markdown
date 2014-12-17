@@ -1,12 +1,10 @@
 ## repeat
 
-
 Repeat allow to `repeat` nearest loop again.
 
 Example:
 
-```
-
+```plee
 var i,
     once = false;
 for i .. 3 {

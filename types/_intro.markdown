@@ -12,7 +12,7 @@ your types from the code you write or complain when something is missing.
 
 * Initialization
 
-  ```
+  ```plee
   var a = 0; // i64
   var b = 0.0; // float
   var c = [1, 2, ""]; // compile-error, 3rd parameter is incompatible with the other
@@ -24,14 +24,14 @@ your types from the code you write or complain when something is missing.
 
   Resolve the type based on operation over the variable.
 
-  ```
+  ```plee
   var x = 0, y = 0; //i64
   var z = x + y;
   ```
 
 * function arguments
 
-  ```
+  ```plee
   fn sum ui8 x, ui8 y : ui8 {
       return x + y;
   }
@@ -42,7 +42,7 @@ your types from the code you write or complain when something is missing.
 
 A type can only grow in precision.
 
-```
+```plee
 var x = 0; // ui64
 var y = 0.1; // float
 var z = x + y; // float
@@ -50,7 +50,7 @@ var z = x + y; // float
 
 #### explicit type
 
-```
+```plee
 var i64 x;
 var string str;
 ```
@@ -59,13 +59,13 @@ var string str;
 
 * Using type operators, parenthesis is required most of the times...
 
-```
+```plee
 ui64 x = (ui64 0.0);
 ```
 
 * `to_*` functions
 
-```
+```plee
 ui64 x = to_ui64(0.0);
 
 ```
