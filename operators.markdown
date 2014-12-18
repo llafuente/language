@@ -18,6 +18,7 @@
 | 4 | Prefix Decrement | right-to-left | -- *rhs* |
 | 4 | typeof | right-to-left | typeof *rhs* |
 | 4 | delete | right-to-left | delete *rhs* |
+| 4 | resize | right-to-left | resize *rhs* |
 | 5 | Multiplication | left-to-right | *lhs* \* *rhs* |
 | 5 | Division | left-to-right | *lhs* / *rhs* |
 | 5 | Remainder | left-to-right | *lhs* % *rhs* |

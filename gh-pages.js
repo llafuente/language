@@ -1,10 +1,13 @@
 var fs = require("fs"),
   path = require('path'),
   marked = require('marked'),
+  cheerio = require('cheerio'),
+  $,
   mktemp = require('mktemp'),
   tmp = mktemp.createDirSync('XXXXX.tmp');
 
 console.log(tmp + "/index.html");
+console.log(tmp + "/code.txt");
 
 var files = {
     "readme.markdown": "index.html",
@@ -123,4 +126,13 @@ marked(source, { renderer: renderer }, function(err, content) {
   err && console.log(err);
 
   fs.writeFileSync(path.join(tmp, "index.html"), content);
+
+  // extract all code examples
+  var $ = cheerio.load(content),
+    code = [];
+  $(".lang-plee").each(function(k, v) {
+    code.push($(v).text());
+  });
+
+  fs.writeFileSync(path.join(tmp, "code.txt"), code.join("\n//---\n"));
 });

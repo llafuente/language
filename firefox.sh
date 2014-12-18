@@ -5,6 +5,6 @@ file=$(node gh-pages.js)
 path=$(dirname "$file")
 
 firefox ${file}
-wait 5
+sleep 3
 echo "removing: ${path}"
 rm -rf ${path}
