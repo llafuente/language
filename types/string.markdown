@@ -31,7 +31,7 @@
   starting from position start and running for length code units
   (or through the end of the string). If start is negative,
   it is treated as (str.length + start).
-  
+
   Aliases: `slice`
 
 * **substring** (*string* str, *ui64* start != nan < str.length, *ui64* end = str.length != nan < str.length)
@@ -41,7 +41,7 @@
   start and running to, but not including, character position end of the String
   (or through the end of the String is end is undefined). The result is a String value,
   not a String object
-  
+
   If start is larger than end, they are swapped.
 
 * **concat** (*string* str, *string* str2)
@@ -63,8 +63,8 @@
   Returns a String containing the character at position pos in the String resulting from
   converting this object to a String. If there is no character at that position, the result
   is the empty String. The result is a String value, not a String object.
-  
-  Shorthand of: `substring(str, pos, pos+1)`
+
+  shortcut of: `substring(str, pos, pos+1)`
 
 * **char\_code_at** (*string* str, *ui64* pos) : ui64
 
@@ -84,18 +84,18 @@
 * **last\_index_of** (*string* haystack, *string* needle, *ui64* offset = 0, *bool* case_insensitive = false) : *bool*
 
   Find the position of the last occurrence of a substring in a string.
-  
+
   *offset*: If specified, search will start this number of characters counted from the beginning of the string.
   If the value is negative, search will instead start from that many characters from the end of the string,
-  searching backwards. 
+  searching backwards.
 
 * **replace** (*string* str, *string* search, *string* replace, *bool* case_insensitive = false, *ui64* count = null)
 * **replace** (*string* str, *array* search, *string* replace, *bool* case_insensitive = false, *ui64* count = null)
 * **replace** (*string* str, *array* search, *array* replace, *bool* case_insensitive = false, *ui64* count = null)
 
   Replace all occurrences of the search string with the replacement string
- 
-  *count* If passed, this will be set to the number of replacements performed. 
+
+  *count* If passed, this will be set to the number of replacements performed.
 
 * **locale_compare**
 * **match** (*string* str, *regexp* reg_exp, *ui64* start = 0, *ui64* end = str.lenght) : *bool*
@@ -103,16 +103,16 @@
 * **ocurrences** (*string* haystack, *string* needle) : array
 
   Returns a list of indexes with the ocurrences of *needle* into *haystack*.
-  
+
 * **split** (*string* str, *string* delimiter, *ui64* limit = infinity) : *array*
 * **split** (*string* str, *regexp* delimiter, *ui64* limit = infinity) : *array*
- 
+
   Returns an array of strings, each of which is a substring of str formed by splitting
-it on boundaries formed by the string delimiter. 
+it on boundaries formed by the string delimiter.
 
   If limit is set and positive, the returned array will contain a maximum of limit elements
   with the last element containing the rest of string.
-  
+
   If the limit parameter is negative, all components except the last -limit are returned.
 
   alias: `explode`
@@ -120,13 +120,13 @@ it on boundaries formed by the string delimiter.
 * **lowercase**(*string* str, *bool* use_locale = true)
 
   Returns string with all alphabetic characters converted to lowercase.
-  
+
   if *use_locale* is `true` use current locale options to lowercase. Otherwise locale "C" will be used.
 
 * **uppercase**
 
   Returns string with all alphabetic characters converted to uppercase.
-  
+
   if *use_locale* is `true` use current locale options to uppercase. Otherwise locale "C" will be used.
 
 * **trim** (*string* str, *string* character_mask = " \t\n\r\0\x0B")
@@ -156,7 +156,7 @@ it on boundaries formed by the string delimiter.
 * **nl2br** (*string* string, *bool* is_xhtml = true): *string*
 
   Returns string with '<br />' (`is_xhtml = true`) or '<br>' (`is_xhtml = false`) inserted
-  before all newlines (`\r\n`, `\n\r`, `\n` and `\r`). 
+  before all newlines (`\r\n`, `\n\r`, `\n` and `\r`).
 
 * **parse_qs** (*string* str): *array*
 
@@ -165,8 +165,8 @@ it on boundaries formed by the string delimiter.
 * **parse_url**(*string* str): *object*
 
   This function parses a URL and returns an object containing any of the various
-  components of the URL that are present. 
-  
+  components of the URL that are present.
+
   Returned *object*
   ```
   {
@@ -184,9 +184,9 @@ it on boundaries formed by the string delimiter.
 * **parse_csv** (*string* input, *string* delimiter = ",", *string* enclosure = '"', *string* escape = "\\"): *array*
 
   Parses a string input for fields in CSV format and returns an array containing the fields read.
-  
+
 * **parse_json** (*string* input): *object*
- 
+
   **TODO** study, this return an object ?
 
 One-way string hashing

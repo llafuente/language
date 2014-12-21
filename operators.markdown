@@ -19,6 +19,7 @@
 | 4 | typeof | right-to-left | typeof *rhs* |
 | 4 | delete | right-to-left | delete *rhs* |
 | 4 | resize | right-to-left | resize *rhs* |
+| 4 | Exits operator | n/a | ! *lhs*? |
 | 5 | Multiplication | left-to-right | *lhs* \* *rhs* |
 | 5 | Division | left-to-right | *lhs* / *rhs* |
 | 5 | Remainder | left-to-right | *lhs* % *rhs* |
@@ -31,18 +32,17 @@
 | 8 | Less Than Or Equal | left-to-right | *lhs* <= *rhs* |
 | 8 | Greater Than | left-to-right | *lhs* > *rhs* |
 | 8 | Greater Than Or Equal | left-to-right | *lhs* >= *rhs* |
-| 8 | in | left-to-right | *lhs* in *rhs* |
-| 8 | instanceof | left-to-right | *lhs* instanceof *rhs* |
-| 8 | Exits operator & safe assignment | left-to-right | *rhs* ? |
 | 8 | force assignment | left-to-right | *rhs* ! |
 | 9 | Equality | left-to-right | *lhs* == *rhs* |
 | 9 | Inequality | left-to-right | *lhs* != *rhs* |
+| 9 | Address Equality | left-to-right | *lhs* $= *rhs* |
 | 10 | Bitwise AND | left-to-right | *lhs* & *rhs* |
 | 11 | Bitwise XOR | left-to-right | *lhs* ^ *rhs* |
 | 12 | Bitwise OR | left-to-right | *lhs* &#124; *rhs* |
 | 13 | Logical AND | left-to-right | *lhs* && *rhs* |
 | 14 | Logical OR | left-to-right | *lhs* &#124;&#124; *rhs* |
 | 15 | Conditional | right-to-left | *lhs* ? … : *rhs* |
+| 16 | Safe assignment | right-to-left | *lhs* ?= *rhs* |
 | 16 | Assignment | right-to-left | *lhs* = *rhs* |
 | 16 | Assignment | right-to-left | *lhs* += *rhs* |
 | 16 | Assignment | right-to-left | *lhs* -= *rhs* |
@@ -60,6 +60,8 @@
 
 <!--
 | 4 | void | right-to-left | void *rhs* |
+| 8 | in | left-to-right | *lhs* in *rhs* |
+| 8 | instanceof | left-to-right | *lhs* instanceof *rhs* |
 | 9 | Strict Equality | left-to-right | *lhs* === *rhs* |
 | 9 | Strict Inequality | left-to-right | *lhs* !== *rhs* |
 | 17 | yield | right-to-left | yield *rhs* |
@@ -70,6 +72,11 @@ Mathematical operators need to be separated by `space` for readability
 purposes and fully support UTF-8 as identifier.
 
 ```
-var x = y+z; // invalid: parsing-error if `y+z` variable is not defined!
 var x = y + z; // ok
+```
+
+See more information about [var-idenfiers](#var-idenfiers)
+```
+var x = y+z; // compilation-error
+// undefined variable x+z
 ```

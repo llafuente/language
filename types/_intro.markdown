@@ -1,23 +1,62 @@
 ### Types.
 
-* Variable declaration require the keyword **var**.
-Some languages allow declaration of variables prefixed its type,
-that could be messy, and not easy to read.
-For readability plee enforce the use **var** or **const**
-* Lazy typed: plee is a *strong type* language, the compiler will identify
-your types from the code you write or complain when something is missing.
-* All types in the language lowercased.
+#### Philosophy
+
+* [Type introspection](http://en.wikipedia.org/wiki/Type_introspection)
+
+* Required keyword (var, const, unvar) for readability.
+
+* [Type inference](http://en.wikipedia.org/wiki/Type_inference)
+
+* Types lowercased.
+
+
+#### Syntax
+
+```syntax
+var-declaration
+('const'|'var'|'unvar') (var-declarator)+;
+
+var-declarator
+type? var-identifier ('=' (expression|literal))? (',' var-declarator)*
+type var-identifier '(' argument_list ')' (',' var-declarator)*
+```
+
+* `const` for constants
+* `var` for variables implicit initialized to default values
+* `unvar` for un-initialized variables
+
+examples:
+
+```plee
+var a = 0; // i64 (default compiler option)
+var b = 0.0; // float (default compiler option)
+
+var d = [1, 2, 3]; // array of i64, size=length=3
+var e = a; // same type as a
+
+var ui64 e; // also: i64
+log e; // stdout: 0
+```
+
+#### lazy initialization (shortcut)
+
+```plee
+var a = new array(5);
+//equivalent to
+var array a(5);
+```
 
 #### Type inference.
 
 * Initialization
 
-  ```plee
-  var a = 0; // i64
-  var b = 0.0; // float
-  var c = [1, 2, ""]; // compile-error, 3rd parameter is incompatible with the other
-  var d = [1, 2, 3]; // array of i64, size=3
-  var e = a; // also: i64
+
+* Initialization without a value
+
+  ```
+  unvar a;
+  unvar ui64 b;
   ```
 
 * Operators
@@ -83,7 +122,7 @@ ui64 x = to_ui64(0.0);
 | block | * | not allowed |
 | struct | block | compiler will complain an offer a solution: use copy operator |
 
-
+<a name="var-idenfiers"></a>
 #### Variable identifier/name rules
 
 * Cannot start with a number

@@ -1,5 +1,12 @@
 ## while
 
+### Syntax
+
+```syntax
+while-statement
+**TODO**
+```
+
 ### while
 
 Allows code to be executed repeatedly based on a given boolean condition.

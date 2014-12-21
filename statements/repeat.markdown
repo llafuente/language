@@ -1,8 +1,11 @@
 ## repeat
 
-Repeat allow to `repeat` nearest loop again.
+Repeat allow to `repeat` nearest loop again from the beginning
 
-Example:
+
+```plee
+'repeat' (literal)? ';'
+```
 
 ```plee
 var i,
@@ -22,3 +25,5 @@ for i .. 3 {
 // stdout: 2
 
 ```
+
+see [break](#break) for the literal options

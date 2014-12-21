@@ -1,22 +1,55 @@
 ## for
 
-### for-classic
+### Syntax
 
-```plee
-for [init;]condition; after_loop {
+```syntax
+for-statement
+for-classic function-body for-else?
+for-in function-body for-else?
+for-in-slice function-body for-else?
+for-till function-body for-else?
+for-to function-body for-else?
+for-iterable function-body for-else?
 
-} [else {
-    // executed if condition fails the first time
-}]
+for-classic
+'for' (var-declaration|expression ';')? expression ';' expression
+
+for-in
+'for' (var_identifier ',')? var_identifier 'in' var_identifier
+
+for-in-slice
+for-in '[' literal ',' literal ']'
+
+for-till
+'for' var_identifier 'till' (literal|expression)
+'for' var-declaration 'till' (literal|expression)
+
+for-to
+'for' var_identifier 'to' (literal|expression)
+'for' var-declaration 'to' (literal|expression)
+
+for-iterable
+'for' var_identifier
+
+
+for-else
+'else' function-body
 
 ```
+
+### for-classic
+
 
 
 ### for-in
 
-for-in won't clone the iterable. The iterator will behave if something is removed.
+for-in won't clone the iterable.
 
-Iterator behavior:
+To see iterator behavior when remove or push,
+see [array@iterators](#array-iterators) or
+[object@iterators](#object-iterators)
+
+Iterator :
 
 * If current value is removed (splice) the next value will have the same key and next value. if end is reached just break.
 * If a value before the current is removed the next value will have the same key and next value.
@@ -51,7 +84,7 @@ for [key, ] value in iterable[3,5] {
 ```
 
 
-### for-till (shorthand)
+### for-till (shortcut)
 
 ```plee
 for variable|number till number {
@@ -71,7 +104,7 @@ Compiler will translate for-till with the folowing rules:
 > for var i=1 till 10 -> for var i=1; i < 10; ++i
 
 
-### for-to  (shorthand)
+### for-to  (shortcut)
 
 ```plee
 for variable|number to number {
@@ -91,7 +124,7 @@ Compiler will translate for-to with the folowing rules:
 > for var i=1 to 10 -> for var i=1; i <= 10; ++i
 
 
-### for-iterable (shorthand)
+### for-iterable (shortcut)
 
 for-iterable don't clone the iterable.
 
@@ -99,11 +132,15 @@ Cannot be nested with the same iterable variable-name. You can alias a variable 
 
 ```plee
 for iterable {
-    iterable.$0 // will be aliased, can be used outside the loop!
-    iterable.$1 // will be aliased, can be used outside the loop!
-    //
+
+    // will be aliased, can be used outside the loop!
+    assert $0 != iterable.$0;
+
+    // will be aliased, can be used outside the loop!
+    assert $1 != iterable.$1;
+
 } [else {
-    // executed if condition fails the first time
+    // executed if condition no length
 }]
 ```
 

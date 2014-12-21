@@ -1,32 +1,76 @@
 ## array
 
 * Arrays are always dense.
+
 * Arrays always contains a common type.
+
 * Assign a pointer to something in the array it's only possible if fixed size.
 
 ### Initialization
 
-```
-array [ui64:length] [bool:fixed_size]
-```
+> **new** *type* (*ui64* length = 0, *bool* dynamic = false)
 
-* length: initial length
-* fixed_size: cannot be resized
+* *length*: initial length
+* *dynamic*: can be resized
+
+  Compiler will optimize some operations if dynamic is false.
+
+
+Example with basic operations:
 
 ```plee
+// alloc an array, but no memory to store data
+// length variable
+// type unkown type atm.
 var ar1 = [];
-var ar2 = new number[5];
-var ar3 = clone other_array;
-var ar4 = [x, y, z]; // x, y & z must have the same type.
-var ui8[] ar5 = new array(5, true); // fixed, ui8 (x5)
+// on the first assignament, type is known, from now on it's ui64.
+ar1[3] = 0;
 
-ar1[3] = 0; // compiler not know the implicit type
-ar1.toJSON(); // [null, null, null, 0]
+log ar1.toJSON(); // stdout: [null, null, null, 0]
+
+
+// alloc an array, alloc 5 numbers
+// length fixed
+// type number.
+var ar2 = new number(5);
+
+
+// clone an array
+var ar3 = clone ar2;
+
+
+// initialize an array with 3 elements
+// x, y & z must have the same type
+var ar4 = [x, y, z];
+
+
+// multi-dimensional array 2x2
+// the first dimension cannot be resized
+var ar_2x2 = new ui8(2, true)(2);
+
+// access
+ar_2x2[0][0];
+
 ```
 
-The compiler will decide the type of the array with a simple rule: Type of the first insertion.
+### multi-dimensional implementation (compiler-notes)
 
-* Will raise a warning if no implicit conversion is made, when possible information loss. for example: ui64 -> ui32
+`multi-dimensional` arrays are a different type, that is not directly
+exposed to user.
+
+To be performance, must be memory continous, parser cannot solve this problem if the array is not fixed-size, so need to be solved as compile-runtime.
+
+**Study** this lead to some problems.
+All array functions must has an offset/length, to work on continuous memory. for example:
+
+```plee
+var ar = new ui8(5, true)(6, true);
+ar[1].indexOf(0);
+
+// will be compiled to
+ar.indexOf(0, 6, 12);
+```
+
 
 ### Instances properties
 
@@ -36,17 +80,22 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 
 * `size`
 
-  readonly. Reserved memory.
+  readonly. Reserved memory (bytes)
 
-* `last`
+* `last` (shortcut)
 
   Last element in the array, no more array[array.length -1]
 
-* [**index**:**ui64**]
+* \[**index**:**ui64**] (shortcut)
 
-  Access to given index.
+  Access to given index
 
-### Transformations
+* `index` (ui64 pos, ...)
+
+  Get the value in the given pos.
+  If the array is multi-dimensional
+
+### transformations/transcoding
 
 * `to_string`
 
@@ -56,19 +105,29 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 
   Return the length.
 
-  [**STUDY**] This could lead to problems but could avoid check against `array.length`
+  **STUDY** This could lead to problems but could avoid check against `array.length` for lazy people...
 
 * `to_object`
 
-  Return a new Object will keys as Ids
+  Return a new `object` with indexes as keys (casted to string),
+  values as values.
 
+<!--
  // change id-property and returned as Object
 
 .for: -> raise runtime error
 .switch: -> raise runtime error
 .is: // memory position check -> check length. if the same, loop every item and do `this[i] is that[i]`
+-->
 
-* `concat` (**other**:**array**)
+### array functions
+
+**STUDY** i have to add *any* as type, because `index_of` neede it.
+But is this possible in our type-system?
+Also sort... could lead to some problems...
+Even with type inference, some types could need something special...
+
+* `concat` (*array* ar, ...)
 
   Returns a new array comprised of the array on which it is called joined with the array(s) and/or value(s) provided as arguments.
 
@@ -78,106 +137,163 @@ The compiler will decide the type of the array with a simple rule: Type of the f
 
   Returns current array joined with the array(s) and/or value(s) provided as arguments.
 
-* `join` (**separator**:**string**)
+* `join` (*string* separator)
 
   Return a string resulting of join all elements with given separator.
 
-`last_index_of`(**search_element**:void, **from_index**:**ui64** = length)
+* `last_index_of`(*any* search_element, *ui64* from_index = length)
 
   Returns the last index at which a given element can be found in the array, or -1 if it is not present. The array is searched backwards, starting at fromIndex (length by default)
 
-* `index_of`(**search_element**: void, **from_index**:ui64 = 0)
+* `index_of`(*any* search_element, *ui64* from_index = 0)
 
   Returns the first index at which a given element can be found in the array, or -1 if it is not present.
 
-* `has_any`(**searchArray**: array)
+* `has_any`(*array* search_array)
 
   Returns if any of the values in searchArray is contained in the array.
 
-* `reverse`()
-* `sort`()
-* `splice`(**index**:ui64, **howMany**:ui64, **elements**:array ...)
+  alias: `contains`
+
+* `reverse` ()
+
+  Reverse array.
+
+* `sort` (*fn* func)
+
+  sort your array.
+
+  func must return a ui64.
+
+  * negative means lesser
+  * 0 equal
+  * position means greater
+
+* `splice` (**ui64** index, **ui64** how_many, **array** elements, ...)
 
   Changes the content of an array, adding new elements while removing old elements
 
-* `shift`()
+* `remove` (**any** element, **ui64** how_many, **array** elements ...)
+
+  Changes the content of an array, adding new elements while removing old elements
+
+* `shift` ()
+
   Removes the first element from an array and returns that element. This method changes the length of the array
 
-* `slice`(**begin**:ui64, **end**:ui64 = length)
+* `slice` (**ui64** begin, **ui64** end = length)
   Returns a shallow copy of a portion of an array into a new array object
 
-* `pop`()
+* `pop` ()
 
   Removes the last element from an array and returns that element
 
-* `push`(**elements**:array ...)
+* `push` (**any** element, ...)
 
   Adds one or more elements to the end of an array and returns the new length of the array
 
-* `unshift`(**elements**:array ...)
+* `insert` (**any** element, **ui64** index)
+
+  Insert an element into the given position.
+
+* `unshift` (**any** element, ...)
 
   Adds one or more elements to the beginning of an array and returns the new length of the array.
 
-* `fill`(**value**:any ...)
+* `fill` (**any** value)
 
   Fill the array (all size reserved) with the given value.
 
 
 
-### loping
+### looping
 
 For evey function listed here if the function is anonymously declared, the compiler will transform them into a blocks for performance.
 
-* `every` (**callback**: function)
+* `every` **array** arr, **fn** callback(**any** element,
+**ui64** index, **array** arr) : boolean
 
   Tests whether all elements in the array pass the test implemented by the provided function.
 
-  The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return a boolean.
 
-* `filter` (**calback**: function)
+* `filter` **array** arr, **fn** test(**any** element,
+**ui64** index, **array** arr)) : array
 
-  creates a new array (with the original length) with all elements that pass the test implemented by the provided function.
+  Modify *arr* removing all elements don't pass the test
+  implemented by the provided *test* function.
 
-  The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return a boolean.
-
-* `for_each`  (**calback**: function)
-* `each` (**calback**: function)
+* `for_each` **array** arr, **fn** callback(**any** element,
+**ui64** index, **array** arr)
 
   Executes a provided function once per array element
 
-  The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array.
+  alias: **each**
 
-* `map`(**calback**: function)
+* `map` **array** arr, **fn** callback(**any** element,
+**ui64** index, **array** arr)
 
-  creates a new array with the results of calling a provided function on every element in this array.
+  Modify *arr* with the results of calling a provided function
+  on every element in this array.
 
-  The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return the same value that the array contains.
+  The callback must return the same value that the array contains.
 
-* `mapme`(**calback**: function)
+* `reduce` **array** arr, **fn** accumulator(**any** previous_el,
+**any** current_el, **ui64** index, **array** arr) : **any**
 
-  Same as map but without array creation.
+  Applies a function against an *accumulator* and each value of
+  the array (from left-to-right) has to reduce it to a single value.
 
-  The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return the same value that the array contains.
+  Returned value is defined by the callback itself.
 
-* `reduce`(**calback**: function)
+* `reduce_right` **array** arr, **fn** accumulator(
+**any** previous_el, **any** current_el, **ui64** index,
+**array** arr) : **any**
 
-  Applies a function against an accumulator and each value of the array (from left-to-right) has to reduce it to a single value.
+  Applies a function against an *accumulator* and each value of
+  the array (from right-to-left) has to reduce it to a single value.
 
-  The callback will recieve 4 parameters: **previousValue**:void, **currentValue**:void, **index**:ui64, **array**:array. Returned value is defined by the callback itself.
+  Returned value is defined by the callback itself.
 
-* `reduceRight`(**calback**: function)
-
-  Applies a function against an accumulator and each value of the array (from right-to-left) has to reduce it to a single value
-
-  The callback will recieve 4 parameters: **previousValue**:void, **currentValue**:void, **index**:ui64, **array**:array. Returned value is defined by the callback itself.
-
-* `some`(**calback**: function)
+* `some`  **array** arr, **fn** callback(**any** element,
+**ui64** index, **array** arr)
 
   Tests whether some element in the array passes the test implemented by the provided function
 
-  The callback will recieve 3 parameters: **element**:void, **index**:ui64, **array**:array. And must return a boolean.
+<a name="array-iterators"></a>
+### iterators
 
+`for-itr` need an iterator that behave. These are their rules:
+
+* When remove an object, all iterators need to be notified.
+And if the element is the current element of someone, the next will have the same ID (do not increment)
+
+```
+var a = [1, 2, 3];
+var itr1 = a.iterator();
+var itr2 = a.iterator();
+itr1.next();
+itr2.next();
+
+// remove current object
+itr2.remove();
+
+// this is not an alias of
+// a.splice, has the extra logic to keep iterator sane
+// splice NOT!
+
+log itr1; // stdout: 2
+log itr2; // stdout: 2
+
+itr1.next();
+itr2.next();
+
+log itr1; // stdout: 3
+log itr2; // stdout: 3
+```
+
+* splice/push
 
 ### Notes
 
 * if type is defined, when enter a switch gives a compile error.
+

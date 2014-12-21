@@ -12,23 +12,17 @@ If the memory do not own the struct, tell the compiler using `ext`.
 
 `struct` can be considered as a basic Object Oriented programming paradigm.
 
-Syntax
 
-> **struct** *struct_identifier* {
+### Syntax
 
-> // Variable declaration
+```syntax
+struct-statement
+'struct' var_identifier block-body
 
->  **var** [*type*] *var_identifier*[ = *initialization*]**;**
+block-body
+'{' (var_declaration|fn_declaration)+ '}'
+```
 
-> // Function declaration
-
->  **fn** *fn_identifier* [*arguments*] {
-
->  }
-
->};
-
-Example:
 ```plee
 struct v2 {
   var number x = 0;

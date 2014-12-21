@@ -1,65 +1,125 @@
-# Functions
+## Functions
 
-Main philosophy behind:
+### Philosophy
 
 * [Function overloading](http://en.wikipedia.org/wiki/Function_overloading)
+
 * [Anonymous function](http://en.wikipedia.org/wiki/Anonymous_function)
+
 * [Variadic function](https://en.wikipedia.org/wiki/Variadic_function)
-* Everything is sent by reference, hence *Multiple Return Values* is not needed-supported.
-* There is no `this` concept. `this` introduce many memory management problems so it's removed.
-* Argument types are optional (sometimes)
-* Return type is optional (sometimes). If no return statement is found, `null` will be returned.
+
+* Everything is sent by reference
+
+* There is no `this` concept/keyword.
+
+`this` could introduce so many memory management
+problems so it's removed.
+
+* *Type inference*: Argument types are optional (sometimes)
+
+* *Type inference*: Return type is optional (sometimes).
+If no return statement is found, `null` will be returned.
+
+* if *Type inference* found two compatible types, compiler will
+generate as many functions as needed to optimize execution time.
+
 * `fn` is an alias `function`, for lazy people.
-* Parenthesis are not required, braces are.
 
-## Functions identifier/name rules
+* Parenthesis are not required, curly braces are.
 
-* Cannot start with a number
-* Cannot start with a $
+
+**study**
+
+* *Multiple Return Values*. Need support for tuples or
+no-typed arrays...
+
+### Functions identifier/name rules (*fn_identifier*)
+
+* Must not be a [number](#number).
+* Cannot start with a `$`
 * Any UTF-8 valid character
+* if has more than one character cannot start with any [left-to-right operator](#operators)
 
-Can I use `+` as function name... The answer is: *Yes*, we can.
+Can I use `a+b` or `a-b` as function name... The answer is: *Yes*, we can. Even snowman!
 
-## Function declaration
+### Syntax
 
-> **fn**|**function** *identifier* [,*arguments*]\* [: *return_type*] [**alias** identifier [, identifier]] {}
+```syntax
+function-declaration
+function-header [':' type] [alias [',' fn_identifier]+] function-body
 
+function-header
+function-header-full
+function-header-lazy
+
+function-header-full
+('inline'|'no_inline')? ('fn'|'function') '(' fn-identifier arguments-list? ')'
+
+function-header-lazy
+('inline'|'no_inline')? ('fn'|'function') fn-identifier arguments-list?
+
+arguments-list
+argument (',' arguments-list)*
+
+argument
+type var_identifier ('=' literal)? (('!='|'<'|'>'|'=>'|'<=') literal)*
+function-header-full
+
+function-body
+'{' (statement|function-declaration)+ '}'
+
+function-call
+fn_identifier '(' parameter-list* ')'
+var_identifier '.' fn_identifier '(' parameter-list* ')'
+
+parameter-list
+parameter (',' parameter-list)
+
+parameter
+literal ':' (literal|expression)
+(literal|expression) 'as' literal
+(literal|expression)
+```
+
+Notice that function-body cannot be empty, there is no
+`empty-statement`.
+
+### Declaration
 
 ```plee
 fn giveme x {
     return x;
 }
+
 log giveme(0); // stdout: 0
 ```
 
+### function call
 
-Argument types are optional. Compiler will try to fill the blanks and even generate different versions of the same function with different arguments to optimize run-time execution.
+* Classic function call
 
+  ```plee
+  log sum(5, 6);
+  // stdout 11
+  ```
 
-## function calls
+* Objects Oriented / Prototypal
 
-There are two ways to call a function: Classic and ~Prototypes/Objects like (first argument as class-like).
+  ```plee
+  log 5.sum(6);
+  // stdout 11
+  ```
 
-<example>
-```plee
-log sum(5, 6);
-// stdout 11
+**note** If chaning if possible, use the second one, because
+allow compiler to use `tail-call-recursion` that optimize
+runtime execution.
 
-log 5.sum(6);
-// stdout 11
-```
-</example>
+To use any of the notation you don't need to write extra code.
 
-That allow compiler to use tail-call-recursion.
+Compiler will expand to the functional form, adding '5' as first
+argument.
 
-
-The first argument can be used as a classy-method-prototype.
-
-Compiler will translate those *lazy forms* to the full.
-
-## Argument default
-
-Common syntax.
+### default arguments
 
 ```plee
 fn sum ui8 a, ui8 b = 1 {
@@ -67,11 +127,21 @@ fn sum ui8 a, ui8 b = 1 {
 }
 ```
 
-## Argument assertion (shorthand)
+You can use other arguments properties as default values.
+
+```plee
+fn array arr, ui64 limit = arr.length {
+
+}
+```
+
+## Argument assertion (shortcut)
 
 Assertion is a common use to check arguments invalid ranges/value.
 
-You could use any check comparison to create an assertion
+You could use any check comparison to create an assertion.
+*notice*: compiler allow *strange* checks like '> 5' and '< 6' that
+simply don't allow any number, so becareful.
 
 ```plee
 // default: 1
@@ -82,18 +152,25 @@ fn sum ui8 a, ui8 b = 1 < 0 == null {
 }
 ```
 
-## Argument call expansion
+### Parameter names call
 
-Sometime functions could receive a lot of parameters, with many optional/default values. In those cases reading or even writing the call could be painful.
+Name each parameter to match argument names of a function.
 
-For that you can specify what arguments are you passing.
+Solve two common problems.
 
+* Functions with a lot of parameters, many time with many
+optional/default values.
+
+* Function overloading with the same types is allowed with diferent
+arguments identifiers
+
+* Clearly indicate the purpose of each argument you pass to the
+function.
 
 ```plee
 fn sum ui8 a, ui8 b {
 
 }
-
 
 // and you can define the same function, with different argument names.
 fn sum ui8 c, ui8 b {
@@ -101,16 +178,19 @@ fn sum ui8 c, ui8 b {
 }
 
 sum(5 as b, 6 as a);
-sum(5, 6); // compiler-error, argument expansion is required found two compatible functions: ...
+sum(c: 5, b: 6);
+sum(5, 6); // compiler-error
+// Argument expansion is required found two compatible functions: ...
+sum(5, b: 6); // this is allowed
 ```
 
-## Variadic function
+### Variadic function
 
 Variadic functions allow you to receive any number of arguments of the same type.
 
 ```plee
 // this function recieve many ui8
-fn sumall ui8... {
+fn sumall ui8, ... {
     var sum = 0;
 
     arguments.each({ sum+=$0;})
@@ -118,7 +198,7 @@ fn sumall ui8... {
     return sum;
 }
 
-// this is not allowed
+// this is not allowed (atm)
 fn glue string start, string to_join..., string end {
 
 }
@@ -126,18 +206,24 @@ fn glue string start, string to_join..., string end {
 ```
 
 **TODO** Study support for multiple Variadic
+**TODO** Study support spread operator, but notation of
+one must differ to avoid confusion
 
-## Operator functions
+### Operator functions
 
-Operator function can be used as a shorthand with two purposes:
+**TODO** too vage, need to be more tighten.
+this could lead to some problems. operator function declaration
+need to be standard, and checked by the compile, define those rules.
+**null** as return value?!
+
+Operator function can be used as a shortcut with two purposes:
 
 * Modify the first argument
 * Return a new Argument
 
 Operator functions doesn't require `.` (dot).
 
-Operator list (**TODO** study to add more but this should be
-enough, and do not introduce so much errors )
+Operator list
 
 * +
 * -
@@ -145,18 +231,21 @@ enough, and do not introduce so much errors )
 * /
 * =
 
+**STUDY** add more operators? but this should be
+enough, and do not introduce so much errors
+
 ```plee
 var vec2 = require("v2"); // mod type is v2
 var va = new vec2(1, 1);
 var v_ra = new vec2(1, 1);
 var v_rb = new vec2(1, 1);
 
-fn +(x:v2, y:v2) {
+fn + v2 x, v2 y : null {
     x.x += y.x;
     x.y += y.y;
 }
 
-fn +(x:v2, y:v2) -> v2 {
+fn + v2 x, v2 y : v2 {
     x.x += y.x + 10;
     x.y += y.y;
 
@@ -170,9 +259,10 @@ v_ra = v_ra + v_rb; // v will be modified now (12,2)
 
 ```
 
-## Arguments by value
+### Arguments by value
 
-`clone` operator is used before an argument to specify that you want to clone it.
+`clone` operator is used before an argument to specify that
+you want to clone it.
 
 ```plee
 function mod_all(clone x, y) {
@@ -187,17 +277,17 @@ log x; // stdout: 0
 log y; // stdout: 1
 ```
 
-## `function` as arguments
+### `function` as arguments
 
 A function is divided into header and body.
-A callback function could have a default header that will be used is at call-expression
-is not used.
+A callback function could have a default header
+that will be used is at call-expression is not used.
 
 
 
 ```plee
 // declaration
-function each ar:array, code:function($0, string $1)) {
+function each array ar, inline fn code($0, string $1)) {
     var i = 0,
         max = ar.lenth;
 
@@ -242,7 +332,7 @@ Because the first argument will have a pseudo-method, functions with the same na
 cannot have the same arguments. To avoid collision we introduce a "do not export"
 
 
-## functions in modules.
+### functions in modules.
 
 Just as a brief introduction, functions in modules has special keyword to specify
 their behavior.
@@ -251,7 +341,7 @@ their behavior.
 * `export fn new` constructor of the module
 * `export fn delete` destructor of the module
 
-## documentation
+### documentation
 
 Compiler can generate documentation based on comments preceding a functions, also can get types.
 
@@ -274,6 +364,6 @@ fn ui8 x, ui8 y {
 ```
 
 
-## #run
+### #run
 
 Compile time function running

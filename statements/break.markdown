@@ -1,5 +1,13 @@
+<a name="break"></a>
 ## break
 
+
+### syntax
+
+```syntax
+break-statement
+'break' (literal){0,1} ';'
+```
 
 ### break inside loops
 
@@ -58,3 +66,17 @@ id-label: if (found) {
     //
 }
 ```
+
+
+### break iterator (shortcut)
+
+```plee
+for far_itr in ar {
+    for near_itr in ar {
+    break far_itr;
+    // will be aliased to break number;
+    // no need to count :)
+}
+```
+
+This is because the compiler will label the `for` for you.

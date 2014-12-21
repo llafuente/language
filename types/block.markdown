@@ -2,27 +2,41 @@
 
 It's the same as struct but memory continuous.
 
-The advantage in performance has a counter part of fixed size. A single pointer cannot be resized after the first reserve.
+The advantage in performance has a counter part of fixed global size.
+`new` and `resize` need to know all sizes.
 
-```plee
-block identifier [, pointer_name] {
-  // variables
-  // functions
-};
+Syntax
+
+```syntax
+block-declaration
+'block' var_identifier block-body;
+
+block-body
+'{' (var_declaration|fn_declaration)+ '}'
 ```
 
 Example
 ```plee
-block blk ptr1, ptr2 { // specify the order, if leave it blank, declaration order will be asumed
-  "ptr1": p1,
-  "ptr1": p2,
+
+// declaration
+block blk {
+  var array ptr_a;
+  var array ptr_b;
 };
 
+// initialization
 var x = new blk[10, 10];
-// can be resized as a group
+var blk y(10, 10); // shortcut
+
+// can be resized
 resize x[15, 10]; // this will allocate, copy and free the old memory.
 
-resize x.ptr1[15]; // compilation error
-resize x.ptr1[0]; // compilation error
-delete x.ptr1[15]; // compilation error
+// error you could expect
+resize x.ptr_a[15]; // compilation error
+// block property cannot be resized, because it's memoty continuos
+// try to resize the entire block
+
+resize x.ptr_a[0]; // compilation error
+delete x.ptr_a[15]; // compilation error
+// block property cannot freed, you must free the entire block
 ```

@@ -3,33 +3,38 @@
 What are you going to find here...
 Plee language documentation and compiler implementation notes.
 
-## Compiler (breaf intro)
+## Breaf introduction
 
-Things that the compiler *must do*.
+Things that the compiler *will do* for you.
 
-* Testing and continuous integration (CI) and code coverage at compile time.
+* Testing - continuous integration (CI) and code coverage
+at compile time.
 
-* Documentation. Basic and extendable. Fill the gaps with information
-from compiler.
+* Documentation. Plee has type inference so we need a way to export
+that information, we build a basic documentation.
 
 * Export module interface in a clean file.
+Something like header file in c.
 
-* Benchmarks. Once again, basic and extendable.
+* Benchmarks.
 
-* Code expansion, beautifier. Most of the shorthands in plee require compiler
-to generate code, better the user to see full code.
+* Code expansion and beautifier. Plee is full of shortcuts that
+generate code, code expansion display the full code that will be
+executed.
+
+* Powerfull type introspection.
 
 Things that you should now before the *shocking news*.
 
 * No classes hierarchy. plee propose modules as replacement.
 Also, do not expect `this` as reserved word...
 
-* Function scope rather than block scope.
+* Auto variable scope. Switch beetwen Function scope and block scope.
 
 * Robust memory management, focus on no leaks a proper error display
 for easy debugging.
 
-* Braces are mandatory everywhere but you can avoid using parenthesis :)
+* Curly braces are mandatory *everywhere* but you can avoid using parenthesis :)
 
 * *pass-by-reference* everything to improve performance. You can clone
 everything easily.
@@ -50,7 +55,8 @@ only at statement level.
 * Error prone. If something is powerful but introduce errors,
 need to be reconsidered at least.
 
-* Easy to learn. We don't worry much about so many reserved words, because clarify things.
+* Easy to learn. You will see many reserved words,
+mostly because clarify things.
 
 * Easy to code & be lazy.
 
@@ -60,3 +66,6 @@ need to be reconsidered at least.
 
 * No hierarchy (Object Oriented programming).
 Forget interfaces, abstract classes, protected methods, extends... Just plain and simple objects.
+
+* Be nice target for other languages. There is much code out there,
+playing nice with other languages it's important to us.s

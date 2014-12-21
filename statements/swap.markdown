@@ -1,15 +1,10 @@
 ## swap
 swap variable names.
 
+```syntax
+'swap' var_identifier var_identifier ';'
+```
+
+```plee
 swap x y;
-
-
-### swap AST
-
-```ast
-SwapStatement <: Statement {
-    "type": "swap-statement",
-    "left": Idenfier,
-    "right": Idenfier
-}
 ```

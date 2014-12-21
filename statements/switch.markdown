@@ -12,6 +12,13 @@ Plee goes a bit beyond while provide `fallthrough` also provide `break` but the 
 
 There are two types of switch: expression switch and comparison switch.
 
+### Syntax
+
+```syntax
+switch-statement
+**TODO**
+```
+
 ### comparison switch
 
 Compare all case against one value.

@@ -10,6 +10,15 @@ Values are pointers and can be repeated.
 Objects are declared using JSON-like format.
 Last comma is required (atm) for version control system cleaning.
 
+```syntax
+object-declaration
+'{' (object-property-declaration)* '}'
+
+object-property-declaration
+string-literal ':' (literal|expression) ','
+var_identifier ':' (literal|expression) ','
+```
+
 ```
 var d;
 var xxx = {
@@ -21,38 +30,42 @@ var xxx = {
 ```
 
 ### methods
-* `$has` (*string* **key**) : *bool*
+* `$has` **object** obj, **string** key : **bool**
 
   Return if given key is defined.
 
-* `$keys` () : *array*
+* `$keys` **object** obj : **array**
 
   Returned keys are always sorted.
 
-* `$get` (*string* **key**, *bool* **safe** = false) : *any*
+* `$get` **object** obj, **string** key, **bool** safe = false) : **any**
 
   Get value, if `safe=false` will raise a run-time-error
 
-* `$set` (*string* **key**, **pointer** **value**) : *bool*
+* `$set` **object** obj, **string** key, **ptr** value) : **bool**
 
   Set/overwrite given key with given value.
 
   if the key stats with `$` a runtime error is raised.
 
-* `$delete`(*string* **key**) : *any*
+* `$delete` **object** obj, **string** key : **any**
 
   Remove given key and return pointer or null.
 
-* `$setter`(*fn* **sttr** = null) : **function**
+* `$setter` **object** obj, *fn* **sttr** = null : **function**
 
   Set a setter function that will be called before each set.
 
-* `$getter`(*fn* **gttr** = null) : **function**
+  if null is provided will remove the previous setter.
+
+* `$getter` **object** obj, *fn* **gttr** = null : **function**
 
   Set a getter function that will be called before each get.
 
+  if null is provided will remove the previous getter.
 
-## `?` exits operator (nested `$has` shorthand)
+
+## `?` exits operator (nested `$has` shortcut)
 
 Object has a special method `$has` but it recommended to use the `?` operator for readability purposes.
 
@@ -125,5 +138,10 @@ log typeof obj.say;
 log typeof obj.say.hello;
 // stdout: string
 
+var obj2 = {};
+obj2.list[3]! = 55;
+
+log obj2.toJSON();
+// stdout: {"list": [null, null, null, 55]}
 
 ```

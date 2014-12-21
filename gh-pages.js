@@ -88,7 +88,7 @@ renderer.heading = function (text, level) {
   ++headings[level];
 
   var ret = [],
-    i = 0,
+    i = 1,
     head = [],
     args = Array.prototype.slice.call(arguments);
 
