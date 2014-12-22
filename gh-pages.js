@@ -8,6 +8,7 @@ var fs = require("fs"),
 
 console.log(tmp + "/index.html");
 console.log(tmp + "/code.txt");
+console.log(tmp + "/syntax.txt");
 
 var files = {
     "readme.markdown": "index.html",
@@ -127,12 +128,23 @@ marked(source, { renderer: renderer }, function(err, content) {
 
   fs.writeFileSync(path.join(tmp, "index.html"), content);
 
-  // extract all code examples
-  var $ = cheerio.load(content),
-    code = [];
-  $(".lang-plee").each(function(k, v) {
-    code.push($(v).text());
+  [{
+    selector: ".lang-plee",
+    file: "code.txt",
+    sep: "\n//---\n"
+  },{
+    selector: ".lang-syntax",
+    file: "syntax.txt",
+    sep: "\n\n\n"
+  }].forEach(function(v) {
+    // extract all code examples
+    var $ = cheerio.load(content),
+      code = [];
+    $(v.selector).each(function(k, v) {
+      code.push($(v).text());
+    });
+
+    fs.writeFileSync(path.join(tmp, v.file), code.join(v.sep));
   });
 
-  fs.writeFileSync(path.join(tmp, "code.txt"), code.join("\n//---\n"));
 });
