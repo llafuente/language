@@ -39,9 +39,66 @@ argv._.forEach(function(pattern) {
 });
 
 function parse_file(file) {
-  var tokens = tokenizer(file, !!argv.v);
+  var code = require("fs").readFileSync(file, "utf-8");
+  var tokens = tokenizer.parse(code, !!argv.v);
   var ranges = tokenizer.rangenize(tokens);
-  var ast = parser(ranges, !!argv.v);
+  try {
+    var ast = parser(ranges, !!argv.v);
 
-  console.log(util.inspect(ast, {depth: null, colors: true}));
+    console.log(util.inspect(ast, {depth: null, colors: true}));
+  } catch(e) {
+    console.log(e);
+    console.log(e.stack);
+
+    var err_data = e.parser;
+
+    var lines = code.split("\n"),
+    err_line = lines[err_data.line -1],
+    chars = err_line.split(""),
+    x = "",
+    max = err_data.column + 8,
+    i,
+    pad = "      ",
+    pad_i;
+
+    if (chars.length > err_data.column) {
+      chars[err_data.column - 1] = chalk.bgRed(chars[err_data.column - 1]);
+    } else {
+      chars[chars.length - 1] = chalk.bgRed(chars[chars.length - 1]);
+    }
+
+    console.log("file:", process.argv[2]);
+    console.log("error context:");
+
+    for(i = 0; i < max; ++i) {
+      x+= " ";
+    }
+
+    max = Math.max(0, err_data.line - 5);
+    for(i = max; i < err_data.line; ++i) {
+      pad_i = pad.substring(0, pad.length - ("" + i).length) + i;
+
+      if (err_data.line - 1 === i) {
+        console.log(pad_i + " | " + chars.join(""));
+      } else {
+        console.log(pad_i + " | " + lines[i]);
+      }
+    }
+
+    if (max + e.message.length < 80) {
+      console.log(x + "^", chalk.bgRed(e.message));
+    } else {
+      console.log(x + "^\n", chalk.bgRed(e.message));
+    }
+    console.log("");
+
+    max = Math.min(lines.length, err_data.line + 5);
+
+    for(i = err_data.line; i < max; ++i) {
+      pad_i = pad.substring(0, pad.length - ("" + i).length) + i;
+
+      console.log(pad_i + " | " + lines[i]);
+    }
+
+  }
 }
