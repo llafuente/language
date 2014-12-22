@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+"use strict";
+
+var tokenizer = require("../lib/tokenizer.js"),
+  argv = require('yargs')
+    .usage('Usage: $0 [--debug] [--no-json] [-v] files')
+    .demand(1)
+    .boolean("debug")
+    .default("debug", false)
+    .boolean("json")
+    .default("json", true)
+    .boolean("v")
+    .default("v", false)
+    .argv,
+  glob = require("glob");
+
+if (!!argv.v) {
+    console.log(argv);
+}
+
+var tokens = tokenizer(argv._[0], !!argv.v);
+
+if (argv.json) {
+  console.log(JSON.stringify(tokens));
+}
+
+if (!!argv.debug) {
+  console.log(tokenizer.debug(tokens, !!argv.v));
+}

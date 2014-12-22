@@ -1,21 +1,31 @@
 #!/usr/bin/env node
-
 "use strict";
 
-var PEG = require("pegjs"),
+var tokenizer = require("../lib/tokenizer.js"),
+  parser = require("../lib/parser.js"),
+  argv = require('yargs')
+    .usage('Usage: $0 [options] files')
+    .demand(1)
+
+    .boolean("print-file")
+    .default("print-file", false)
+
+    .boolean("print-ast")
+    .default("print-ast", true)
+
+    .describe("v", "verbose")
+    .boolean("v")
+    .default("v", false)
+    .argv,
   fs = require("fs"),
   path = require("path"),
-  grammar = PEG.buildParser(fs.readFileSync(path.join(__dirname, "..", "plee-grammar.peg"), "utf-8")),
   util = require("util"),
   chalk = require('chalk'),
-  argv = require('yargs')
-    .usage('Usage: $0 [--print-ast] [--print-file] [ files]')
-    .demand(1)
-    .argv,
-  glob = require("glob");
+  glob = require("glob"),
+  files = [];
 
-if (argv.v) {
-    console.error(argv);
+if (!!argv.v) {
+    console.log(argv);
 }
 
 argv._.forEach(function(pattern) {
@@ -29,78 +39,9 @@ argv._.forEach(function(pattern) {
 });
 
 function parse_file(file) {
-  console.error("# parsing: ", file);
-  var contents = fs.readFileSync(file, 'utf-8');
+  var tokens = tokenizer(file, !!argv.v);
+  var ranges = tokenizer.rangenize(tokens);
+  var ast = parser(ranges, !!argv.v);
 
-  if (argv.printFile) {
-      console.log("# file contents: ", file);
-      console.log(contents);
-      console.log("# EOF");
-  }
-
-  try {
-    var result = require("util").inspect(
-      grammar.parse(contents), {colors: true, depth: null}
-    );
-
-    console.error("# done");
-
-    if (argv.printAst) {
-      console.log(result);
-    }
-  } catch(e) {
-    if (argv.v) {
-        console.log(e);
-    }
-
-    var lines = contents.split("\n"),
-      err_line = lines[e.line -1],
-      chars = err_line.split(""),
-      x = "",
-      max = e.column + 8,
-      i,
-      pad = "      ",
-      pad_i;
-
-    if (chars.length > e.column) {
-      chars[e.column - 1] = chalk.bgRed(chars[e.column - 1]);
-    } else {
-      chars[chars.length - 1] = chalk.bgRed(chars[chars.length - 1]);
-    }
-
-    console.log("file:", process.argv[2]);
-    console.log("error context:");
-
-    for(i = 0; i < max; ++i) {
-      x+= " ";
-    }
-
-    max = Math.max(0, e.line - 5);
-    for(i = max; i < e.line; ++i) {
-      pad_i = pad.substring(0, pad.length - ("" + i).length) + i;
-
-      if (e.line - 1 === i) {
-          console.log(pad_i + " | " + chars.join(""));
-      } else {
-          console.log(pad_i + " | " + lines[i]);
-      }
-    }
-
-    if (max + e.message.length < 80) {
-      console.log(x + "^", chalk.bgRed(e.message));
-    } else {
-      console.log(x + "^\n", chalk.bgRed(e.message));
-    }
-    console.log("");
-
-    max = Math.min(lines.length, e.line + 5);
-
-    for(i = e.line; i < max; ++i) {
-      pad_i = pad.substring(0, pad.length - ("" + i).length) + i;
-
-      console.log(pad_i + " | " + lines[i]);
-    }
-
-  }
+  console.log(util.inspect(ast, {depth: null, colors: true}));
 }
-
