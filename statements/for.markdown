@@ -40,6 +40,13 @@ for-else
 ### for-classic
 
 
+```plee
+
+for var i = 0; i < 10; ++i {
+    // do your staff
+}
+
+```
 
 ### for-in
 

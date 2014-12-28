@@ -45,3 +45,31 @@ Number with decimals has special properties
   If you set epsilon many times in your program, the last one prevail. So it's recommended to do it in the configuration file.
 
   When set, modify `a == b` to `-epsilon < (a - b) < epsilon`, So there is a performance hit, but avoid floating points errors.
+
+
+Number representations
+
+* binary
+
+ 0b[0-1]
+
+ number will be truncated to nearest 8 byte possible. 0b0101 (is in fact 0b00000101)
+
+* hecadecimal
+
+ * 0x(abcdef0123456789)
+ * 0#(abcdef0123456789)
+
+* octal
+
+ 0o(01234567)
+
+
+bitmask dir {
+  north, // =1,
+  east,  // = 2,
+  south, // = 4,
+  west   // = 8
+}
+
+var dir diagonal = dir.north | dir.east;

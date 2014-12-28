@@ -47,12 +47,12 @@ var x = if test {
 ```
 
 
-### if as modifier (shortcut)
+### when, if as modifier (shortcut)
 
 Another lazy form to avoid curly braces.
 
 ```plee
-log "no-curly-braces" if i_am_lazy; // i_am_lazy must be defined :)
+log "no-curly-braces" when i_am_lazy; // i_am_lazy must be defined :)
 ```
 
 
@@ -61,11 +61,11 @@ log "no-curly-braces" if i_am_lazy; // i_am_lazy must be defined :)
 For expressiveness this time, because `unless` is much larger than `if !`.
 
 ```plee
-log "this is a small file" unless __LINE__ > 500;
+log "this is a small file" unless #line > 500;
 ```
 
 
-### Chained Comparisons
+### Chained Comparisons (shortcut)
 
 For making it easy to test if a value falls within a certain range.
 
@@ -74,3 +74,15 @@ if 5 < x < 10 {
     // mad science
 }
 ```
+
+### Multiple AND comparison (shortcut)
+
+To check many things against a single value.
+
+```plee
+if x, y, z < 0 { // x < 0 && y < 0 && z < 0
+    // mad science
+}
+```
+
+*STUDY* this can cause parsing problems with argument list.

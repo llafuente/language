@@ -15,7 +15,7 @@ block-body
 '{' (var_declaration|fn_declaration)+ '}'
 ```
 
-Example
+
 ```plee
 
 // declaration

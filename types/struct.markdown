@@ -26,8 +26,7 @@ block-body
 ```plee
 struct v2 {
   var number x = 0;
-  var y = 0; // implicit type -> number
-  ext rawp y; // implicit type -> number
+  var number y = 0;
 
   fn add _x, _y {
     // notice that v2.x point to x member and not the global variable.
@@ -40,6 +39,17 @@ var v2 instance;
 instance.add(5, 6);
 log instance.x; // stdout: 5
 log instance.y; // stdout: 6
+
+```
+
+### Index access
+
+A struct can be access by index like arrays. The offset is calculated
+in realtime even if a constant is sent, so it have a little overhead.
+
+```plee
+assert v2[0] == v2.x;
+assert v2[1] == v2.y;
 ```
 
 I'm a lazy programmer and dont like to type var inside structs...

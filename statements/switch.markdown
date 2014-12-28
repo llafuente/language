@@ -1,14 +1,19 @@
 ## switch (case, break, fallthrough)
 
 "Switch" statements provide multi-way execution.
-An expression or type specifier is compared to the "cases" inside the "switch" to determine which branch to execute.
+An expression or type specifier is compared to the "cases" inside
+the "switch" to determine which branch to execute.
 
-`switch` is very special in plee in comparison with other languages.
+`switch` is very special in plee in comparison with any other
+language.
 
 Most common languages choose to break by default, and it's resonable, they provide `fallthrough` as error prone replacement of `break`
 
-Plee goes a bit beyond while provide `fallthrough` also provide `break` but the default behavior is continue testing the next cases. So you can reuse code easily. Also default will be the last to test, regardless the position. In fact is recommended to be the first.
+Plee goes a bit beyond while provide `fallthrough` also provide
+`break` but the default behavior is **continue testing the next cases**.
+Allowing more.
 
+**compiler-note** default must be the last case.
 
 There are two types of switch: expression switch and comparison switch.
 
@@ -30,8 +35,6 @@ This example illustrate the usage of comparison switch
 var test = "ok";
 
 switch(test) {
-    default: return "i will be the last";
-
     case "ok": // test == "ok"
         echo "ok is found!";
 
@@ -44,6 +47,8 @@ switch(test) {
         echo "ok or nice is found!";
 
         break;
+
+    default: return "i will be the last";
 }
 ```
 
@@ -54,11 +59,14 @@ ok is found!
 ok or nice is found!
 ```
 
-You may expect "nok is found!" to be part of the output. But that's not the `case` and you didn't read the intro...
+You may expect "nok is found!" to be part of the output. But that's
+not the `case` and you didn't read the intro...
 
-Fall-through in a switch is a common error for programmers that forget to `break`,
-to avoid this undesired behavior even if the switch is falling-though case comparison must be meet.
-If is desired you must specify it with the reserved word: `fallthrough`.
+Fall-through in a switch is a common error for programmers that
+forget to `break`, to avoid this undesired behavior even if the
+switch is falling-though case comparison must be meet.
+If is desired you must specify it with the reserved word:
+`fallthrough`.
 
 
 ```plee
