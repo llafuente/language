@@ -13,9 +13,13 @@ var tokenizer = require("../lib/tokenizer.js"),
     .boolean("print-ast")
     .default("print-ast", true)
 
-    .describe("v", "verbose")
+    .describe("v", "debug")
     .boolean("v")
     .default("v", false)
+
+    .describe("vv", "verbose")
+    .boolean("vv")
+    .default("vv", false)
     .argv,
   fs = require("fs"),
   path = require("path"),
@@ -43,7 +47,7 @@ function parse_file(file) {
   var tokens = tokenizer.parse(code, !!argv.v);
   var ranges = tokenizer.rangenize(tokens);
   try {
-    var ast = parser(ranges, !!argv.v);
+    var ast = parser(ranges, argv.v ? 1 : (argv.vv ? 2 : 0));
 
     console.log(util.inspect(ast, {depth: null, colors: true}));
   } catch(e) {
