@@ -1,0 +1,13 @@
+var a;
+
+var b, c;
+
+var d = 0;
+
+var e = [1, 2, 3];
+
+var e = {};
+
+var ui8 f;
+
+var ui8 g[10];
