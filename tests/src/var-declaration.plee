@@ -11,3 +11,7 @@ var e = {};
 var ui8 f;
 
 var ui8 g[10];
+
+var ui8 g[c];
+
+var ui8 g[c = b];
