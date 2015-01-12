@@ -17,3 +17,5 @@ var ui8 g[c];
 var ui8 g[c = b];
 
 var ui8 g = a + b;
+
+var ui8 g = a();
