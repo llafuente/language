@@ -1,3 +1,5 @@
+// also test most of the literals
+
 var a;
 
 var b, c;
@@ -12,10 +14,15 @@ var ui8 f;
 
 var ui8 g[10];
 
-var ui8 g[c];
+var ui8 h[c];
 
-var ui8 g[c = b];
+var ui8 i[c = b];
 
-var ui8 g = a + b;
+var ui8 j = a + b;
 
-var ui8 g = a();
+var ui8 k = a();
+
+var ñ = {
+  c: b,
+  "x": (a = c),
+};
