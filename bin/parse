@@ -14,12 +14,7 @@ var tokenizer = require("../lib/tokenizer.js"),
     .default("print-ast", true)
 
     .describe("v", "debug")
-    .boolean("v")
-    .default("v", false)
-
-    .describe("vv", "verbose")
-    .boolean("vv")
-    .default("vv", false)
+    .default("v", 0)
     .argv,
   fs = require("fs"),
   path = require("path"),
