@@ -48,15 +48,17 @@ Steps:
 
   Tokenize the code with the language rules (like `var a-b;` a-b is a variable not a, -, b)
 
-* AST generator
+* AST generator ~& Preprocesor
 
-  From the tokenizer output build the AST.
-
-* Preprocesor
+  Transform the tokenizer output into full AST.
 
 * AST expansion
 
-  Search for plee shortcut and generate full code.
+  Reduce AST to it's minimal form. Undo the shortcuts found in the language.
+
+* Postprocesor
+
+  User defined rules.
 
 * Generate Target code from AST
 
@@ -64,7 +66,7 @@ Steps:
 
   Output: text files?
 
-And then... compile.
+And then... compile/execute.
 
 
 ### Compiler implementation
@@ -88,12 +90,11 @@ And then... compile.
   rather fast, could support more introspection types,
   more dynamic typing, easy REPL
 
+* AOT-JIT.
+
+  Use a JIT engine as Ahead of time compilation.
+
 ### compile-time execution.
 
 Some features of the language need compile-time execution,
 like `test` or `bench`.
-
-
-
-
-

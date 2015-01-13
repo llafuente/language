@@ -15,6 +15,8 @@ var files = {
     "hello-world-example.markdown": "hello-world.html",
 
     "compiler.markdown": "compiler.html",
+    "preprocessor.markdown": "preprocessor.html",
+    "postprocessor.markdown": "postprocessor.html",
 
     "entry-point.markdown": "compiler.html",
 
