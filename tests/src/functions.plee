@@ -1,0 +1,41 @@
+fn a {
+
+}
+
+function b {
+
+}
+
+function one_arg arg1 {
+
+}
+
+function two_args arg1, arg2 {
+
+}
+
+function def_arg arg1 = 0, arg2 {
+
+}
+
+function def_and_assert arg1 = 0 != null, arg2 {
+
+}
+
+function def_and_assert clone arg1 = 0 != null, arg2 {
+
+}
+fn member_expr_as_default array arr, ui64 limit = arr.length {
+
+}
+
+fn call_as_default super_def = callme() {
+
+}
+
+
+fn lambda_test {
+  fn lambda_done {
+
+  }
+}
