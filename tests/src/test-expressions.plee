@@ -17,3 +17,11 @@ b++;
 c--;
 
 //TODO ++b++; ?
+
+callme();
+
+callme(maybe);
+
+foo || bar();
+
+success && callback();
