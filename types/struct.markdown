@@ -20,7 +20,7 @@ struct-statement
 'struct' var_identifier block-body
 
 block-body
-'{' (var_declaration|fn_declaration)+ '}'
+'{' (var-declaration|fn-declaration)+ '}'
 ```
 
 ```plee
@@ -42,10 +42,9 @@ log instance.y; // stdout: 6
 
 ```
 
-### Index access
+### index/property access
 
-A struct can be access by index like arrays. The offset is calculated
-in realtime even if a constant is sent, so it have a little overhead.
+A struct can be access by index (like arrays) or named properties.
 
 ```plee
 assert v2[0] == v2.x;

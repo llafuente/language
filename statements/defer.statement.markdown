@@ -7,7 +7,7 @@ A defer statement defers the execution of a function until the surrounding funct
 "defer" delete-statement
 "defer" log-statement
 "defer" assert-statement
-"defer" block
+"defer" block-statement
 ```
 
 **STUDY** defer executes if throw/raise ? (for `defer delete` seams resonable)
@@ -15,6 +15,8 @@ A defer statement defers the execution of a function until the surrounding funct
 #### defer call-expr
 
 Execute function when the surrounding function returns but the deferred call's arguments are evaluated immediately.
+
+Note: To also defer the arguments evaluation you should use a block-statement.
 
 #### defer delete
 
