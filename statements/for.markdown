@@ -10,6 +10,7 @@ for-in-slice function-body for-else?
 for-till function-body for-else?
 for-to function-body for-else?
 for-iterable function-body for-else?
+for-ever function-body for-else?
 
 for-classic
 'for' (var-declaration|expression ';')? expression ';' expression
@@ -31,6 +32,8 @@ for-to
 for-iterable
 'for' var_identifier
 
+for-ever
+'for'
 
 for-else
 'else' function-body
@@ -152,3 +155,11 @@ for iterable {
 ```
 
 Compiler will translate for-iterable with for-in.
+
+
+### for-ever
+```plee
+for {
+  //do something!
+}
+```

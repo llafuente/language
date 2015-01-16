@@ -19,37 +19,43 @@
 Example with basic operations:
 
 ```plee
-// alloc an array, but no memory to store data
-// length variable
-// type unkown type atm.
-var ar1 = [];
-// on the first assignament, type is known, from now on it's ui64.
-ar1[3] = 0;
+// array initializations
 
-log ar1.toJSON(); // stdout: [null, null, null, 0]
+// dynamic array use "[]"
+var dyn_ar = []; // empty array
+var dyn_ar2 = [1, 2]; // array with two elements
+var dyn_ar3 = new number[10]; // array with 10 size, that need to be deleted.
+defer delete dyn_ar3; // defer delete so we don't forget
 
-
-// alloc an array, alloc 5 numbers
-// length fixed
-// type number.
-var ar2 = new number(5);
+// static arrays use "()"
+var st_ar = number(10); // 10 numbers
+var st_ar = new number(10); // 10 numbers, that need to be deleted.
+defer delete st_ar; // defer delete so we don't forget
 
 
 // clone an array
-var ar3 = clone ar2;
+var dyn_ar = clone dyn_ar2;
 
+// multi-dimensional arrays
+var mul_dyn_ar = [[1], [1]];
+var mul_st_ar = number(2, 1);
 
-// initialize an array with 3 elements
-// x, y & z must have the same type
-var ar4 = [x, y, z];
+// index access
+log dyn_ar[0]; // stdout 1
 
+// new array as slice
+var dyn_ar_sl = [1, 2, 3];
+// static slice, reference same memory
+var st_slice = dyn_ar_sl[0:2];
+// dynamic slice, clone the memory
+var dyn_slice = dyn_ar_sl.slice(0, 2);
 
-// multi-dimensional array 2x2
-// the first dimension cannot be resized
-var ar_2x2 = new ui8(2, true)(2);
+assert (st_slice.length != dyn_ar_sl.length) || (dyn_slice.length != dyn_ar_sl.length);
 
-// access
-ar_2x2[0][0];
+st_slice[0] = 1;
+dyn_slice[0] = 2;
+
+assert st_slice[0] === dyn_slice[0];
 
 ```
 
@@ -296,4 +302,3 @@ log itr2; // stdout: 3
 ### Notes
 
 * if type is defined, when enter a switch gives a compile error.
-

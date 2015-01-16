@@ -7,11 +7,11 @@ the "switch" to determine which branch to execute.
 `switch` is very special in plee in comparison with any other
 language.
 
-Most common languages choose to break by default, and it's resonable, they provide `fallthrough` as error prone replacement of `break`
+Modern languages choose to break by default, and it's resonable, they provide `fallthrough` as error prone replacement of no-`break`
 
 Plee goes a bit beyond while provide `fallthrough` also provide
-`break` but the default behavior is **continue testing the next cases**.
-Allowing more.
+`break` but the default behavior is **continue testing the next cases**,
+allowing more complex behaviors.
 
 **compiler-note** default must be the last case.
 
@@ -34,7 +34,7 @@ This example illustrate the usage of comparison switch
 ```plee
 var test = "ok";
 
-switch(test) {
+switch test {
     case "ok": // test == "ok"
         echo "ok is found!";
 
@@ -78,7 +78,7 @@ switch(test) {
     case "ok": // test == "ok"
         echo "ok is found!";
 
-        fallthrough; // don't mind continue testing, enter in the next
+        fallthrough; // don't mind testing, enter in the next
     case "nok": // test == "nok"
         echo "nok is found!";
         break;

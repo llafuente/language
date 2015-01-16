@@ -12,8 +12,7 @@
 
 * There is no `this` concept/keyword.
 
-`this` could introduce so many memory management
-problems so it's removed.
+  `this` introduce many memory management problems.
 
 * *Type inference*: Argument types are optional (sometimes)
 
@@ -38,7 +37,8 @@ no-typed arrays...
 * Must not be a [number](#number).
 * Cannot start with a `$`
 * Any UTF-8 valid character
-* if has more than one character cannot start with any [left-to-right operator](#operators)
+* cannot start with any [left-to-right operator](#operators)
+* cannot end with any [right-to-left operator](#operators)
 
 Can I use `a+b` or `a-b` as function name... The answer is: *Yes*, we can. Even snowman!
 
@@ -62,7 +62,7 @@ arguments-list
 argument (',' arguments-list)*
 
 argument
-type var_identifier ('=' literal)? (('!='|'<'|'>'|'=>'|'<=') literal)*
+[type] var_identifier ('=' literal)? (('!='|'<'|'>'|'=>'|'<=') literal)*
 function-header-full
 
 function-body
@@ -73,7 +73,7 @@ fn_identifier '(' parameter-list* ')'
 var_identifier '.' fn_identifier '(' parameter-list* ')'
 
 parameter-list
-parameter (',' parameter-list)
+parameter (',' parameter-list)*
 
 parameter
 literal ':' (literal|expression)
@@ -93,6 +93,10 @@ fn giveme x {
 
 log giveme(0); // stdout: 0
 ```
+
+Declaration implicit declare the type. There is no need to `typedef` like in c.
+
+Types are automatically exported in modules if required.
 
 ### function call
 
