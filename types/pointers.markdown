@@ -146,7 +146,7 @@ while (itr.next()) {
     log itr.current; // stdout (10 times): 10
 }
 
-assert &itr.current == &itr.last "end reached";
+assert @itr.current == @itr.last "end reached";
 
 delete itr; // do not delete l memory
 

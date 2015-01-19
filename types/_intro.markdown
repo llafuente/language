@@ -99,13 +99,13 @@ var string str;
 * Using type operators, parenthesis is required most of the times...
 
 ```plee
-ui64 x = (ui64 0.0);
+var ui64 x = (ui64 0.0);
 ```
 
 * `to_*` functions
 
 ```plee
-ui64 x = to_ui64(0.0);
+var ui64 x = to_ui64(0.0);
 
 ```
 
