@@ -19,7 +19,7 @@ for-in
 'for' (var_identifier ',')? var_identifier 'in' var_identifier
 
 for-in-slice
-for-in '[' literal ',' literal ']'
+for-in '[' literal? ':' literal? ']'
 
 for-till
 'for' var_identifier 'till' (literal|expression)
@@ -86,7 +86,7 @@ Iterator behavior:
 * It will iterate (max - min) times regardless removals or reach iterable.length
 
 ```plee
-for [key, ] value in iterable[3,5] {
+for [key, ] value in iterable[3:5] {
 
 } [else {
     // executed if condition fails the first time

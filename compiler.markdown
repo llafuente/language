@@ -73,9 +73,10 @@ And then... compile/execute.
 
 **Study** choose!
 
-* Transcopile to C
+* Transcompile to C
 
-  fast, portable, rather straight
+  fast, portable, rather straight. Some features are not supported (defer/lambda)
+  need to hack a lot the language
 
 * c bytecode
 
@@ -83,7 +84,7 @@ And then... compile/execute.
 
 * LLVM
 
-  very fast, diffucult, nice linking to other languages like c/c++
+  very fast, difficult, nice linking to other languages like c/c++
 
 * JIT LLVM
 
@@ -115,3 +116,12 @@ like `test` or `bench`.
   Low Level Virtual Machine.
 
   Compiler, AOC and JIT.
+
+### compilers based on LLVM
+
+* [clay](https://bitbucket.org/kssreeram/clay)
+* [kaleidoscope](http://llvm.org/docs/tutorial/LangImpl1.html)
+* [rust](https://github.com/rust-lang/rust)
+* [roadsend-php-raven](https://github.com/weyrick/roadsend-php-raven)
+
+* [Mapping-High-Level-Constructs-to-LLVM-IR](http://llvm.lyngvig.org/Articles/Mapping-High-Level-Constructs-to-LLVM-IR)
