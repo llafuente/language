@@ -19,27 +19,29 @@ is no operation that can be perform on the pointer apart from assign to other me
 ```plee
 var ui8 a = 1;
 var ui8 b = 2;
-var ui64 b_addr = @b; // hold b address
 
 // @ means address
 var ref pa = @a; // reference to a
-var ref pb = b_addr; // reference to b
+var ref pb = @b; // reference to b
 
 
 // ref is always dereferenced for easy to use.
 a = a + pb;
 log a; // stdout: 3
 
-
-pa = pb; // assign value
+pa = pb; // remember dereferenced so assign value
 log a; // stdout: 2
 
-pa = pb; // now pa and pb point to b
+pa = @pb; // now pa and pb point to b
 
 // has the same value?
 log (pa == pb); // stdout: true
-// has the same addres? no. Points to the same address.
-log (@pa == @pb); // stdout: false
+
+// now something tricky.
+// @pa points to a address or pa addres
+log (@pa == @pb); // stdout: true
+// points to a addres.
+// you can't have a ref to a ref for security
 ```
 
 
@@ -63,74 +65,86 @@ log arr[0]?; // null
 
 ```
 
+**compiler notes**
+
+* ref dont have pointer arithmetic
+
+* ref must have a pointer to the memory owner it pointing to.
+
+  ```plee
+  var x = ui8[10];
+  var ref xptr = x[5];
+  delete x;
+  ```
+
+  xptr must have a pointer to x. If x is deleted like in the example.
+  x memory must not be freed until xptr is deleted.
+
+* ref is always dereferenced except on left side equal and
+address on right side.
+
 ### `pitr`
 
-Pointer(memory) iterator.
+Pointer iterator.
 
 Properties
-* `length`:**ui64**
+* **ui64** `length`
 
   readonly.
 
-* `start`:**rawp**
+* **rawp** `start`
 
   readonly.
 
-* `end`:**rawp**
+* **rawp** `end`
 
   readonly.
 
-* `current`:**rawp**
+* **rawp** `current`
 
-  readonly.
+* **ref** `value`
+
+  fake property that dereference current.
 
   current is dereferenced by the compiler.
-
-* `next`:**any** or ``
-
-  readonly.
-
-* `prev`:**any** or ``
-
-  readonly.
 
 
 Operator
 * operator++
 
-  same as next();
+  alias of next(1);
 
 * operator--
 
-  same as prev();
+  alias of prev(1);
 
 * operator+ amount:ui64
 
-  same as next(amount)
+  alias of (clone pitr).next(amount)
 
 * operator+= amount:ui64
 
-  same as next(amount)
+  alias of pitr.next(amount)
 
 * operator- amount:ui64
 
-  same as next(amount)
+  alias of pitr.next(amount)
 
 * operator-= amount:ui64
 
-  same as prev(amount)
+  alias of (clone pitr).prev(amount)
 
 
 Members
-* `reset`
+* `reset`()
 
   back to start
 
-* `next`(**amount**:ui64 = 1)
+* `next`(ui64 **amount** = 1)
 
   go to next and return false if the end reached or no action is performed.
 
-* `prev`(**amount**:ui64 = 1)
+* `prev`(ui64 **amount** = 1)
 
   go to previous and return false if the beginning reached or no action is performed.
 
@@ -152,16 +166,26 @@ delete itr; // do not delete l memory
 
 ```
 
+**compiler-notes**
+
+* as ref, must save a pointer to the memory owner to avoid free
+memory.
+
+* once a pitr is assigned to an array, the array will be static.
 
 
 ### `rawp`
 
 Raw C-like pointer, for maximum performance.
-It's not safe to use because has no bounds check.
+It's not safe to use because has no bounds check, do not have a pointer
+to memory owner to avoid free-ing.
 
 Use it with caution.
 
 
 Compiler notes:
 
-* `var x:rawp = new ui8[1];` raise a compilation error
+* `var rawp x = new ui8[1];`
+
+  should raise a compilation error. Even if possible, there is no
+  variable that own the memory, a rawp canot be deleted
