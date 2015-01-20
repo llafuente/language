@@ -98,3 +98,20 @@ And then... compile/execute.
 
 Some features of the language need compile-time execution,
 like `test` or `bench`.
+
+
+### libraries
+
+* [pcre](http://www.pcre.org/)
+
+  Perl Compatible Regular Expressions
+
+* [libuv](http://www.pcre.org/)
+
+  Asynchronous IO, NET, DNS & threads tools.
+
+* [llvm](http://llvm.org/)
+
+  Low Level Virtual Machine.
+
+  Compiler, AOC and JIT.

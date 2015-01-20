@@ -282,3 +282,34 @@ to specify their behavior.
 
 * `export var` allow a variable to be accessed outside the module
 * There is no way to export a *readonly* variable.
+
+#### special functions
+
+* `regexp_test`
+
+  Give you support to include your type inside a switch with a regular expression
+  test.
+
+* `to_string`
+
+  transform your type into an string.
+
+* `to_number`
+
+  Transform your type into a number.
+
+* `to_log`  
+
+  Used by log. Native types include the type name before calling `to_json`.
+
+  If the function is not defined, log will use `to_string` instead.
+
+* `to_json`
+
+  Give you support to enconding: `json`
+
+* `operator` assignament operators.
+
+  Allow to use your type on left side of the assignament operators.
+
+  All this calls will be inlined if possible.

@@ -4,18 +4,23 @@
 An expression or type specifier is compared to the "cases" inside
 the "switch" to determine which branch to execute.
 
-`switch` is very special in plee in comparison with any other
-language.
+Modern languages choose to break by default, and it's resonable,
+they provide `fallthrough` as error prone replacement of non-`break`-ing.
 
-Modern languages choose to break by default, and it's resonable, they provide `fallthrough` as error prone replacement of no-`break`
+In plee both is mandatory to en a case with one of the following.
 
-Plee goes a bit beyond while provide `fallthrough` also provide
-`break` but the default behavior is **continue testing the next cases**,
-allowing more complex behaviors.
+* `break`, exit switch
+* `fallthrough`, enter in the next case without testing
+* `continue`, continue testing
 
-**compiler-note** default must be the last case.
+`default` case must be the last, and do not need to `break`, `fallthrough` or `continue`.
 
-There are two types of switch: expression switch and comparison switch.
+There are three types of switch:
+* comparison switch.
+* expression switch.
+* match-regexp switch.
+
+**STUDY** fallthrough is rather long. next is more resonable...
 
 ### Syntax
 
@@ -32,73 +37,54 @@ Compare all case against one value.
 This example illustrate the usage of comparison switch
 
 ```plee
-var test = "ok";
+fn switch_test(string test) {
+  log "switch = ", test;
 
-switch test {
+  switch test {
     case "ok": // test == "ok"
-        echo "ok is found!";
+      log "case ok";
+      continue;
 
-        // continue testing by default
     case "nok": // test == "nok"
-        echo "nok is found!";
+      log "case nok";
+      break;
 
-        break; // to stop
-    case "ok","nice": // test == "ok" || test == "nice"
-        echo "ok or nice is found!";
+    case "ok", "nice": // test == "ok" || test == "nice"
+      log "case ok, nice";
+      break;
 
-        break;
-
-    default: return "i will be the last";
+    default:
+      log "case default";
+  }  
 }
+
+switch_test("ok");
+switch_test("nok");
+switch_test("nice");
+switch_test("unknown");
+
 ```
 
 output will be:
 
+```stdout
+switch = ok
+case ok
+case ok, nice
+switch = nok
+case nok
+switch = nice
+case ok, nice
+switch = unknown
+case default
 ```
-ok is found!
-ok or nice is found!
-```
 
-You may expect "nok is found!" to be part of the output. But that's
-not the `case` and you didn't read the intro...
+### expression switch (switch true)
 
-Fall-through in a switch is a common error for programmers that
-forget to `break`, to avoid this undesired behavior even if the
-switch is falling-though case comparison must be meet.
-If is desired you must specify it with the reserved word:
-`fallthrough`.
-
+If value is not sent true is used instead.
 
 ```plee
-var test = "ok";
-
-switch(test) {
-    default: return "i will be the last";
-
-    case "ok": // test == "ok"
-        echo "ok is found!";
-
-        fallthrough; // don't mind testing, enter in the next
-    case "nok": // test == "nok"
-        echo "nok is found!";
-        break;
-
-    case "ok","nice": // test == "ok" || test == "nice"
-        echo "ok or nice is found!";
-
-        break;
-}
-```
-
-```
-ok is found!
-nok is found!
-```
-
-### expression switch
-
-```plee
-switch {
+switch { // test against true
     default: return "i will be the last";
 
     case test == "ok": // test == "ok"
@@ -113,5 +99,35 @@ switch {
         echo "ok or nice is found!";
 
         break; // exit
+}
+```
+
+### match-regexp switch
+
+Thre are two variants: values against many regexp, or one regexp against multiple values.
+
+To support regexp the type must have `regexp_test` function asociation.
+
+```plee
+switch v {
+  case /a-z/g:
+    log "lowercase";
+    break;
+
+  case /A-Z/g:
+    log "uppercase";
+    break;
+}
+```
+
+```plee
+switch (/0-9/g) {
+  case a:
+    log "a is a number";
+  break;
+
+  case b:
+    log "b is a number";
+  break;
 }
 ```
