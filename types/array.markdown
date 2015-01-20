@@ -2,7 +2,7 @@
 
 * Arrays are always dense.
 
-* Arrays always contains a common type.
+* Arrays always contains a common type (**TODO**)
 
 * Assign a pointer to something in the array it's only possible if fixed size.
 
@@ -11,9 +11,7 @@
 > **new** *type* (*ui64* length = 0, *bool* dynamic = false)
 
 * *length*: initial length
-* *dynamic*: can be resized
-
-  Compiler will optimize some operations if dynamic is false.
+* *dynamic*: can be resized?
 
 
 Example with basic operations:
@@ -21,11 +19,13 @@ Example with basic operations:
 ```plee
 // array initializations
 
-// dynamic array use "[]"
+// stack dynamic array
 var dyn_ar = []; // empty array
 var dyn_ar2 = [1, 2]; // array with two elements
+
+// heap dynamic array
 var dyn_ar3 = new number[10]; // array with 10 size, that need to be deleted.
-defer delete dyn_ar3; // defer delete so we don't forget
+defer delete dyn_ar3; // defer free memory so we don't forget
 
 // static arrays use "()"
 var st_ar = number(10); // 10 numbers
@@ -38,7 +38,8 @@ var dyn_ar = clone dyn_ar2;
 
 // multi-dimensional arrays
 var mul_dyn_ar = [[1], [1]];
-var mul_st_ar = number(2, 1);
+// **STUDY** this is ugly
+var mul_st_ar = number(2).map(fn {return number(2)}); // 2x2
 
 // index access
 log dyn_ar[0]; // stdout 1
@@ -70,7 +71,7 @@ To be performance, must be memory continous, parser cannot solve this problem if
 All array functions must has an offset/length, to work on continuous memory. for example:
 
 ```plee
-var ar = new ui8(5, true)(6, true);
+var ar = ui8[5][6];
 ar[1].indexOf(0);
 
 // will be compiled to

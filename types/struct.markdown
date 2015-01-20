@@ -20,7 +20,7 @@ struct-statement
 'struct' var_identifier block-body
 
 block-body
-'{' (var-declaration|fn-declaration)+ '}'
+'{' (var-declaration ';'|fn-declaration)+ '}'
 ```
 
 ```plee
