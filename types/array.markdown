@@ -56,7 +56,7 @@ assert (st_slice.length != dyn_ar_sl.length) || (dyn_slice.length != dyn_ar_sl.l
 st_slice[0] = 1;
 dyn_slice[0] = 2;
 
-assert st_slice[0] === dyn_slice[0];
+assert st_slice[0] == dyn_slice[0];
 
 ```
 

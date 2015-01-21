@@ -96,17 +96,10 @@ var string str;
 
 #### explicit type conversion
 
-* Using type operators, parenthesis is required most of the times...
-
-```plee
-var ui64 x = (ui64 0.0);
-```
-
-* `to_*` functions
+`to_*` functions
 
 ```plee
 var ui64 x = to_ui64(0.0);
-
 ```
 
 #### invalid explicit conversions
