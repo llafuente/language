@@ -39,3 +39,16 @@ fn lambda_test {
 
   }
 }
+
+// anonimous function, no arguments
+fn {
+  return 1;
+}
+// anonimous function, one arguments
+fn ,y {
+  return 1;
+}
+// anonimous function, two arguments or more
+fn x, y {
+  return 1;
+}

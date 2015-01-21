@@ -25,3 +25,12 @@ callme(maybe);
 foo || bar();
 
 success && callback();
+
+
+var x = fn {
+
+};
+
+(fn { return 0; })
+
+(fn x {}());
