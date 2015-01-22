@@ -23,6 +23,7 @@ block-body
 '{' (var-declaration ';'|fn-declaration)+ '}'
 ```
 
+<a name="struct-example"></a>
 ```plee
 struct v2 {
   var number x = 0;
@@ -31,7 +32,8 @@ struct v2 {
   fn add _x, _y {
     // notice that v2.x point to x member and not the global variable.
     v2.x += _x;
-    v2._y += _y;
+    // but v2 can be avoided if no name collision
+    y += _y;
   }
 };
 
@@ -41,6 +43,8 @@ log instance.x; // stdout: 5
 log instance.y; // stdout: 6
 
 ```
+
+see [with](#with) statement for access shortcuts.
 
 ### index/property access
 
