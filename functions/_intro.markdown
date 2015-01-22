@@ -370,4 +370,62 @@ fn ui8 x, ui8 y {
 
 ### #run
 
-Compile time function running
+Compile time function running.
+
+
+### bind statement
+
+Bind arguments to a function returning a function with only the missing arguments.
+
+```plee
+fn op x, y {
+  return x + y * 2;
+}
+
+var op_x5 = bind op(5);
+log op_x5(5); // stdout: 15
+
+var op_y5 = bind op(y:5);
+log op_y5(1); // stdout: 11
+```
+
+Arguments cannot be used/bind twice by either a call or bind
+```plee-err
+fn op x, y {
+  return x + y * 2;
+}
+
+var op_x5 = bind op(x: 5);
+
+var op_x5_2 = bind op_x5(x: 5); // x parameter not found.
+op_x5(x: 5, y: 5); // x parameter not found.
+```
+
+### cache(function)
+
+Cache the result of a function. Cached value will be returned if the input is the same.
+
+```plee
+fn sum x, y {
+  log "work";
+  return x + y;
+}
+
+var cached_sum = cache(sum);
+
+log cached_sum(5, 5);
+log cached_sum(5, 5);
+log cached_sum(6, 5);
+```
+
+```stdout
+work
+10
+10
+work
+11
+```
+
+*Performance note*: arguments are serialized and stored as key in an object.
+Serialization fetch/store in the object has it costs, so keep in mind that the
+function call cost should be greater or no performance gain will be obtained.
