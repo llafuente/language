@@ -125,3 +125,7 @@ like `test` or `bench`.
 * [roadsend-php-raven](https://github.com/weyrick/roadsend-php-raven)
 
 * [Mapping-High-Level-Constructs-to-LLVM-IR](http://llvm.lyngvig.org/Articles/Mapping-High-Level-Constructs-to-LLVM-IR)
+
+### general purpose vm
+
+* [parrot](http://www.parrot.org)

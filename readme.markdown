@@ -29,7 +29,7 @@ Things that you should now before the *shocking news*.
 * No classes hierarchy. plee propose modules as replacement.
 Also, do not expect `this` as reserved word...
 
-* Auto variable scope. Switch beetwen Function scope and block scope.
+* Auto scope. A variable use `function scope` or `block scope` automatically.
 
 * Robust memory management, focus on no leaks a proper error display
 for easy debugging.

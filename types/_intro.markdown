@@ -1,4 +1,4 @@
-### Types.
+### Variables & types.
 
 #### Philosophy
 
@@ -9,6 +9,8 @@
 * [Type inference](http://en.wikipedia.org/wiki/Type_inference)
 
 * Types lowercased.
+
+* Auto scope. Compiler will choose between function or block scope.
 
 
 #### Syntax
@@ -301,8 +303,51 @@ to specify their behavior.
 
   Give you support to enconding: `json`
 
-* `operator` assignament operators.
+* `operator` "assignament operators"
 
   Allow to use your type on left side of the assignament operators.
 
   All this calls will be inlined if possible.
+
+
+### Auto scope
+
+Auto scope refers to where your variable is available.
+
+block scope
+
+```plee
+{
+    var x;
+}
+// now x is not available.
+```
+
+function scope
+
+```plee
+fn read-file {
+  var current_line = 0;
+  fn next_line {
+    ++current_line; // the compiler see this and use function scope
+  }
+
+  while (!eof()) {
+    next_line();
+  }
+
+  log current_line;
+}
+```
+
+Variable names must be unique at function scope.
+So this is not possible.
+
+```plee-err
+fn a {
+  var i;
+  fn b {
+    var i;
+  }
+}
+```
