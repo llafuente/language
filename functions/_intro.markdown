@@ -26,11 +26,8 @@ generate as many functions as needed to optimize execution time.
 
 * Parenthesis are not required, curly braces are.
 
+* A function declaration implicit declare it name and aliases as a type.
 
-**study**
-
-* *Multiple Return Values*. Need support for tuples or
-no-typed arrays...
 
 ### Functions identifier/name rules (*fn_identifier*)
 
@@ -45,8 +42,11 @@ Can I use `a+b` or `a-b` as function name... The answer is: *Yes*, we can. Even 
 ### Syntax
 
 ```syntax
+function-type-declaration
+function-header ";"
+
 function-declaration
-function-header [':' type] [alias [',' fn_identifier]+] function-body
+function-header [':' type] ["alias" [',' fn_identifier]+] function-body
 
 function-header
 function-header-full
@@ -188,13 +188,13 @@ sum(5, 6); // compiler-error
 sum(5, b: 6); // this is allowed
 ```
 
-### Variadic function
+### Variadic function (brackend-dependant)
 
 Variadic functions allow you to receive any number of arguments of the same type.
 
 ```plee
 // this function recieve many ui8
-fn sumall ui8, ... {
+fn sumall ui8... {
     var sum = 0;
 
     arguments.each({ sum+=$0;})
@@ -209,9 +209,6 @@ fn glue string start, string to_join..., string end {
 
 ```
 
-**TODO** Study support for multiple Variadic
-**TODO** Study support spread operator, but notation of
-one must differ to avoid confusion
 
 ### Operator functions
 
@@ -234,9 +231,6 @@ Operator list
 * *
 * /
 * =
-
-**STUDY** add more operators? but this should be
-enough, and do not introduce so much errors
 
 ```plee
 var vec2 = require("v2"); // mod type is v2
@@ -283,20 +277,29 @@ log y; // stdout: 1
 
 ### `function` as arguments
 
-A function is divided into header and body.
-A callback function could have a default header
-that will be used is at call-expression is not used.
+Any function can be used as argument just using it's name.
+But the `fn` keyword means that accept any, to accept all in fact you are telling the
+parser that duplicate your function as many times as necessary...
+like a "C++ template".
 
+
+Knowing that a function is divided into header and body... why should you declare
+the header of lambda... just don't. The function header user in the function
+declaration will be used.
 
 
 ```plee
-// declaration
-function each array ar, inline fn code($0, string $1)) {
+// setup
+
+// this function is not callable only declare the type.
+fn each_callback($0, string $1);
+
+inline fn each array ar, each_callback callback {
     var i = 0,
         max = ar.lenth;
 
     for (i = 0; i < max; ++i) {
-        code(ar[i], i);
+      callback(ar[i], i);
     }
 
 }
@@ -319,7 +322,7 @@ arr.each({
 
 ```
 
-Compile will expand the call
+Compile will expand the call to
 
 ```plee
 arr.each(fn ($0, string $1) {
@@ -347,7 +350,9 @@ their behavior.
 
 ### documentation
 
-Compiler can generate documentation based on comments preceding a functions, also can get types.
+Documentation is a two-way information for the parser/compiler.
+
+Both sources must be align or one missing.
 
 The following two examples are identical
 
@@ -367,6 +372,19 @@ fn ui8 x, ui8 y {
 }
 ```
 
+Misalignment is not permitted.
+Even if possible to use both, and merge, it will lead to inconsistency. Just fix it.
+
+```plee-err
+/**
+* @param ui8 x
+* @param ui8 y
+*/
+fn string x, y {
+
+}
+```
+
 
 ### #run
 
@@ -382,7 +400,7 @@ fn op x, y {
   return x + y * 2;
 }
 
-var op_x5 = bind op(5);
+var op_x5 = bind op(5); // same as: bind op(x: 5);
 log op_x5(5); // stdout: 15
 
 var op_y5 = bind op(y:5);

@@ -1,6 +1,7 @@
-### defer
+### defer & panic
 
-A defer statement defers the execution of a function until the surrounding function returns.
+A `defer` statement postpone the execution of "something" until the surrounding function
+returns or throw.
 
 ```syntax
 "defer" call-expr
@@ -10,13 +11,16 @@ A defer statement defers the execution of a function until the surrounding funct
 "defer" block-statement
 ```
 
-**STUDY** defer executes if throw/raise ? (for `defer delete` seams resonable)
-
 #### defer call-expr
 
 Execute function when the surrounding function returns but the deferred call's arguments are evaluated immediately.
 
-Note: To also defer the arguments evaluation you should use a block-statement.
+*Note*: to also defer the arguments evaluation you should wrap it in a block-statement.
+
+```plee
+defer x(a); // a is evaluated, x will be executed later
+defer { x(a); }; // a and x will be evaluated/executed later
+```
 
 #### defer delete
 
@@ -73,4 +77,28 @@ x()
 
 ```stdout
 assert returned value must not be null.
+```
+
+
+
+#### panic
+
+Panic goes along return and raise/throw as modifier.
+
+```plee
+fn reserve target, amount  {
+  // some defers calls!
+
+  target = resize ui8[amount];
+  defer log "reserved memory";
+
+  if (x > 0) {
+    return x; // this is ok
+  }
+  if (x == 0) {
+    panic return x; // this is ok, but there is no reserved memory
+  }
+  // negative number? obviously resize will fail but it's an example :D
+  panic throw "What have you done!";
+}
 ```

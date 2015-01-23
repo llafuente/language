@@ -10,7 +10,7 @@ they provide `fallthrough` as error prone replacement of non-`break`-ing.
 In plee both is mandatory to en a case with one of the following.
 
 * `break`, exit switch
-* `fallthrough`, enter in the next case without testing
+* `fallthrough` or `next`, enter in the next case without testing
 * `continue`, continue testing
 
 `default` case must be the last, and do not need to `break`, `fallthrough` or `continue`.
@@ -19,8 +19,6 @@ There are three types of switch:
 * comparison switch.
 * expression switch.
 * match-regexp switch.
-
-**STUDY** fallthrough is rather long. next is more resonable...
 
 ### Syntax
 

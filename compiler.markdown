@@ -128,4 +128,4 @@ like `test` or `bench`.
 
 ### general purpose vm
 
-* [parrot](http://www.parrot.org)
+* [parrot](http://www.parrot.org) [JIT info](http://trac.parrot.org/parrot/wiki/JITRewrite)
