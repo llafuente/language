@@ -17,7 +17,7 @@
 
 ```syntax
 var-declaration
-('const'|'var'|'unvar') (var-declarator)+;
+'export' ('const'|'var'|'unvar'|'static') (var-declarator)+;
 
 var-declarator
 type? var-identifier ('=' (expression|literal))? (',' var-declarator)*
@@ -293,7 +293,7 @@ to specify their behavior.
 
   Transform your type into a number.
 
-* `to_log`  
+* `to_log`
 
   Used by log. Native types include the type name before calling `to_json`.
 

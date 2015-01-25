@@ -2,49 +2,73 @@
 
 * Arrays are always dense.
 
-* Arrays always contains a common type (**TODO**)
+* Arrays always contains a common type
 
-* Assign a pointer to something in the array it's only possible if fixed size.
+* Assign a pointer to something in the array it's only possible
+if fixed size.
 
-### Initialization
+```syntax
+array-literal
+"[" array-item-list "]"
 
-> **new** *type* (*ui64* length = 0, *bool* dynamic = false)
+array-item-list
+assignament-expression ("," assignament-expression)
+```
 
-* *length*: initial length
-* *dynamic*: can be resized?
+### Declaration & Initialization
 
+* dynamic arrays use 'var' declaration.
+* static arrays use 'static' declaration.
 
-Example with basic operations:
+dynamic stack array
+
+> var *type*[*size*] var-identifier = [*values*]
+
+static stack array
+
+> static *type*[*size*] var-identifier = [*values*]
+
+dynamic heap array
+
+> var var-identifier = *new* *type*[*size*]
+
+> var *type*[*size*] var-identifier = *new* [*values*]
+
+static heap array
+> static var-identifier = *new* *type*[*size*]
+
+> static *type*[*size*] var-identifier = *new* [*values*]
+
+Some examples will give you some insights.
 
 ```plee
-// array initializations
+// array initializations examples
 
-// stack dynamic array
-var dyn_ar = []; // empty array
-var dyn_ar2 = [1, 2]; // array with two elements
+// dynamic arrays
+var stack_dynamic = []; // empty size=0
+var stack_dynamic2 = [1, 2]; // array size=2 type is number[]
+var ui8[15] stack_dynamic3 = [1, 2]; // length=2, size=15
 
-// heap dynamic array
-var dyn_ar3 = new number[10]; // array with 10 size, that need to be deleted.
-defer delete dyn_ar3; // defer free memory so we don't forget
+var heap_static = new ui8[10]; // array size=10
+defer delete heap_dynamic; // defer delete so we don't forget
 
-// static arrays use "()"
-var st_ar = number(10); // 10 numbers
-var st_ar = new number(10); // 10 numbers, that need to be deleted.
-defer delete st_ar; // defer delete so we don't forget
+// static arrays
+static ui8[10] stack_static; // size=10
+static heap_static = new ui8[10]; // 10 numbers
+defer delete heap_static; // defer delete so we don't forget
+
+// multi-dimensional arrays
+var mul_dyn_ar = [[1], [1]];
+// **STUDY** this is ugly
+var mul_st_ar = ui8[2][2]; // 2x2
 
 
 // clone an array
 var dyn_ar = clone dyn_ar2;
 
-// multi-dimensional arrays
-var mul_dyn_ar = [[1], [1]];
-// **STUDY** this is ugly
-var mul_st_ar = number(2).map(fn {return number(2)}); // 2x2
-
 // index access
 log dyn_ar[0]; // stdout 1
 
-// new array as slice
 var dyn_ar_sl = [1, 2, 3];
 // static slice, reference same memory
 var st_slice = dyn_ar_sl[0:2];
@@ -79,7 +103,7 @@ ar.indexOf(0, 6, 12);
 ```
 
 
-### Instances properties
+### Array instance properties
 
 * `length`
 

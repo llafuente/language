@@ -16,6 +16,10 @@
 
   Number of characters
 
+* string.charsets charset = 0 [readonly]
+
+  Number of characters
+
 ### operators
 
 * `[]` access to a single character first byte.
