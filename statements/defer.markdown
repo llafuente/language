@@ -1,7 +1,7 @@
-### defer & panic
+### defer
 
-A `defer` statement postpone the execution of "something" until the surrounding function
-returns or throw.
+A `defer` statement postpone the execution of "something"
+until the surrounding function returns or throw.
 
 ```syntax
 "defer" call-expr
@@ -80,10 +80,10 @@ assert returned value must not be null.
 ```
 
 
-
+<!--
 #### panic
 
-Panic goes along return and raise/throw as modifier.
+Panic goes along `return` and `raise/throw` as modifier.
 
 ```plee
 fn reserve target, amount  {
@@ -102,3 +102,7 @@ fn reserve target, amount  {
   panic throw "What have you done!";
 }
 ```
+
+There is no recover
+
+-->

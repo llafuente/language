@@ -11,7 +11,9 @@
 * array
 * string
 * struct
+* union
 * block
+* bitmask
 * object
 * function, fn
 * p1, p2, p3, p4
@@ -23,11 +25,19 @@
 * till
 * to
 * continue
-* repeat
 * break
 * do
 * while
 * switch
 * case
 * fallthought
+* next
+* defer
 * swap
+* if
+* else
+* when
+* unless
+* var
+* unvar
+* const
