@@ -1,0 +1,8 @@
+# bitcode/llvm ir
+*.ll
+
+# compiled
+contiguos-memeory
+function-overload
+operators
+string

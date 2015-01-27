@@ -1,7 +1,7 @@
 
 #sudo apt-get install cmake
-sudo yum install cmake
-sudo yum install libffi-devel
+sudo yum -y install cmake
+sudo yum -y install libffi-devel
 
 # gcc 4.7 ubuntu
 #sudo add-apt-repository ppa:ubuntu-toolchain-r/test

@@ -2,6 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+
+test continuos memory using [] at the end of the
+struct.
+
+str can be used as char* for strncpy so could be
+a resonable way to do it.
+
+*/
 enum charset {
   ascii,
   utf8,
