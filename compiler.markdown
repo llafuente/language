@@ -123,8 +123,10 @@ like `test` or `bench`.
 * [kaleidoscope](http://llvm.org/docs/tutorial/LangImpl1.html)
 * [rust](https://github.com/rust-lang/rust)
 * [roadsend-php-raven](https://github.com/weyrick/roadsend-php-raven)
+* [unladen-swallow (phyton)](https://code.google.com/p/unladen-swallow/wiki/RelevantPapers)
 
 * [Mapping-High-Level-Constructs-to-LLVM-IR](http://llvm.lyngvig.org/Articles/Mapping-High-Level-Constructs-to-LLVM-IR)
+
 
 ### general purpose vm
 
