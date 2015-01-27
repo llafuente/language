@@ -27,7 +27,6 @@
 | 6 | Subtraction | left-to-right | *lhs* - *rhs* |
 | 7 | Bitwise Left Shift | left-to-right | *lhs* << *rhs* |
 | 7 | Bitwise Right Shift | left-to-right | *lhs* >> *rhs* |
-| 7 | Bitwise Unsigned Right Shift | left-to-right | *lhs* >>> *rhs* |
 | 8 | Less Than | left-to-right | *lhs* < *rhs* |
 | 8 | Less Than Or Equal | left-to-right | *lhs* <= *rhs* |
 | 8 | Greater Than | left-to-right | *lhs* > *rhs* |
@@ -60,6 +59,7 @@
 
 <!--
 | 4 | void | right-to-left | void *rhs* |
+| 7 | Bitwise Unsigned Right Shift | left-to-right | *lhs* >>> *rhs* |
 | 8 | in | left-to-right | *lhs* in *rhs* |
 | 8 | instanceof | left-to-right | *lhs* instanceof *rhs* |
 | 9 | Strict Equality | left-to-right | *lhs* === *rhs* |
