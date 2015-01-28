@@ -52,3 +52,27 @@ fn ,y {
 fn x, y {
   return 1;
 }
+
+
+
+// optional parenthesis
+fn () {
+  return 1;
+}
+
+fn (a) {
+  return 1;
+}
+
+fn (a, b) {
+  return 1;
+}
+
+
+fn x (a, b, ui8 c) {
+  return 1;
+}
+
+fn y (a, b, ui8 c) : ui64 {
+  return 1;
+}
