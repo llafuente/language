@@ -1,4 +1,4 @@
-
+#include <stdbool.h>
 
 int add(int a, int b) {
   return a + b;
@@ -41,23 +41,34 @@ int bitwise_and(int a, int b) {
     return a & b;
 }
 
-void relational(int a, int b) {
-    bool b;
+bool relational(int a, int b) {
+    bool c;
 
-    b = a < b;
-    b = a <= b;
-    b = a > b;
-    b = a >= b;
+    c = a < b;
+    c = a <= b;
+    c = a > b;
+    c = a >= b;
+
+    return c;
 }
 
-void shift(int a, int b) {
+int shift(int a, int b) {
     int c;
 
     c = a << 1;
     c = b >> 1;
+
+    return c;
 }
 
-void unary(int a, int b) {
+int unary(int a, int b) {
     a++;
     b--;
+
+    return a;
+}
+
+
+int main() {
+  return 0;  
 }

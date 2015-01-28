@@ -1,8 +1,10 @@
 # bitcode/llvm ir
 *.ll
+*.bc
 
 # compiled
 contiguos-memeory
 function-overload
 operators
 string
+memory-pool
