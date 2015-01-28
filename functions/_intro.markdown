@@ -59,7 +59,7 @@ function-header-lazy
 ('inline'|'no_inline')? ('fn'|'function') fn-identifier arguments-list?
 
 arguments-list
-argument (',' arguments-list)*
+"("? argument (',' arguments-list)* ")"?
 
 argument
 [type] var_identifier ('=' literal)? (('!='|'<'|'>'|'=>'|'<=') literal)*
@@ -186,6 +186,20 @@ sum(c: 5, b: 6);
 sum(5, 6); // compiler-error
 // Argument expansion is required found two compatible functions: ...
 sum(5, b: 6); // this is allowed
+```
+
+### Anonimous functions
+
+Same syntax prefixing parameters with "," or use parenthesis.
+
+```plee
+fn ,a ,b { // without parenthesis
+
+}
+
+fn (a ,b) { // without parenthesis
+
+}
 ```
 
 ### Variadic function (brackend-dependant)
