@@ -127,3 +127,15 @@ This require knowledge of the parser itself, use it with caution.
 ```
 
 **TODO** when the basic parser is done back here!
+
+
+#### `#meta` text
+
+Set `metadata` property text in the next AST statement.
+
+```plee
+#meta post-process
+fn xx {
+  return 0;
+}
+```

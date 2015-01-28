@@ -5,8 +5,8 @@ that defines a physically grouped list of variables and
 functions to be placed under one name in a block of memory.
 
 Unions are different layouts of the same block of memory. Only one
-should be used at a given time. the size will be the minimum required
-to store any layout (biggest of all)
+should be used at a given time. The size will be the minimum required
+to store any layout (so the biggest of all).
 
 Functions have direct access to those variables in the group by their name if no collision occur, and using `struct_name.property` otherwise
 
@@ -20,13 +20,13 @@ use `resize xx.xx[0]`.
 
 ```syntax
 struct-declaration
-('compact')? 'struct' var-identifier (',' var-identifier)? block-body
+('compact')? 'struct' var-identifier ('extends' var-identifier)? block-body
 
 union-declaration
-'struct' var-identifier block-body
+'union' var-identifier block-body
 
 block-body
-'{' (var-declaration ';'|fn-declaration)+ '}'
+'{' ('merge'? var-declaration ';'|fn-declaration)+ '}'
 ```
 
 <a name="struct-example"></a>
@@ -84,7 +84,9 @@ assert v2.size == 8; // bytes
 
 ### extends
 
-Simple struct inherance.
+Simple struct inheritance.
+Notice: A struct can be downcasted if nobody in the inheritance chain is `compact`.
+
 
 ### compact
 
@@ -102,7 +104,7 @@ Because break save/load binary data compatibility, adding a new property at the 
 `log` how your struct is in memory.
 
 In contrast it's useful with `extends`, because it will rearrange all
-properties, but, remember that
+properties, but, remember that then cannot be downcasted.
 
 
 ```plee
