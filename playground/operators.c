@@ -1,74 +1,107 @@
-#include <stdbool.h>
 
-int add(int a, int b) {
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// for atomic operations
+// #include <stdatomic.h>
+
+//#define TYPE atomic_int
+#define TYPE int
+
+// always inline!
+inline TYPE add(TYPE a, TYPE b) __attribute__((always_inline));
+
+
+TYPE add(TYPE a, TYPE b) {
   return a + b;
 }
 
-int substract(int a, int b) {
+TYPE substract(TYPE a, TYPE b) {
   return a - b;
 }
 
 
-int multiply(int a, int b) {
+TYPE multiply(TYPE a, TYPE b) {
   return a * b;
 }
 
-int divide(int a, int b) {
+TYPE divide(TYPE a, TYPE b) {
   return a / b;
 }
 
-int mod(int a, int b) {
+TYPE mod(TYPE a, TYPE b) {
   return a % b;
 }
 
-bool logical_or(int a, int b) {
+bool logical_or(TYPE a, TYPE b) {
     return a || b;
 }
 
-bool logical_and(int a, int b) {
+bool logical_and(TYPE a, TYPE b) {
     return a && b;
 }
 
-int bitwise_or(int a, int b) {
+TYPE bitwise_or(TYPE a, TYPE b) {
     return a | b;
 }
 
-int bitwise_xor(int a, int b) {
+TYPE bitwise_xor(TYPE a, TYPE b) {
     return a ^ b;
 }
 
-int bitwise_and(int a, int b) {
+TYPE bitwise_and(TYPE a, TYPE b) {
     return a & b;
 }
 
-bool relational(int a, int b) {
-    bool c;
-
-    c = a < b;
-    c = a <= b;
-    c = a > b;
-    c = a >= b;
-
-    return c;
+bool relational_gt(TYPE a, TYPE b) {
+    return a > b;
 }
 
-int shift(int a, int b) {
-    int c;
-
-    c = a << 1;
-    c = b >> 1;
-
-    return c;
+bool relational_lt(TYPE a, TYPE b) {
+  return a < b;
 }
 
-int unary(int a, int b) {
-    a++;
-    b--;
-
-    return a;
+bool relational_egt(TYPE a, TYPE b) {
+  return a >= b;
 }
 
+bool relational_elt(TYPE a, TYPE b) {
+  return a <= b;
+}
 
-int main() {
-  return 0;  
+TYPE shift_left(TYPE a, TYPE b) {
+    return a << 1;
+}
+
+TYPE shift_right(TYPE a, TYPE b) {
+    return b >> 1;
+}
+
+TYPE unary_increment(TYPE a, TYPE b) {
+    return a++;
+}
+
+TYPE unary_decrement(TYPE a, TYPE b) {
+  return a--;
+}
+
+void function_call_int(int a);
+void function_call_ptr(char* a);
+void function_call_ref(int* a);
+
+void function_call() {
+  int a = 1;
+
+  function_call_int(a);
+
+  char* b = 0;
+
+  function_call_ptr(b);
+
+  int c = 2;
+
+  function_call_ref(&c);
+
+
 }
