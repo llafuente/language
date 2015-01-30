@@ -1,6 +1,6 @@
 ### Variables & types.
 
-#### Philosophy
+#### Keypoints
 
 * [Type introspection](http://en.wikipedia.org/wiki/Type_introspection)
 

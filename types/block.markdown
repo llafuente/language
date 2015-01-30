@@ -3,7 +3,7 @@
 It's the same as struct but memory continuous.
 
 To be memory continuous, sizes of all arrays must
-be defined at once, and can obly be allocated in the heap.
+be defined at once, and can only be allocated in the heap.
 
 
 Syntax
@@ -36,7 +36,7 @@ resize x(15, 10); // note: this will allocate, copy and free the old memory.
 ```plee-err
 resize x.ptr_a[0]; // compilation error
 delete x.ptr_a[15]; // compilation error
-// block property cannot freed, you must free the entire block
+// compile-err: block property cannot freed, you must free the entire block
 ```
 
 note: do not need to store the size/length in the array.
