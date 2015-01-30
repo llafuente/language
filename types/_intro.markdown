@@ -12,7 +12,6 @@
 
 * Auto scope. Compiler will choose between function or block scope.
 
-
 #### Syntax
 
 ```syntax
@@ -41,36 +40,35 @@ var ui64 e; // also: i64
 log e; // stdout: 0
 ```
 
-#### lazy initialization (shortcut)
-
-```plee
-var a = new array(5);
-//equivalent to
-var array a(5);
-```
-
 #### Type inference.
 
-* Initialization
+* variables
+  * declaration + initialization
+
+    variable will get the type that the initialization return.
+
+  * declaration
+
+    variable will get the type of the first assignment found.
+
+    This cannot be used to "unbox" from array/object.
+
+  * parameter
+
+    if the variable is a parameter of a function will get it's type.
+
+  * narrow type by operation
+
+    Sometimes a variable will be in some operations and that can narrow it's type
+    the compiler will anotate until only one is valid.
+
+    for examples `a + b;` wont give most...
+    Because can be used for numbers/arrays/strings but that remove modules and object!
+
+* arguments
+  * function arguments
 
 
-* Initialization without a value
-
-  ```
-  unvar a;
-  unvar ui64 b;
-  ```
-
-* Operators
-
-  Resolve the type based on operation over the variable.
-
-  ```plee
-  var x = 0, y = 0; //i64
-  var z = x + y;
-  ```
-
-* function arguments
 
   ```plee
   fn sum ui8 x, ui8 y : ui8 {
@@ -81,12 +79,20 @@ var array a(5);
 
 #### implicit type conversion
 
-A type can only grow in precision.
+A type can only grow in precision on left hand side.
 
 ```plee
 var x = 0; // ui64
 var y = 0.1; // float
 var z = x + y; // float
+```
+
+But will not grow in right hand side.
+
+```plee-err
+var x = 0; // ui64
+var y = 0.1; // float
+x = x + y; // float
 ```
 
 #### explicit type
@@ -127,6 +133,9 @@ var ui64 x = to_ui64(0.0);
 
 #### Primitives
 
+A primitive is data in the most simple way. It just map memory and don't
+have extra logic.
+
 * **bool**
 
   There are only two Boolean values, `true` and `false`.
@@ -163,6 +172,10 @@ var ui64 x = to_ui64(0.0);
 
   Function as type. Unlike other languages arguments doesn't matter.
 
+  *Properties:*
+  * length: number of arguments
+  * arguments: list of arguments
+
 * **string**
 
   Primitive value that is a finite ordered sequence of zero or more 16-bit unsigned integer
@@ -171,16 +184,9 @@ var ui64 x = to_ui64(0.0);
   * iterable
   * shared-ptr
 
-#### Data aggregation, complex types.
+* **regexp**
 
-* **array**
-
-  List of things, this is continuous memory and should have a defined type, cannot contains different things (unless pointers are stored).
-
-  *Properties:*
-  * iterable
-  * thread-block
-  * shared-ptr
+  Perl Compatible Regular Expressions
 
 * **struct**
 
@@ -202,6 +208,29 @@ var ui64 x = to_ui64(0.0);
   * thread-block
   * shared-ptr
 
+#### Data aggregation & complex types.
+
+Complex types always have a subtype, that can be a primitive or a box.
+
+* **box**
+
+  Wrap a variable with it's type.
+
+  Now box can be used in an array/object, and store heterogeneous data.
+
+  [box in details](#box)
+
+* **array**
+
+  List of things, this is continuous memory and should have a defined type, cannot contains different things (unless pointers are stored).
+
+  *Properties:*
+  * iterable
+  * thread-block
+  * shared-ptr
+
+  [array in details](#array)
+
 * **object**
 
   Mutable structured data. You could add/remove members.
@@ -211,25 +240,9 @@ var ui64 x = to_ui64(0.0);
   * thread-block
   * shared-ptr
 
-* **p1, p2, p3, p4**
+  [object in details](#object)
 
-  Pointer of different sizes (bytes).
 
-  There are two types of pointer.
-
-  * Pointer to iterate, those that use memory already allocated.
-  * Pointer to mange memory, those that allocate memory
-
-  *Members:*
-  * .start
-  * .end
-  * .length
-
-  *Properties:*
-  * alloc / new
-  * dealloc / delete
-  * realloc / resize
-  * copy
 
 <!--
 * **bin[X]**

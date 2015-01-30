@@ -1,3 +1,4 @@
+<a name="array"></a>
 ## array
 
 * Arrays are always dense.

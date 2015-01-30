@@ -15,6 +15,8 @@ In plee both is mandatory to en a case with one of the following.
 
 `default` case must be the last, and do not need to `break`, `fallthrough` or `continue`.
 
+Each `case` has it's own block. so var declarations don't leak to other cases.
+
 There are three types of switch:
 * comparison switch.
 * expression switch.
