@@ -9,6 +9,7 @@ plee [actions] file
 
 actions:
   -e              execute
+  -safe           enable safe mode
   -t              run tests
   -c              compile (default if no action sent)
   -p              parse
@@ -111,11 +112,30 @@ like `test` or `bench`.
 
   Asynchronous IO, NET, DNS & threads tools.
 
+* [http-parser](https://github.com/joyent/http-parser)
+
+* [glfw](http://www.glfw.org/)
+
+  window, opengl, & input
+
 * [llvm](http://llvm.org/)
 
   Low Level Virtual Machine.
 
   Compiler, AOC and JIT.
+
+* [asmlib](http://www.agner.org/optimize/)
+  & [nt2](https://github.com/MetaScale/nt2)
+
+  SIMD
+
+* [zlib](http://www.zlib.net/)
+
+* [openssl](https://www.openssl.org/)
+
+* [icu c](http://site.icu-project.org/)
+
+* [iconv](http://www.gnu.org/savannah-checkouts/gnu/libiconv/)
 
 ### compilers based on LLVM
 

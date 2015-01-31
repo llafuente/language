@@ -11,27 +11,28 @@ console.log(tmp + "/code.txt");
 console.log(tmp + "/syntax.txt");
 
 var files = {
-    "readme.markdown": "index.html",
-    "hello-world-example.markdown": "hello-world.html",
+    "introduction/introduction.md": "index.html",
+    "introduction/hello-world.md": "hello-world.html",
 
-    "compiler.markdown": "compiler.html",
-    "preprocessor.markdown": "preprocessor.html",
-    "postprocessor.markdown": "postprocessor.html",
+    "compiler/compiler.md": "compiler.html",
+    "compiler/preprocessor.md": "preprocessor.html",
+    "compiler/postprocessor.md": "postprocessor.html",
 
     "entry-point.markdown": "compiler.html",
 
+    "variables/variables.md": "variables.html",
+    "types/numbers.md": "numbers.html",
+    "types/string.md": "string.html",
+    "types/enum.md": "enum.html",
+    "types/pointers.md": "pointers.html",
+    "types/array.md": "array.html",
+    "types/struct.md": "struct.html",
+    "types/block.md": "block.html",
+    "types/object.md": "object.html",
+    "types/iterable.md": "iterable.html",
+    "types/observers.md": "observers.html",
+
     "operators.markdown": "operators.html",
-    "types/_intro.markdown": "types.html",
-    "types/string.markdown": "string.html",
-    "types/numbers.markdown": "numbers.html",
-    "types/enum.markdown": "enum.html",
-    "types/pointers.markdown": "pointers.html",
-    "types/array.markdown": "array.html",
-    "types/struct.markdown": "struct.html",
-    "types/block.markdown": "block.html",
-    "types/object.markdown": "object.html",
-    "types/iterable.markdown": "iterable.html",
-    "types/observers.markdown": "observers.html",
 
     "functions/_intro.markdown": "functions.html",
     "functions/listeners.markdown": "functions-listeners.html",

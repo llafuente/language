@@ -29,11 +29,15 @@
 | 7 | Bitwise Right Shift | left-to-right | *lhs* >> *rhs* |
 | 8 | Less Than | left-to-right | *lhs* < *rhs* |
 | 8 | Less Than Or Equal | left-to-right | *lhs* <= *rhs* |
+|   |                    |               | *lhs* ≤ *rhs* |
 | 8 | Greater Than | left-to-right | *lhs* > *rhs* |
 | 8 | Greater Than Or Equal | left-to-right | *lhs* >= *rhs* |
+|   |                       |               | *lhs* ≥ *rhs* |
 | 8 | force assignment | left-to-right | *rhs* ! |
 | 9 | Equality | left-to-right | *lhs* == *rhs* |
+| 9 | Floating point equality (inside epsilon range) | left-to-right | *lhs* ~= *rhs* |
 | 9 | Inequality | left-to-right | *lhs* != *rhs* |
+|   |            |               | *lhs* ≠ *rhs* |
 | 9 | Address Equality | left-to-right | *lhs* $= *rhs* |
 | 10 | Bitwise AND | left-to-right | *lhs* & *rhs* |
 | 11 | Bitwise XOR | left-to-right | *lhs* ^ *rhs* |
@@ -54,10 +58,11 @@
 | 16 | Assignment | right-to-left | *lhs* &= *rhs* |
 | 16 | Assignment | right-to-left | *lhs* ^= *rhs* |
 | 16 | Assignment | right-to-left | *lhs* &#124;= *rhs* |
-| 17 | Spread | n/a | ... … |
-| 18 | Comma / Sequence | left-to-right | *lhs* , *rhs* | </tbody>
+| 17 | Cast operator | left-to-right | *lhs* as *type* |
 
 <!--
+| 17 | Spread | n/a | ... … |
+| 18 | Comma / Sequence | left-to-right | *lhs* , *rhs* | </tbody>
 | 4 | void | right-to-left | void *rhs* |
 | 7 | Bitwise Unsigned Right Shift | left-to-right | *lhs* >>> *rhs* |
 | 8 | in | left-to-right | *lhs* in *rhs* |

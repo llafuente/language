@@ -1,16 +1,40 @@
 ### Variables & types.
 
+<a name="var-idenfiers"></a>
+#### Variable identifier, allowed names
+
+A variable identifier can contain any valid UTF-8.
+
+* Cannot start with a number
+
+* Cannot start or end with an operator.
+
+* Cannot be a reserved word
+
+#### Stylistic Conventions
+
+This are the rule that we use to develop the core.
+
+* snake case
+* use of "-" inside a variable is possible
+but use it if there is a good reason, like writing css staff
+
 #### Keypoints
 
 * [Type introspection](http://en.wikipedia.org/wiki/Type_introspection)
 
-* Required keyword (var, const, unvar) for readability.
+  All primitives and complex types has a very verbose output with
+  `log` for easy debugging. You also have access in runtime
+  to some properties of how the type is declared.
+
+* Required keyword (`var`, `const`, `unvar`) for readability purposes.
 
 * [Type inference](http://en.wikipedia.org/wiki/Type_inference)
 
 * Types lowercased.
 
 * Auto scope. Compiler will choose between function or block scope.
+
 
 #### Syntax
 
@@ -30,10 +54,10 @@ type var-identifier '(' argument_list ')' (',' var-declarator)*
 examples:
 
 ```plee
-var a = 0; // i64 (default compiler option)
-var b = 0.0; // float (default compiler option)
+var a = 0; // f32 (default compiler option)
+var b = 0.0; // f32 (default compiler option)
 
-var d = [1, 2, 3]; // array of i64, size=length=3
+var d = [1, 2, 3]; // array of f32, size=length=3
 var e = a; // same type as a
 
 var ui64 e; // also: i64
@@ -66,20 +90,46 @@ log e; // stdout: 0
     Because can be used for numbers/arrays/strings but that remove modules and object!
 
 * arguments
-  * function arguments
+  There are two cases.
+
+  * arguments without a type
+
+  * arguments with complex types.
+
+    Comples types require a primitive to be a complete type that can
+    be compiled. The compiler will fill the gap with the calling types
+
+
+* return
+  Return type of a function is the type of all return statements found.
+
+  box won't be allowed to be a return type unless user defined it.
 
 
 
-  ```plee
-  fn sum ui8 x, ui8 y : ui8 {
-      return x + y;
-  }
-  ```
+
+```plee
+fn sum x, y {
+    return x + y;
+}
+
+sum(1 as u8, 2 as u8);
+// will generate a new function with a compatible signature.
+// fn sum ui8 x, ui8 y: ui8 {...}
+
+```plee-err
+var ui8 x = sum(1 as ui8, 1 as ui32);
+// it will comlaint about resolution loss in x
+// fn sum ui8 x, ui32 y: ui32 {...}
+
+var ui8 x = sum(1 as ui8, [1] as ui8[]);
+// compile-error: incompatible type operation found for: ui8 + ui8[]
+```
 
 
 #### implicit type conversion
 
-A type can only grow in precision on left hand side.
+A type can only grow in precision on right hand side.
 
 ```plee
 var x = 0; // ui64
@@ -87,7 +137,7 @@ var y = 0.1; // float
 var z = x + y; // float
 ```
 
-But will not grow in right hand side.
+But will not grow in left hand side.
 
 ```plee-err
 var x = 0; // ui64
@@ -95,11 +145,12 @@ var y = 0.1; // float
 x = x + y; // float
 ```
 
-#### explicit type
+#### explicit type declaration
 
 ```plee
 var i64 x;
 var string str;
+var i64[] x;
 ```
 
 #### explicit type conversion
@@ -110,51 +161,46 @@ var string str;
 var ui64 x = to_ui64(0.0);
 ```
 
+`as` operator
+
+```plee
+var x = 0 as ui8;
+```
+
 #### invalid explicit conversions
 
-| from | to | description |
-|---|---|---|
-| array | string | compiler will complain an offer a solution: use join |
-| function | * | functions cannot be casted |
-| string | function | compiler will complain an offer a solution: use call operator |
-| object | array | not allowed **TODO** study |
-| object | block | compiler will complain an offer a solution: use copy operator |
-| block | object | compiler will complain an offer a solution: use call operator |
-| block | * | not allowed |
-| struct | block | compiler will complain an offer a solution: use copy operator |
+Some convertion are meant to be used as a function rather than usign
+`as` operator.
 
-<a name="var-idenfiers"></a>
-#### Variable identifier/name rules
+| from     |    to    | description |
+|----------|----------|-------------|
+| array    | string   | invalid cast: use join |
+| function | *        | invalid cast: functions cannot be casted |
+| string   | function | invalid cast: use call function |
+| object   | array    | invalid cast: use object.values or object.keys |
+| object   | block    | invalid cast: use copy operator |
+| block    | object   | invalid cast: use to_object |
+| block    | array    | invalid cast use to_array |
+| block    | *        | invalid cast: |
+| struct   | object   | invalid cast use to_object |
+| struct   | array    | invalid cast use to_array |
+| struct   | *        | invalid cast |
 
-* Cannot start with a number
-* Cannot contains: `$`, `.`, `(`, `)`, `[`, `]`, `{`, `}`, `"`, `'`, `@`
-* Cannot be a reserved word
-* Any UTF-8 valid character
 
 #### Primitives
 
-A primitive is data in the most simple way. It just map memory and don't
-have extra logic.
+A primitive are the standard types (most simple) types.
+It just map memory and don't have extra logic.
 
 * **bool**
 
-  There are only two Boolean values, `true` and `false`.
+  There are only two valid boolean values, `true` and `false`.
 
-  But there some aliases:
+  There some aliases to give more expressiveness to the language:
 
   * `true`: `on` & `yes`
 
   * `false`: `of` & `no`
-
-  Those aliases give more expressiveness to the language.
-
-* **number**
-
-  Mutable-multipuporse number. Increase it's size as needed / overflow happens.
-
-  Will be i64 until floating point is needed and change it's type to f64.
-
-  Note: If any calculation produces and error `nan` (`not a number`) will be returned.
 
 * **i8, i16, i32, i64 (int), ui8, ui16, ui32, ui64 (uint)**
 
@@ -162,11 +208,14 @@ have extra logic.
 
   Note: If any calculation produces and error `nan` (`not a number`) will be returned.
 
-* **f32 (float) & f64**
+* **f32 (float/number) & f64**
 
   Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.
 
   Note: If any calculation produces and error `nan` (`not a number`) will be returned.
+
+  f32 will be used by the compiler when a numerial variable don't
+  have implicit type.
 
 * **function**
 
@@ -178,7 +227,7 @@ have extra logic.
 
 * **string**
 
-  Primitive value that is a finite ordered sequence of zero or more 16-bit unsigned integer
+  Primitive value that is a finite ordered sequence of zero character.
 
   *Properties:*
   * iterable

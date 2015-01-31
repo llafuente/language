@@ -73,3 +73,18 @@ bitmask dir {
 }
 
 var dir diagonal = dir.north | dir.east;
+
+
+
+### Safe mode
+
+Safe mode wrap some operations, giving runtime-errors if something
+happends:
+
+* [Arithmetic underflow](http://en.wikipedia.org/wiki/Arithmetic_underflow)
+* [Arithmetic overflow](http://en.wikipedia.org/wiki/Arithmetic_overflow)
+* Division by cero
+
+Otherwise you will have to deal with undefined behaviour or `nan` (not a number)
+
+Safe mode is slow, so it's not compiled by default. To enable use `-safe` compile option.
