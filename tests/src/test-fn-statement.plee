@@ -25,6 +25,10 @@ function def_and_assert arg1 = 0 != null, arg2 {
 function def_and_assert clone arg1 = 0 != null, arg2 {
 
 }
+fn member_expr_as_default array arr {
+
+}
+
 fn member_expr_as_default array arr, ui64 limit = arr.length {
 
 }
@@ -75,4 +79,17 @@ fn x (a, b, ui8 c) {
 
 fn y (a, b, ui8 c) : ui64 {
   return 1;
+}
+
+
+fn complex_types (ui8{} a) {
+
+}
+
+fn complex_types2 (ui8[1][2][] a) {
+
+}
+
+fn complex_types3 (fn[] a) {
+
 }

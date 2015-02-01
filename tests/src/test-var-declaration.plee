@@ -26,3 +26,19 @@ var ñ = {
   c: b,
   "x": (a = c)
 };
+
+var ui8[] a;
+var fn[] a;
+var ui8[5] a;
+var ui8[5][] a;
+var ui8[5][6] a;
+var ui8[5][6][] a;
+var ui8[5][6][7] a;
+var [] a;
+var {} a;
+var ui8{} a;
+
+
+var ui8{} a;
+var ui8{} b;
+var ui8{} c;
