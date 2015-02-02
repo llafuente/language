@@ -24,13 +24,14 @@ var_identifier ':' (literal|expression) ','
 var d;
 var xxx = {
   "a": "world",
-  "b": hello(), // function
-  "c": variable, // variable, dont forget the last comma!
+  "b": hello(), // function as value
+  "c": variable, // variable as value
   d: hello(), // variable as key :)
 };
 ```
 
 ### methods
+
 * `$has` **object** obj, **string** key : **bool**
 
   Return if given key is defined.
@@ -53,17 +54,24 @@ var xxx = {
 
   Remove given key and return pointer or null.
 
-* `$setter` **object** obj, *fn* **sttr** = null : **function**
+* `$setter` **object** obj, **fn** *sttr* = null : **function**
 
   Set a setter function that will be called before each set.
 
   if null is provided will remove the previous setter.
 
-* `$getter` **object** obj, *fn* **gttr** = null : **function**
+* `$getter` **object** obj, **fn** *gttr* = null : **function**
 
   Set a getter function that will be called before each get.
 
   if null is provided will remove the previous getter.
+
+* `$observe` **object** obj, **fn** *obsr*(*string* action, *string* prop, *box* value)
+
+  Notify obsr when something happend in the object.
+  * set
+  * get
+  * delete
 
 
 ## `?` exits operator (nested `$has` shortcut)

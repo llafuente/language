@@ -83,24 +83,28 @@ log arr[0]?; // null
 * ref is always dereferenced except on left side equal and
 address on right side.
 
-### `pitr`
+### `itr`
 
 Pointer iterator.
 
-Properties
-* **ui64** `length`
+#### itr properties
+* **ref** `owner`
 
   readonly.
 
-* **rawp** `start`
+  * **ui32** `step`
+
+  sizeof of the target element.
+
+* **ptr** `start`
 
   readonly.
 
-* **rawp** `end`
+* **ptr** `end`
 
   readonly.
 
-* **rawp** `current`
+* **ptr** `current`
 
 * **ref** `value`
 
@@ -109,31 +113,36 @@ Properties
   current is dereferenced by the compiler.
 
 
-Operator
+#### pointer arithmetic
+
 * operator++
 
-  alias of next(1);
+  alias of `itr.next(1)`
 
 * operator--
 
-  alias of prev(1);
+  alias of `itr.prev(1)`
 
-* operator+ amount:ui64
+* operator+ (ui64 amount)
 
-  alias of (clone pitr).next(amount)
+  alias of `(clone itr).next(amount)`
 
-* operator+= amount:ui64
+* operator+= (ui64 amount)
 
-  alias of pitr.next(amount)
+  alias of `itr.next(amount)`
 
-* operator- amount:ui64
+* operator- (ui64 amount)
 
-  alias of pitr.next(amount)
+  alias of `(clone itr).next(amount)`
 
-* operator-= amount:ui64
+* operator-= (ui64 amount)
 
-  alias of (clone pitr).prev(amount)
+  alias of `itr.prev(amount)`
 
+Notes.
+
+`itr` do not iterate thought bytes, like c-pointers rather than the sizeof(element).
+Any movements of the iterator will be made over the target size.
 
 Members
 * `reset`()

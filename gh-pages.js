@@ -26,10 +26,11 @@ var files = {
     "types/enum.md": "enum.html",
     "types/pointers.md": "pointers.html",
     "types/array.md": "array.html",
+    "types/bitmask.md": "bitmask.html",
     "types/struct.md": "struct.html",
     "types/block.md": "block.html",
     "types/object.md": "object.html",
-    "types/iterable.md": "iterable.html",
+    "types/box.md": "box.html",
     "types/observers.md": "observers.html",
 
     "operators.markdown": "operators.html",
