@@ -26,15 +26,19 @@ typedef struct  {
 string* reserve(size_t len) {
   printf("1\n");
 
+string_malloc:;
   string* s = (string*) malloc(sizeof(string) + len * sizeof(char));
   //string* s;
   //void* v = (string*) malloc(sizeof(string) + len * sizeof(char));
   //void* v = (string*) calloc(1, sizeof(string) + len * sizeof(char));
   //s = v;
-
+set_length:;
   s->length = 0;
+set_size:;
   s->size = len;
+set_first:;
   s->str[0] = 'a';
+set_second:;
   s->str[1] = '\0';
 
   return s;
