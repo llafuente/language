@@ -1,3 +1,4 @@
+<a name="pointers-type"></a>
 ## Pointers
 
 **TODO** this need review and a real comparison with c-pointers.
@@ -54,20 +55,38 @@ References do not own memory, but some structures like
 array will transfer memory ownage to `ref`. let's see an example.
 
 ```plee
-var arr = [1,2,3];
-var ref c = @arr; // reference arr
+{
+  var arr = [1,2,3];
+  var ref c = @arr; // reference arr
 
-delete arr;
+  delete arr; // memory is not free, ownage is transfered
 
-log c[0]; // 1
+  log c[0]; // 1
 
-log arr[0]?; // null
+  log arr[0]?; // null
+} // now memory will be free
+
+```
+
+But it will also work on a single value.
+
+```plee
+{
+  var arr = [1,2,3];
+  var ref c = @arr[0]; // reference arr
+
+  delete arr; // memory is not free, ownage is transfered
+
+  log c; // 1
+
+  log arr[0]?; // null
+} // now memory will be free
 
 ```
 
 **compiler notes**
 
-* ref dont have pointer arithmetic
+* ref don't have pointer arithmetic
 
 * ref must have a pointer to the memory owner it pointing to.
 
@@ -80,29 +99,35 @@ log arr[0]?; // null
   xptr must have a pointer to x. If x is deleted like in the example.
   x memory must not be freed until xptr is deleted.
 
-* ref is always dereferenced except on left side equal and
-address on right side.
+* ref is always dereferenced except on assinament expression
+on left equal and address on right side.
 
-### `itr`
+### `itr` (safe & unsafe)
 
-Pointer iterator.
+Pointer iterator, it could be considered as "movable ref".
 
-#### itr properties
-* **ref** `owner`
+Safe pointer is slow, but 100% safe, use if where is points could
+move.
 
-  readonly.
+Readonly properties.
 
-  * **ui32** `step`
+* **ui64** `length` (safe & unsafe)
 
-  sizeof of the target element.
+  number of steps.
 
-* **ptr** `start`
+  safe will be synchronized with owner.
 
-  readonly.
+  unsafe will be set at creation time.
 
-* **ptr** `end`
+* **ui64** `step_size` (safe & unsafe)
 
-  readonly.
+  Bytes per step
+
+* **ref** `owner` (safe only)
+
+* **ui64** `index` (safe & unsafe)
+
+  current index
 
 * **ptr** `current`
 
@@ -113,36 +138,31 @@ Pointer iterator.
   current is dereferenced by the compiler.
 
 
-#### pointer arithmetic
-
+Operator
 * operator++
 
-  alias of `itr.next(1)`
+  alias of next(1);
 
 * operator--
 
-  alias of `itr.prev(1)`
+  alias of prev(1);
 
-* operator+ (ui64 amount)
+* operator+ amount:ui64
 
-  alias of `(clone itr).next(amount)`
+  alias of (clone itr).next(amount)
 
-* operator+= (ui64 amount)
+* operator+= amount:ui64
 
-  alias of `itr.next(amount)`
+  alias of itr.next(amount)
 
-* operator- (ui64 amount)
+* operator- amount:ui64
 
-  alias of `(clone itr).next(amount)`
+  alias of itr.next(amount)
 
-* operator-= (ui64 amount)
+* operator-= amount:ui64
 
-  alias of `itr.prev(amount)`
+  alias of (clone itr).prev(amount)
 
-Notes.
-
-`itr` do not iterate thought bytes, like c-pointers rather than the sizeof(element).
-Any movements of the iterator will be made over the target size.
 
 Members
 * `reset`()
@@ -163,7 +183,7 @@ Members
 var l = new array[10];
 l.fill(10);
 
-var itr = l.iterator();
+var itr = l.itr(); // or safe_itr
 
 while (itr.next()) {
     log itr.current; // stdout (10 times): 10
@@ -177,24 +197,44 @@ delete itr; // do not delete l memory
 
 **compiler-notes**
 
-* as ref, must save a pointer to the memory owner to avoid free
-memory.
+* generate a warning if an array is modified while an unsafe
+itr lives
 
-* once a pitr is assigned to an array, the array will be static.
+* maybe step_size could be inside a macro, and dont need to
+save it in the struct
+
+* value is and alias of "dereference current", can cannot be
+assigned to other memory.
 
 
-### `rawp`
+### `ptr`
 
 Raw C-like pointer, for maximum performance.
-It's not safe to use because has no bounds check, do not have a pointer
-to memory owner to avoid free-ing.
+It's not safe:
+* has no bounds check
+* do not have a pointer to memory owner to avoid free-ing.
+
+As itr, pointer arithmetic take into consideration where are you
+pointing.
+
+```plee
+var ui8_arr = new ui8[10];
+var ptr x = @ui8_arr;
+++x; // advance 1 byte;
+
+
+var ui16_arr = new ui16[10];
+var ptr y = @ui16_arr;
+++y; // advance 2 byte;
+```
+
 
 Use it with caution.
 
 
 Compiler notes:
 
-* `var rawp x = new ui8[1];`
+* `var ptr x = new ui8[1];`
 
   should raise a compilation error. Even if possible, there is no
-  variable that own the memory, a rawp canot be deleted
+  variable that own the memory, a ptr canot be deleted

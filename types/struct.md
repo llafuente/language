@@ -1,3 +1,6 @@
+<a name="struct-type"></a>
+<a name="union-type"></a>
+<a name="extends-type"></a>
 ## struct & union
 
 Structs are complex data type declaration
@@ -135,8 +138,9 @@ v2 vec2_err = (vec2) v3c;
 
 ### implementation notes
 
-Functions inside the struct must be hoisted outside the struct and
-prepend a new argument of the struct type with the struct name.
+Functions inside the struct must be hoisted outside.
+Then prepend a new argument of the struct type (by ref?)
+with the struct name.
 Because functions can be called as classy and functional
 this remove complexity to the compiler once more and move
 it to parser.

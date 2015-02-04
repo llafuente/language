@@ -1,3 +1,4 @@
+<a name="number-type"></a>
 ## Number types
 
 Any number type has the following properties.

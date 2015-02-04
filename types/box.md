@@ -1,4 +1,4 @@
-<a name="box"></a>
+<a name="box-type"></a>
 ## box
 
 Wrap a variable with it's type (aka [Variant](http://en.wikipedia.org/wiki/Variant_type))

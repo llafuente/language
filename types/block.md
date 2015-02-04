@@ -1,3 +1,4 @@
+<a name="block-type"></a>
 ## block
 
 It's the same as struct but memory continuous.

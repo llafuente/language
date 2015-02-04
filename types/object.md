@@ -1,4 +1,4 @@
-<a name="object"></a>
+<a name="object-type"></a>
 ## Objects
 
 Abstract data type composed of a collection of (key, value) pairs.

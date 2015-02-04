@@ -11,6 +11,7 @@ A variable identifier can contain any valid UTF-8.
 
 * Cannot be a reserved word
 
+
 #### Stylistic Conventions
 
 This are the rule that we use to develop the core.
@@ -19,28 +20,12 @@ This are the rule that we use to develop the core.
 * use of "-" inside a variable is possible
 but use it if there is a good reason, like writing css staff
 
-#### Keypoints
-
-* [Type introspection](http://en.wikipedia.org/wiki/Type_introspection)
-
-  All primitives and complex types has a very verbose output with
-  `log` for easy debugging. You also have access in runtime
-  to some properties of how the type is declared.
-
-* Required keyword (`var`, `const`, `unvar`) for readability purposes.
-
-* [Type inference](http://en.wikipedia.org/wiki/Type_inference)
-
-* Types lowercased.
-
-* Auto scope. Compiler will choose between function or block scope.
-
 
 #### Syntax
 
 ```syntax
 var-declaration
-'export' ('const'|'var'|'unvar'|'static') (var-declarator)+;
+'export' ('const'|'var'|'unvar'|'static'|'global') (var-declarator)+;
 
 var-declarator
 type? var-identifier ('=' (expression|literal))? (',' var-declarator)*
@@ -50,6 +35,8 @@ type var-identifier '(' argument_list ')' (',' var-declarator)*
 * `const` for constants
 * `var` for variables implicit initialized to default values
 * `unvar` for un-initialized variables
+* `static` for variables that cannot be resized
+* `global` declare a variable in global scope
 
 examples:
 
@@ -64,7 +51,27 @@ var ui64 e; // also: i64
 log e; // stdout: 0
 ```
 
+#### paradigms
+
+* [Type introspection](http://en.wikipedia.org/wiki/Type_introspection)
+
+  All primitives and complex types has a very verbose output with
+  `log` for easy debugging. You also have access in runtime
+  to some properties of how the type is declared printing it's type.
+
+* Required keyword at declaration for readability purposes and easy
+search
+
+* [Type inference](http://en.wikipedia.org/wiki/Type_inference)
+
+* Types lowercased.
+
+* Auto scope. Compiler will choose between function or block scope.
+
+
 #### Type inference.
+
+Logic behind type inference as follow:
 
 * variables
   * declaration + initialization
@@ -169,8 +176,8 @@ var x = 0 as ui8;
 
 #### invalid explicit conversions
 
-Some convertion are meant to be used as a function rather than usign
-`as` operator.
+Some convertion are meant to be used as a function rather
+than usign `as` operator.
 
 | from     |    to    | description |
 |----------|----------|-------------|
@@ -187,14 +194,13 @@ Some convertion are meant to be used as a function rather than usign
 | struct   | *        | invalid cast |
 
 
-#### Primitives
+#### Primitives / Basic types
 
 A primitive are the standard types (most simple) types.
-It just map memory and don't have extra logic.
 
-* **bool**
+* `bool`
 
-  There are only two valid boolean values, `true` and `false`.
+  There are only two valid boolean values: `true` and `false`.
 
   There some aliases to give more expressiveness to the language:
 
@@ -202,49 +208,79 @@ It just map memory and don't have extra logic.
 
   * `false`: `of` & `no`
 
-* **i8, i16, i32, i64 (int), ui8, ui16, ui32, ui64 (uint)**
+* `i8`, `i16`, `i32`, `i64`, `ui8`, `ui16`, `ui32`, `ui64`
 
   Integers and unsigned integers of different sizes.
 
-  Note: If any calculation produces and error `nan` (`not a number`) will be returned.
+* `f32` & `f64`
 
-* **f32 (float/number) & f64**
+  Primitive value corresponding to a single/double-precision 32/64-bit binary format in IEEE 754 representation.
 
-  Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.
-
-  Note: If any calculation produces and error `nan` (`not a number`) will be returned.
-
-  f32 will be used by the compiler when a numerial variable don't
-  have implicit type.
-
-* **function**
-
-  Function as type. Unlike other languages arguments doesn't matter.
-
-  *Properties:*
-  * length: number of arguments
-  * arguments: list of arguments
-
-* **string**
+* `string`
 
   Primitive value that is a finite ordered sequence of zero character.
 
-  *Properties:*
-  * iterable
-  * shared-ptr
+* `null`, `nil`
 
-* **regexp**
+  `null` is prefered as `nil` is introduce it just for laziness.
+
+* `regexp`
 
   Perl Compatible Regular Expressions
 
-* **struct**
+* `enum`
 
-  Constant structured data.
+  Type consisting in a list of key words.
 
-  *Properties:*
-  * iterable
-  * thread-block
-  * shared-ptr
+* `thread`
+
+  Thread identifier
+
+* `resource`
+
+  I/O identifier.
+
+  for example: `stdout`, `stderr`, `stdin`.
+
+#### Primitive templates
+
+Instead the common aproach of allow any type as template, Plee
+enforce the use of a 'common minimum type'. The compiler will
+generate more specific functions if needed.
+
+* `function`, `fn`
+
+  Match to a function (anonymous or not)
+
+* `number`
+
+  Match to a numeric types. by default: f32
+
+* `ptr`, `ref`, `itr`
+
+  Are very special types, that allow memory arithmetic of some type.
+
+  [pointers in detail](#pointers-type)
+
+* `any`
+
+  Can be anything, it's usage is not recomended.
+
+#### Data aggregation
+
+Complex types always have a subtype, that can be a primitive or a box.
+
+* `array`
+
+  List of things in a continuous memory.
+
+  [array in details](#array-type)
+
+* `struct`
+
+  Aggregate multiple data under a static list of keys.
+
+  [struct in details](#struct-type)
 
 * **block**
 
@@ -252,68 +288,38 @@ It just map memory and don't have extra logic.
 
   When you allocate a block you must specify every length in the block.
 
-  *Properties:*
-  * iterable
-  * thread-block
-  * shared-ptr
-
-#### Data aggregation & complex types.
-
-Complex types always have a subtype, that can be a primitive or a box.
-
-* **box**
-
-  Wrap a variable with it's type.
-
-  Now box can be used in an array/object, and store heterogeneous data.
-
-  [box in details](#box)
-
-* **array**
-
-  List of things, this is continuous memory and should have a defined type, cannot contains different things (unless pointers are stored).
-
-  *Properties:*
-  * iterable
-  * thread-block
-  * shared-ptr
-
-  [array in details](#array)
+  [block in details](#block-type)
 
 * **object**
 
-  Mutable structured data. You could add/remove members.
+  Aggregate multiple data (of the same type) under a dynamic list of keys.
 
-  *Properties*
-  * iterable
-  * thread-block
-  * shared-ptr
+  [object in details](#object-type)
 
-  [object in details](#object)
+* `bitmask`
 
+  Primitive to pack booleans
 
+  [bitmask in details](#bitmask-type)
 
-<!--
-* **bin[X]**
+#### Types wrappers
 
-  binary data of given number of bytes.
+A type wrapper add extra functionality to a type without modifing
+the type itself.
 
-* **stream:type**
+* **box**
 
-  Wrapper for a given subtype that allow processing in chunks.
--->
+  Wrap a variable with it's type (aka Variant)
 
-* **null** & **nil**
+  Now box can be used in an array/object, and store heterogeneous data.
 
-  `null` is prefered as `nil` is introduce it just for laziness.
+  [box in details](#box-type)
 
-<!--
-* **fnblock**
-
-  Block of code. it could be considered as a function-body.
--->
 
 #### Type properties
+
+
+
 
 **iterable**
 > Has some special methods like: each, filter, reduce...

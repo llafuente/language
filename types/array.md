@@ -1,12 +1,20 @@
-<a name="array"></a>
+<a name="array-type"></a>
 ## array
 
-* Arrays are always dense.
+* Arrays are always dense and memory continuos.
 
-* Arrays always contains a common type
+* Arrays always contains a common type.
 
-* Assign a pointer to something in the array it's only possible
-if fixed size.
+
+## memory safety notes.
+
+* Array has two iterator, safe and unsafe. the latest is fastest but
+it's not memory safe...
+
+* When an array is resized could be stored in other memory block,
+all raw pointers should be invalidated.
+
+## syntax
 
 ```syntax
 array-literal
@@ -14,12 +22,19 @@ array-literal
 
 array-item-list
 assignament-expression ("," assignament-expression)
+
+lhs-array-type
+type ("[" number? "]")+
+
+rhs-array-type
+type ("[" number | var-identifier "]")+
+
 ```
 
 ### Declaration & Initialization
 
-* dynamic arrays use 'var' declaration.
-* static arrays use 'static' declaration.
+* dynamic arrays use 'var' declaration (can be resized)
+* static arrays use 'static' declaration (cannot be resized)
 
 dynamic stack array
 

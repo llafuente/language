@@ -1,3 +1,4 @@
+<a name="string-type"></a>
 ## string
 
 `string` store UTF-8 characters.

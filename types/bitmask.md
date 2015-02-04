@@ -1,3 +1,4 @@
+<a name="bitmask-type"></a>
 ## bitmask
 
 bitmask is a structure that pack booleans in the minimal space to
@@ -55,7 +56,7 @@ bitmask file_flags {
   no_ctty = 0x0400,
   truncate = 0x0800,
   append = 0x1000,
-  non_block = 0x2000,  
+  non_block = 0x2000,
 };
 
 var rwb = file_flags.read_write.binary;
