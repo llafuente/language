@@ -138,6 +138,7 @@ playing nice with other languages it&#39;s important to us.s</p>
 
 actions:
   -e              execute
+  -safe           enable safe mode
   -t              run tests
   -c              compile (default if no action sent)
   -p              parse
@@ -225,9 +226,26 @@ like <code>test</code> or <code>bench</code>.</p>
 <li><p><a href="http://www.pcre.org/">libuv</a></p>
 <p>Asynchronous IO, NET, DNS &amp; threads tools.</p>
 </li>
+<li><p><a href="https://github.com/joyent/http-parser">http-parser</a></p>
+</li>
+<li><p><a href="http://www.glfw.org/">glfw</a></p>
+<p>window, opengl, &amp; input</p>
+</li>
 <li><p><a href="http://llvm.org/">llvm</a></p>
 <p>Low Level Virtual Machine.</p>
 <p>Compiler, AOC and JIT.</p>
+</li>
+<li><p><a href="http://www.agner.org/optimize/">asmlib</a>
+&amp; <a href="https://github.com/MetaScale/nt2">nt2</a></p>
+<p>SIMD</p>
+</li>
+<li><p><a href="http://www.zlib.net/">zlib</a></p>
+</li>
+<li><p><a href="https://www.openssl.org/">openssl</a></p>
+</li>
+<li><p><a href="http://site.icu-project.org/">icu c</a></p>
+</li>
+<li><p><a href="http://www.gnu.org/savannah-checkouts/gnu/libiconv/">iconv</a></p>
 </li>
 </ul>
 </section>
@@ -414,369 +432,69 @@ loop {
 }
 </code></pre><p>Did you spot an error?</p>
 <p>Are you sure... do not skip the operators, you will understand.</p>
+<section>
+<h3 id="variables-types-">5.1 Variables &amp; types.</h3>
+<p><a name="var-idenfiers"></a></p>
+<section>
+<h4 id="variable-identifier-allowed-names">5.1.1 Variable identifier, allowed names</h4>
+<p>A variable identifier can contain any valid UTF-8.</p>
+<ul>
+<li><p>Cannot start with a number</p>
+</li>
+<li><p>Cannot start or end with an operator.</p>
+</li>
+<li><p>Cannot be a reserved word</p>
+</li>
+<li><p>Cannot be a defined type. Function/struct/block/... names are a type.</p>
+</li>
+</ul>
 </section>
 <section>
-<h2 id="operators">6 Operators</h2>
-<table>
-<thead>
-<tr>
-<th>Precedence</th>
-<th>Operator type</th>
-<th>Associativity</th>
-<th>Individual operators</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>Grouping</td>
-<td>n/a</td>
-<td>( … )</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Member Access</td>
-<td>left-to-right</td>
-<td><em>lhs</em> <strong>.</strong> <em>rhs</em></td>
-</tr>
-<tr>
-<td>1</td>
-<td>Computed Member Access</td>
-<td>left-to-right</td>
-<td><em>lhs</em> [ … ]</td>
-</tr>
-<tr>
-<td>1</td>
-<td>new (with argument list)</td>
-<td>n/a</td>
-<td>new … ( … )</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Function Call</td>
-<td>left-to-right</td>
-<td><em>lhs</em> (…)</td>
-</tr>
-<tr>
-<td>2</td>
-<td>new (without argument list)</td>
-<td>right-to-left</td>
-<td>new <em>rhs</em></td>
-</tr>
-<tr>
-<td>3</td>
-<td>Postfix Increment</td>
-<td>n/a</td>
-<td><em>lhs</em> ++</td>
-</tr>
-<tr>
-<td>3</td>
-<td>Postfix Decrement</td>
-<td>n/a</td>
-<td><em>lhs</em> --</td>
-</tr>
-<tr>
-<td>4</td>
-<td>Logical NOT</td>
-<td>right-to-left</td>
-<td>! <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Bitwise NOT</td>
-<td>right-to-left</td>
-<td>~ <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Unary Plus</td>
-<td>right-to-left</td>
-<td>+ <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Unary Negation</td>
-<td>right-to-left</td>
-<td>- <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Prefix Increment</td>
-<td>right-to-left</td>
-<td>++ <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Prefix Decrement</td>
-<td>right-to-left</td>
-<td>-- <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>typeof</td>
-<td>right-to-left</td>
-<td>typeof <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>delete</td>
-<td>right-to-left</td>
-<td>delete <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>resize</td>
-<td>right-to-left</td>
-<td>resize <em>rhs</em></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Exits operator</td>
-<td>n/a</td>
-<td>! <em>lhs</em>?</td>
-</tr>
-<tr>
-<td>5</td>
-<td>Multiplication</td>
-<td>left-to-right</td>
-<td><em>lhs</em> * <em>rhs</em></td>
-</tr>
-<tr>
-<td>5</td>
-<td>Division</td>
-<td>left-to-right</td>
-<td><em>lhs</em> / <em>rhs</em></td>
-</tr>
-<tr>
-<td>5</td>
-<td>Remainder</td>
-<td>left-to-right</td>
-<td><em>lhs</em> % <em>rhs</em></td>
-</tr>
-<tr>
-<td>6</td>
-<td>Addition</td>
-<td>left-to-right</td>
-<td><em>lhs</em> + <em>rhs</em></td>
-</tr>
-<tr>
-<td>6</td>
-<td>Subtraction</td>
-<td>left-to-right</td>
-<td><em>lhs</em> - <em>rhs</em></td>
-</tr>
-<tr>
-<td>7</td>
-<td>Bitwise Left Shift</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &lt;&lt; <em>rhs</em></td>
-</tr>
-<tr>
-<td>7</td>
-<td>Bitwise Right Shift</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &gt;&gt; <em>rhs</em></td>
-</tr>
-<tr>
-<td>8</td>
-<td>Less Than</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &lt; <em>rhs</em></td>
-</tr>
-<tr>
-<td>8</td>
-<td>Less Than Or Equal</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &lt;= <em>rhs</em></td>
-</tr>
-<tr>
-<td>8</td>
-<td>Greater Than</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &gt; <em>rhs</em></td>
-</tr>
-<tr>
-<td>8</td>
-<td>Greater Than Or Equal</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &gt;= <em>rhs</em></td>
-</tr>
-<tr>
-<td>8</td>
-<td>force assignment</td>
-<td>left-to-right</td>
-<td><em>rhs</em> !</td>
-</tr>
-<tr>
-<td>9</td>
-<td>Equality</td>
-<td>left-to-right</td>
-<td><em>lhs</em> == <em>rhs</em></td>
-</tr>
-<tr>
-<td>9</td>
-<td>Inequality</td>
-<td>left-to-right</td>
-<td><em>lhs</em> != <em>rhs</em></td>
-</tr>
-<tr>
-<td>9</td>
-<td>Address Equality</td>
-<td>left-to-right</td>
-<td><em>lhs</em> $= <em>rhs</em></td>
-</tr>
-<tr>
-<td>10</td>
-<td>Bitwise AND</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &amp; <em>rhs</em></td>
-</tr>
-<tr>
-<td>11</td>
-<td>Bitwise XOR</td>
-<td>left-to-right</td>
-<td><em>lhs</em> ^ <em>rhs</em></td>
-</tr>
-<tr>
-<td>12</td>
-<td>Bitwise OR</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &#124; <em>rhs</em></td>
-</tr>
-<tr>
-<td>13</td>
-<td>Logical AND</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &amp;&amp; <em>rhs</em></td>
-</tr>
-<tr>
-<td>14</td>
-<td>Logical OR</td>
-<td>left-to-right</td>
-<td><em>lhs</em> &#124;&#124; <em>rhs</em></td>
-</tr>
-<tr>
-<td>15</td>
-<td>Conditional</td>
-<td>right-to-left</td>
-<td><em>lhs</em> ? … : <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Safe assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> ?= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> = <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> += <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> -= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> <em>= </em>rhs*</td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> /= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> %= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> &lt;&lt;= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> &gt;&gt;= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> &gt;&gt;&gt;= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> &amp;= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> ^= <em>rhs</em></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Assignment</td>
-<td>right-to-left</td>
-<td><em>lhs</em> &#124;= <em>rhs</em></td>
-</tr>
-<tr>
-<td>17</td>
-<td>Spread</td>
-<td>n/a</td>
-<td>... …</td>
-</tr>
-<tr>
-<td>18</td>
-<td>Comma / Sequence</td>
-<td>left-to-right</td>
-<td><em>lhs</em> , <em>rhs</em></td>
-<td></tbody></td>
-</tr>
-</tbody>
-</table>
-<!--
-| 4 | void | right-to-left | void *rhs* |
-| 7 | Bitwise Unsigned Right Shift | left-to-right | *lhs* >>> *rhs* |
-| 8 | in | left-to-right | *lhs* in *rhs* |
-| 8 | instanceof | left-to-right | *lhs* instanceof *rhs* |
-| 9 | Strict Equality | left-to-right | *lhs* === *rhs* |
-| 9 | Strict Inequality | left-to-right | *lhs* !== *rhs* |
-| 17 | yield | right-to-left | yield *rhs* |
--->
-<p>Mathematical operators need to be separated by <code>space</code> for readability
-purposes and fully support UTF-8 as identifier.</p>
-<pre><code>var x = y + z; // ok
-</code></pre><p>See more information about <a href="#var-idenfiers">var-idenfiers</a></p>
-<pre><code>var x = y+z; // compilation-error
-// undefined variable x+z
-</code></pre><section>
-<h3 id="variables-types-">6.1 Variables &amp; types.</h3>
+<h4 id="stylistic-conventions">5.1.2 Stylistic Conventions</h4>
+<p>This are the rule that we use to develop the core.</p>
+<ul>
+<li>snake case</li>
+<li>use of &quot;-&quot; inside a variable is possible
+but use it if there is a good reason, like writing css staff</li>
+</ul>
+</section>
 <section>
-<h4 id="philosophy">6.1.1 Philosophy</h4>
+<h4 id="syntax">5.1.3 Syntax</h4>
+<pre><code class="lang-syntax">var-declaration
+&#39;export&#39; (&#39;const&#39;|&#39;var&#39;|&#39;unvar&#39;|&#39;static&#39;|&#39;global&#39;) (var-declarator)+;
+
+var-declarator
+type? var-identifier (&#39;=&#39; (expression|literal))? (&#39;,&#39; var-declarator)*
+type var-identifier &#39;(&#39; argument_list &#39;)&#39; (&#39;,&#39; var-declarator)*
+</code></pre>
+<ul>
+<li><code>const</code> for constants</li>
+<li><code>var</code> for variables implicit initialized to default values</li>
+<li><code>unvar</code> for un-initialized variables</li>
+<li><code>static</code> for variables that cannot be resized</li>
+<li><code>global</code> declare a variable in global scope</li>
+</ul>
+<p>examples:</p>
+<pre><code class="lang-plee">var a = 0; // f32 (default compiler option)
+var b = 0.0; // f32 (default compiler option)
+
+var d = [1, 2, 3]; // array of f32, size=length=3
+var e = a; // same type as a
+
+var ui64 e; // also: i64
+log e; // stdout: 0
+</code></pre>
+</section>
+<section>
+<h4 id="paradigms">5.1.4 paradigms</h4>
 <ul>
 <li><p><a href="http://en.wikipedia.org/wiki/Type_introspection">Type introspection</a></p>
+<p>All primitives and complex types has a very verbose output with
+<code>log</code> for easy debugging. You also have access in runtime
+to some properties of how the type is declared printing it&#39;s type.</p>
 </li>
-<li><p>Required keyword (var, const, unvar) for readability.</p>
+<li><p>Required keyword at declaration for readability purposes and easy
+search</p>
 </li>
 <li><p><a href="http://en.wikipedia.org/wiki/Type_inference">Type inference</a></p>
 </li>
@@ -787,83 +505,97 @@ purposes and fully support UTF-8 as identifier.</p>
 </ul>
 </section>
 <section>
-<h4 id="syntax">6.1.2 Syntax</h4>
-<pre><code class="lang-syntax">var-declaration
-&#39;export&#39; (&#39;const&#39;|&#39;var&#39;|&#39;unvar&#39;|&#39;static&#39;) (var-declarator)+;
-
-var-declarator
-type? var-identifier (&#39;=&#39; (expression|literal))? (&#39;,&#39; var-declarator)*
-type var-identifier &#39;(&#39; argument_list &#39;)&#39; (&#39;,&#39; var-declarator)*
-</code></pre>
+<h4 id="type-inference-">5.1.5 Type inference.</h4>
+<p>Logic behind type inference as follow:</p>
 <ul>
-<li><code>const</code> for constants</li>
-<li><code>var</code> for variables implicit initialized to default values</li>
-<li><code>unvar</code> for un-initialized variables</li>
-</ul>
-<p>examples:</p>
-<pre><code class="lang-plee">var a = 0; // i64 (default compiler option)
-var b = 0.0; // float (default compiler option)
-
-var d = [1, 2, 3]; // array of i64, size=length=3
-var e = a; // same type as a
-
-var ui64 e; // also: i64
-log e; // stdout: 0
-</code></pre>
-</section>
-<section>
-<h4 id="lazy-initialization-shortcut-">6.1.3 lazy initialization (shortcut)</h4>
-<pre><code class="lang-plee">var a = new array(5);
-//equivalent to
-var array a(5);
-</code></pre>
-</section>
-<section>
-<h4 id="type-inference-">6.1.4 Type inference.</h4>
+<li><p>variables</p>
 <ul>
-<li>Initialization</li>
-</ul>
-<ul>
-<li><p>Initialization without a value</p>
-<pre><code>unvar a;
-unvar ui64 b;
-</code></pre></li>
-<li><p>Operators</p>
-<p>Resolve the type based on operation over the variable.</p>
-<pre><code class="lang-plee">var x = 0, y = 0; //i64
-var z = x + y;
-</code></pre>
+<li><p>declaration + initialization</p>
+<p>variable will get the type that the initialization return.</p>
 </li>
-<li><p>function arguments</p>
-<pre><code class="lang-plee">fn sum ui8 x, ui8 y : ui8 {
+<li><p>declaration</p>
+<p>variable will get the type of the first assignment found.</p>
+<p>This cannot be used to &quot;unbox&quot; from array/object.</p>
+</li>
+<li><p>parameter</p>
+<p>if the variable is a parameter of a function will get it&#39;s type.</p>
+</li>
+<li><p>narrow type by operation</p>
+<p>Sometimes a variable will be in some operations and that can narrow it&#39;s type
+the compiler will anotate until only one is valid.</p>
+<p>for examples <code>a + b;</code> wont give most...
+Because can be used for numbers/arrays/strings but that remove modules and object!</p>
+</li>
+</ul>
+</li>
+<li><p>arguments
+There are two cases.</p>
+<ul>
+<li><p>arguments without a type</p>
+</li>
+<li><p>arguments with complex types.</p>
+<p>Comples types require a primitive to be a complete type that can
+be compiled. The compiler will fill the gap with the calling types</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>return
+Return type of a function is the type of all return statements found.</p>
+<p>box won&#39;t be allowed to be a return type unless user defined it.</p>
+</li>
+</ul>
+<pre><code class="lang-plee">fn sum x, y {
     return x + y;
 }
+
+sum(1 as u8, 2 as u8);
+// will generate a new function with a compatible signature.
+// fn sum ui8 x, ui8 y: ui8 {...}
+
+```plee-err
+var ui8 x = sum(1 as ui8, 1 as ui32);
+// it will comlaint about resolution loss in x
+// fn sum ui8 x, ui32 y: ui32 {...}
+
+var ui8 x = sum(1 as ui8, [1] as ui8[]);
+// compile-error: incompatible type operation found for: ui8 + ui8[]
 </code></pre>
-</li>
-</ul>
 </section>
 <section>
-<h4 id="implicit-type-conversion">6.1.5 implicit type conversion</h4>
-<p>A type can only grow in precision.</p>
+<h4 id="implicit-type-conversion">5.1.6 implicit type conversion</h4>
+<p>A type can only grow in precision on right hand side.</p>
 <pre><code class="lang-plee">var x = 0; // ui64
 var y = 0.1; // float
 var z = x + y; // float
 </code></pre>
-</section>
-<section>
-<h4 id="explicit-type">6.1.6 explicit type</h4>
-<pre><code class="lang-plee">var i64 x;
-var string str;
+<p>But will not grow in left hand side.</p>
+<pre><code class="lang-plee-err">var x = 0; // ui64
+var y = 0.1; // float
+x = x + y; // float
 </code></pre>
 </section>
 <section>
-<h4 id="explicit-type-conversion">6.1.7 explicit type conversion</h4>
+<h4 id="explicit-type-declaration">5.1.7 explicit type declaration</h4>
+<pre><code class="lang-plee">var i64 x;
+var string str;
+var i64[] x;
+</code></pre>
+</section>
+<section>
+<h4 id="explicit-type-conversion">5.1.8 explicit type conversion</h4>
 <p><code>to_*</code> functions</p>
 <pre><code class="lang-plee">var ui64 x = to_ui64(0.0);
 </code></pre>
+<p><code>as</code> operator</p>
+<pre><code class="lang-plee">var x = 0 as ui8;
+</code></pre>
 </section>
 <section>
-<h4 id="invalid-explicit-conversions">6.1.8 invalid explicit conversions</h4>
+<h4 id="invalid-explicit-conversions">5.1.9 invalid explicit conversions</h4>
+<p>Some convertion are meant to be used as a function rather
+than usign <code>as</code> operator.</p>
 <table>
 <thead>
 <tr>
@@ -876,180 +608,164 @@ var string str;
 <tr>
 <td>array</td>
 <td>string</td>
-<td>compiler will complain an offer a solution: use join</td>
+<td>invalid cast: use join</td>
 </tr>
 <tr>
 <td>function</td>
 <td>*</td>
-<td>functions cannot be casted</td>
+<td>invalid cast: functions cannot be casted</td>
 </tr>
 <tr>
 <td>string</td>
 <td>function</td>
-<td>compiler will complain an offer a solution: use call operator</td>
+<td>invalid cast: use call function</td>
 </tr>
 <tr>
 <td>object</td>
 <td>array</td>
-<td>not allowed <strong>TODO</strong> study</td>
+<td>invalid cast: use object.values or object.keys</td>
 </tr>
 <tr>
 <td>object</td>
 <td>block</td>
-<td>compiler will complain an offer a solution: use copy operator</td>
+<td>invalid cast: use copy operator</td>
 </tr>
 <tr>
 <td>block</td>
 <td>object</td>
-<td>compiler will complain an offer a solution: use call operator</td>
+<td>invalid cast: use to_object</td>
+</tr>
+<tr>
+<td>block</td>
+<td>array</td>
+<td>invalid cast use to_array</td>
 </tr>
 <tr>
 <td>block</td>
 <td>*</td>
-<td>not allowed</td>
+<td>invalid cast:</td>
 </tr>
 <tr>
 <td>struct</td>
-<td>block</td>
-<td>compiler will complain an offer a solution: use copy operator</td>
+<td>object</td>
+<td>invalid cast use to_object</td>
+</tr>
+<tr>
+<td>struct</td>
+<td>array</td>
+<td>invalid cast use to_array</td>
+</tr>
+<tr>
+<td>struct</td>
+<td>*</td>
+<td>invalid cast</td>
 </tr>
 </tbody>
 </table>
-<p><a name="var-idenfiers"></a></p>
 </section>
 <section>
-<h4 id="variable-identifier-name-rules">6.1.9 Variable identifier/name rules</h4>
+<h4 id="primitives-basic-types">5.1.10 Primitives / Basic types</h4>
+<p>A primitive are the standard types (most simple) types.</p>
 <ul>
-<li>Cannot start with a number</li>
-<li>Cannot contains: <code>$</code>, <code>.</code>, <code>(</code>, <code>)</code>, <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code>, <code>&quot;</code>, <code>&#39;</code>, <code>@</code></li>
-<li>Cannot be a reserved word</li>
-<li>Any UTF-8 valid character</li>
-</ul>
-</section>
-<section>
-<h4 id="primitives">6.1.10 Primitives</h4>
-<ul>
-<li><p><strong>bool</strong></p>
-<p>There are only two Boolean values, <code>true</code> and <code>false</code>.</p>
-<p>But there some aliases:</p>
+<li><p><code>bool</code></p>
+<p>There are only two valid boolean values: <code>true</code> and <code>false</code>.</p>
+<p>There some aliases to give more expressiveness to the language:</p>
 <ul>
 <li><p><code>true</code>: <code>on</code> &amp; <code>yes</code></p>
 </li>
 <li><p><code>false</code>: <code>of</code> &amp; <code>no</code></p>
 </li>
 </ul>
-<p>Those aliases give more expressiveness to the language.</p>
 </li>
-<li><p><strong>number</strong></p>
-<p>Mutable-multipuporse number. Increase it&#39;s size as needed / overflow happens.</p>
-<p>Will be i64 until floating point is needed and change it&#39;s type to f64.</p>
-<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
-</li>
-<li><p><strong>i8, i16, i32, i64 (int), ui8, ui16, ui32, ui64 (uint)</strong></p>
+<li><p><code>i8</code>, <code>i16</code>, <code>i32</code>, <code>i64</code>, <code>ui8</code>, <code>ui16</code>, <code>ui32</code>, <code>ui64</code></p>
 <p>Integers and unsigned integers of different sizes.</p>
-<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
 </li>
-<li><p><strong>f32 (float) &amp; f64</strong></p>
-<p>Primitive value corresponding to a single/double-precision 32/64-bit binary format IEEE 754 value.</p>
-<p>Note: If any calculation produces and error <code>nan</code> (<code>not a number</code>) will be returned.</p>
+<li><p><code>f32</code> &amp; <code>f64</code></p>
+<p>Primitive value corresponding to a single/double-precision 32/64-bit binary format in IEEE 754 representation.</p>
 </li>
-<li><p><strong>function</strong></p>
-<p>Function as type. Unlike other languages arguments doesn&#39;t matter.</p>
+<li><p><code>string</code></p>
+<p>Primitive value that is a finite ordered sequence of zero character.</p>
 </li>
-<li><p><strong>string</strong></p>
-<p>Primitive value that is a finite ordered sequence of zero or more 16-bit unsigned integer</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>shared-ptr</li>
-</ul>
+<li><p><code>null</code>, <code>nil</code></p>
+<p><code>null</code> is prefered as <code>nil</code> is introduce it just for laziness.</p>
+</li>
+<li><p><code>regexp</code></p>
+<p>Perl Compatible Regular Expressions</p>
+</li>
+<li><p><code>enum</code></p>
+<p>Type consisting in a list of key words.</p>
+</li>
+<li><p><code>thread</code></p>
+<p>Thread identifier</p>
+</li>
+<li><p><code>resource</code></p>
+<p>I/O identifier.</p>
+<p>for example: <code>stdout</code>, <code>stderr</code>, <code>stdin</code>.</p>
 </li>
 </ul>
 </section>
 <section>
-<h4 id="data-aggregation-complex-types-">6.1.11 Data aggregation, complex types.</h4>
+<h4 id="primitive-templates">5.1.11 Primitive templates</h4>
+<p>Instead the common aproach of allow any type as template, Plee
+enforce the use of a &#39;common minimum type&#39;. The compiler will
+generate more specific functions if needed.</p>
 <ul>
-<li><p><strong>array</strong></p>
-<p>List of things, this is continuous memory and should have a defined type, cannot contains different things (unless pointers are stored).</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
-</ul>
+<li><p><code>function</code>, <code>fn</code></p>
+<p>Match to a function (anonymous or not)</p>
 </li>
-<li><p><strong>struct</strong></p>
-<p>Constant structured data.</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
+<li><p><code>number</code></p>
+<p>Match to a numeric types. by default: f32</p>
+</li>
+<li><p><code>ptr</code>, <code>ref</code>, <code>itr</code></p>
+<p>Are very special types, that allow memory arithmetic of some type.</p>
+<p><a href="#pointers-type">pointers in detail</a></p>
+</li>
+<li><p><code>any</code></p>
+<p>Can be anything, it&#39;s usage is not recomended.</p>
+</li>
 </ul>
+</section>
+<section>
+<h4 id="data-aggregation">5.1.12 Data aggregation</h4>
+<p>Complex types always have a subtype, that can be a primitive or a box.</p>
+<ul>
+<li><p><code>array</code></p>
+<p>List of things in a continuous memory.</p>
+<p><a href="#array-type">array in details</a></p>
+</li>
+<li><p><code>struct</code></p>
+<p>Aggregate multiple data under a static list of keys.</p>
+<p><a href="#struct-type">struct in details</a></p>
 </li>
 <li><p><strong>block</strong></p>
 <p>It&#39;s the same as struct but memory continuous.</p>
 <p>When you allocate a block you must specify every length in the block.</p>
-<p><em>Properties:</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
-</ul>
+<p><a href="#block-type">block in details</a></p>
 </li>
 <li><p><strong>object</strong></p>
-<p>Mutable structured data. You could add/remove members.</p>
-<p><em>Properties</em></p>
-<ul>
-<li>iterable</li>
-<li>thread-block</li>
-<li>shared-ptr</li>
-</ul>
+<p>Aggregate multiple data (of the same type) under a dynamic list of keys.</p>
+<p><a href="#object-type">object in details</a></p>
 </li>
-<li><p><strong>p1, p2, p3, p4</strong></p>
-<p>Pointer of different sizes (bytes).</p>
-<p>There are two types of pointer.</p>
-<ul>
-<li>Pointer to iterate, those that use memory already allocated.</li>
-<li>Pointer to mange memory, those that allocate memory</li>
-</ul>
-<p><em>Members:</em></p>
-<ul>
-<li>.start</li>
-<li>.end</li>
-<li>.length</li>
-</ul>
-<p><em>Properties:</em></p>
-<ul>
-<li>alloc / new</li>
-<li>dealloc / delete</li>
-<li>realloc / resize</li>
-<li>copy</li>
-</ul>
+<li><p><code>bitmask</code></p>
+<p>Primitive to pack booleans</p>
+<p><a href="#bitmask-type">bitmask in details</a></p>
 </li>
 </ul>
-<!--
-* **bin[X]**
-
-  binary data of given number of bytes.
-
-* **stream:type**
-
-  Wrapper for a given subtype that allow processing in chunks.
--->
-<ul>
-<li><p><strong>null</strong> &amp; <strong>nil</strong></p>
-<p><code>null</code> is prefered as <code>nil</code> is introduce it just for laziness.</p>
-</li>
-</ul>
-<!--
-* **fnblock**
-
-  Block of code. it could be considered as a function-body.
--->
 </section>
 <section>
-<h4 id="type-properties">6.1.12 Type properties</h4>
+<h4 id="types-wrappers">5.1.13 Types wrappers</h4>
+<p>A type wrapper add extra functionality to a type without modifing
+the type itself.</p>
+<ul>
+<li><p><strong>box</strong></p>
+<p>Wrap a variable with it&#39;s type (aka Variant)</p>
+<p>Now box can be used in an array/object, and store heterogeneous data.</p>
+<p><a href="#box-type">box in details</a></p>
+</li>
+</ul>
+</section>
+<section>
+<h4 id="type-properties">5.1.14 Type properties</h4>
 <p><strong>iterable</strong></p>
 <blockquote>
 <p>Has some special methods like: each, filter, reduce...</p>
@@ -1068,7 +784,7 @@ var string str;
 </blockquote>
 </section>
 <section>
-<h4 id="functions-in-modules-">6.1.13 functions in modules.</h4>
+<h4 id="functions-in-modules-">5.1.15 functions in modules.</h4>
 <p>Just as a brief introduction, variable in modules has special keyword
 to specify their behavior.</p>
 <ul>
@@ -1077,7 +793,7 @@ to specify their behavior.</p>
 </ul>
 </section>
 <section>
-<h4 id="special-functions">6.1.14 special functions</h4>
+<h4 id="special-functions">5.1.16 special functions</h4>
 <ul>
 <li><p><code>regexp_test</code></p>
 <p>Give you support to include your type inside a switch with a regular expression
@@ -1103,7 +819,7 @@ test.</p>
 </ul>
 </section>
 <section>
-<h3 id="auto-scope">6.2 Auto scope</h3>
+<h3 id="auto-scope">5.2 Auto scope</h3>
 <p>Auto scope refers to where your variable is available.</p>
 <p>block scope</p>
 <pre><code class="lang-plee">{
@@ -1134,6 +850,81 @@ So this is not possible.</p>
   }
 }
 </code></pre>
+<p><a name="number-type"></a></p>
+</section>
+<section>
+<h2 id="number-types">6 Number types</h2>
+<p>Any number type has the following properties.</p>
+<ul>
+<li><p>.infinity</p>
+</li>
+<li><p>.minfinity</p>
+</li>
+<li><p>.max</p>
+<p>Maximum number represented</p>
+</li>
+<li><p>.min</p>
+<p>Minimum number represented</p>
+</li>
+<li><p>.min_resolution</p>
+<p>Minimum resolution.</p>
+<p>1 for integers</p>
+<p>[STUDY] f32 &amp; f64</p>
+</li>
+<li><p>.round</p>
+<p>round function behavior.</p>
+<p>0 toward zero
+1 to nearest
+2 toward positive infinity
+3 toward negative infinity</p>
+</li>
+<li><p>.null</p>
+<p>Default value for a not initialized number.</p>
+</li>
+</ul>
+<p>Number with decimals has special properties</p>
+<ul>
+<li><p><em>epsilon</em> = 0</p>
+<p>epsilon can be modified at compile time.</p>
+<p>If you set epsilon many times in your program, the last one prevail. So it&#39;s recommended to do it in the configuration file.</p>
+<p>When set, modify <code>a == b</code> to <code>-epsilon &lt; (a - b) &lt; epsilon</code>, So there is a performance hit, but avoid floating points errors.</p>
+</li>
+</ul>
+<p>Number representations</p>
+<ul>
+<li><p>binary</p>
+<p>0b[0-1]</p>
+<p>number will be truncated to nearest 8 byte possible. 0b0101 (is in fact 0b00000101)</p>
+</li>
+<li><p>hecadecimal</p>
+<ul>
+<li>0x(abcdef0123456789)</li>
+<li>0#(abcdef0123456789)</li>
+</ul>
+</li>
+<li><p>octal</p>
+<p>0o(01234567)</p>
+</li>
+</ul>
+<p>bitmask dir {
+  north, // =1,
+  east,  // = 2,
+  south, // = 4,
+  west   // = 8
+}</p>
+<p>var dir diagonal = dir.north | dir.east;</p>
+<section>
+<h3 id="safe-mode">6.1 Safe mode</h3>
+<p>Safe mode wrap some operations, giving runtime-errors if something
+happends:</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Arithmetic_underflow">Arithmetic underflow</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Arithmetic_overflow">Arithmetic overflow</a></li>
+<li>Division by cero</li>
+</ul>
+<p>Otherwise you will have to deal with undefined behaviour or <code>nan</code> (not a number)</p>
+<p>Safe mode is slow, so it&#39;s not compiled by default. To enable use <code>-safe</code> compile option.</p>
+<p><a name="string-type"></a></p>
 </section>
 <section>
 <h2 id="string">7 string</h2>
@@ -1349,75 +1140,17 @@ components of the URL that are present.</p>
 <li>number_format where?</li>
 <li>currency_format where?</li>
 </ul>
+<p><a name="enum-type"></a></p>
 </section>
 <section>
-<h2 id="number-types">8 Number types</h2>
-<p>Any number type has the following properties.</p>
-<ul>
-<li><p>.infinity</p>
-</li>
-<li><p>.minfinity</p>
-</li>
-<li><p>.max</p>
-<p>Maximum number represented</p>
-</li>
-<li><p>.min</p>
-<p>Minimum number represented</p>
-</li>
-<li><p>.min_resolution</p>
-<p>Minimum resolution.</p>
-<p>1 for integers</p>
-<p>[STUDY] f32 &amp; f64</p>
-</li>
-<li><p>.round</p>
-<p>round function behavior.</p>
-<p>0 toward zero
-1 to nearest
-2 toward positive infinity
-3 toward negative infinity</p>
-</li>
-<li><p>.null</p>
-<p>Default value for a not initialized number.</p>
-</li>
-</ul>
-<p>Number with decimals has special properties</p>
-<ul>
-<li><p><em>epsilon</em> = 0</p>
-<p>epsilon can be modified at compile time.</p>
-<p>If you set epsilon many times in your program, the last one prevail. So it&#39;s recommended to do it in the configuration file.</p>
-<p>When set, modify <code>a == b</code> to <code>-epsilon &lt; (a - b) &lt; epsilon</code>, So there is a performance hit, but avoid floating points errors.</p>
-</li>
-</ul>
-<p>Number representations</p>
-<ul>
-<li><p>binary</p>
-<p>0b[0-1]</p>
-<p>number will be truncated to nearest 8 byte possible. 0b0101 (is in fact 0b00000101)</p>
-</li>
-<li><p>hecadecimal</p>
-<ul>
-<li>0x(abcdef0123456789)</li>
-<li>0#(abcdef0123456789)</li>
-</ul>
-</li>
-<li><p>octal</p>
-<p>0o(01234567)</p>
-</li>
-</ul>
-<p>bitmask dir {
-  north, // =1,
-  east,  // = 2,
-  south, // = 4,
-  west   // = 8
-}</p>
-<p>var dir diagonal = dir.north | dir.east;</p>
-</section>
-<section>
-<h2 id="enum">9 enum</h2>
+<h2 id="enum">8 enum</h2>
 <pre><code class="lang-syntax">enum-declaration
 &#39;export&#39;? &#39;expand&#39;? &quot;enum&quot; var-identifier &quot;{&quot; [&quot;,&quot; var-identifier (&quot;:&quot; integer)? ]+ &quot;}&quot;  &quot;;&quot;
 </code></pre>
-<p>expand leaks enum identifier to current scope, and if it&#39;s exported to the module interface.</p>
+<p>expand leaks enum identifiers to current scope,
+and if it&#39;s exported to the module interface.</p>
+<p>enum are in fact a convenient way to manage a finite number of
+int values.</p>
 <pre><code class="lang-plee">
 enum dirs {north, west, south, east};
 
@@ -1427,9 +1160,10 @@ expand enum DIRS {NORTH, WEST, SOUTH, EAST};
 
 int j = NORTH;
 </code></pre>
+<p><a name="pointers-type"></a></p>
 </section>
 <section>
-<h2 id="pointers">10 Pointers</h2>
+<h2 id="pointers">9 Pointers</h2>
 <p><strong>TODO</strong> this need review and a real comparison with c-pointers.</p>
 <p>There many types of pointers.</p>
 <table>
@@ -1471,7 +1205,7 @@ int j = NORTH;
 </tbody>
 </table>
 <section>
-<h3 id="-ref-">10.1 <code>ref</code></h3>
+<h3 id="-ref-">9.1 <code>ref</code></h3>
 <p>Points to a single memory address, is dereferenced because there
 is no operation that can be perform on the pointer apart from assign to other memory address.</p>
 <pre><code class="lang-plee">var ui8 a = 1;
@@ -1504,18 +1238,32 @@ log (@pa == @pb); // stdout: true
 <p><strong>STUDY</strong> use &#39;===&#39; to compare <code>ref</code> addresses.</p>
 <p>References do not own memory, but some structures like
 array will transfer memory ownage to <code>ref</code>. let&#39;s see an example.</p>
-<pre><code class="lang-plee">var arr = [1,2,3];
-var ref c = @arr; // reference arr
+<pre><code class="lang-plee">{
+  var arr = [1,2,3];
+  var ref c = @arr; // reference arr
 
-delete arr;
+  delete arr; // memory is not free, ownage is transfered
 
-log c[0]; // 1
+  log c[0]; // 1
 
-log arr[0]?; // null
+  log arr[0]?; // null
+} // now memory will be free
+</code></pre>
+<p>But it will also work on a single value.</p>
+<pre><code class="lang-plee">{
+  var arr = [1,2,3];
+  var ref c = @arr[0]; // reference arr
+
+  delete arr; // memory is not free, ownage is transfered
+
+  log c; // 1
+
+  log arr[0]?; // null
+} // now memory will be free
 </code></pre>
 <p><strong>compiler notes</strong></p>
 <ul>
-<li><p>ref dont have pointer arithmetic</p>
+<li><p>ref don&#39;t have pointer arithmetic</p>
 </li>
 <li><p>ref must have a pointer to the memory owner it pointing to.</p>
 <pre><code class="lang-plee">var x = ui8[10];
@@ -1525,26 +1273,32 @@ delete x;
 <p>xptr must have a pointer to x. If x is deleted like in the example.
 x memory must not be freed until xptr is deleted.</p>
 </li>
-<li><p>ref is always dereferenced except on left side equal and
-address on right side.</p>
+<li><p>ref is always dereferenced except on assinament expression
+on left equal and address on right side.</p>
 </li>
 </ul>
 </section>
 <section>
-<h3 id="-pitr-">10.2 <code>pitr</code></h3>
-<p>Pointer iterator.</p>
-<p>Properties</p>
+<h3 id="-itr-safe-unsafe-">9.2 <code>itr</code> (safe &amp; unsafe)</h3>
+<p>Pointer iterator, it could be considered as &quot;movable ref&quot;.</p>
+<p>Safe pointer is slow, but 100% safe, use if where is points could
+move.</p>
+<p>Readonly properties.</p>
 <ul>
-<li><p><strong>ui64</strong> <code>length</code></p>
-<p>readonly.</p>
+<li><p><strong>ui64</strong> <code>length</code> (safe &amp; unsafe)</p>
+<p>number of steps.</p>
+<p>safe will be synchronized with owner.</p>
+<p>unsafe will be set at creation time.</p>
 </li>
-<li><p><strong>rawp</strong> <code>start</code></p>
-<p>readonly.</p>
+<li><p><strong>ui64</strong> <code>step_size</code> (safe &amp; unsafe)</p>
+<p>Bytes per step</p>
 </li>
-<li><p><strong>rawp</strong> <code>end</code></p>
-<p>readonly.</p>
+<li><p><strong>ref</strong> <code>owner</code> (safe only)</p>
 </li>
-<li><p><strong>rawp</strong> <code>current</code></p>
+<li><p><strong>ui64</strong> <code>index</code> (safe &amp; unsafe)</p>
+<p>current index</p>
+</li>
+<li><p><strong>ptr</strong> <code>current</code></p>
 </li>
 <li><p><strong>ref</strong> <code>value</code></p>
 <p>fake property that dereference current.</p>
@@ -1560,16 +1314,16 @@ address on right side.</p>
 <p>alias of prev(1);</p>
 </li>
 <li><p>operator+ amount:ui64</p>
-<p>alias of (clone pitr).next(amount)</p>
+<p>alias of (clone itr).next(amount)</p>
 </li>
 <li><p>operator+= amount:ui64</p>
-<p>alias of pitr.next(amount)</p>
+<p>alias of itr.next(amount)</p>
 </li>
 <li><p>operator- amount:ui64</p>
-<p>alias of pitr.next(amount)</p>
+<p>alias of itr.next(amount)</p>
 </li>
 <li><p>operator-= amount:ui64</p>
-<p>alias of (clone pitr).prev(amount)</p>
+<p>alias of (clone itr).prev(amount)</p>
 </li>
 </ul>
 <p>Members</p>
@@ -1587,7 +1341,7 @@ address on right side.</p>
 <pre><code class="lang-plee">var l = new array[10];
 l.fill(10);
 
-var itr = l.iterator();
+var itr = l.itr(); // or safe_itr
 
 while (itr.next()) {
     log itr.current; // stdout (10 times): 10
@@ -1599,49 +1353,85 @@ delete itr; // do not delete l memory
 </code></pre>
 <p><strong>compiler-notes</strong></p>
 <ul>
-<li><p>as ref, must save a pointer to the memory owner to avoid free
-memory.</p>
+<li><p>generate a warning if an array is modified while an unsafe
+itr lives</p>
 </li>
-<li><p>once a pitr is assigned to an array, the array will be static.</p>
+<li><p>maybe step_size could be inside a macro, and dont need to
+save it in the struct</p>
+</li>
+<li><p>value is and alias of &quot;dereference current&quot;, can cannot be
+assigned to other memory.</p>
 </li>
 </ul>
 </section>
 <section>
-<h3 id="-rawp-">10.3 <code>rawp</code></h3>
+<h3 id="-ptr-">9.3 <code>ptr</code></h3>
 <p>Raw C-like pointer, for maximum performance.
-It&#39;s not safe to use because has no bounds check, do not have a pointer
-to memory owner to avoid free-ing.</p>
+It&#39;s not safe:</p>
+<ul>
+<li>has no bounds check</li>
+<li>do not have a pointer to memory owner to avoid free-ing.</li>
+</ul>
+<p>As itr, pointer arithmetic take into consideration where are you
+pointing.</p>
+<pre><code class="lang-plee">var ui8_arr = new ui8[10];
+var ptr x = @ui8_arr;
+++x; // advance 1 byte;
+
+
+var ui16_arr = new ui16[10];
+var ptr y = @ui16_arr;
+++y; // advance 2 byte;
+</code></pre>
 <p>Use it with caution.</p>
 <p>Compiler notes:</p>
 <ul>
-<li><p><code>var rawp x = new ui8[1];</code></p>
+<li><p><code>var ptr x = new ui8[1];</code></p>
 <p>should raise a compilation error. Even if possible, there is no
-variable that own the memory, a rawp canot be deleted</p>
+variable that own the memory, a ptr canot be deleted</p>
+</li>
+</ul>
+<p><a name="array-type"></a></p>
+</section>
+<section>
+<h2 id="array">10 array</h2>
+<ul>
+<li><p>Arrays are always dense and memory continuos.</p>
+</li>
+<li><p>Arrays always contains a common type.</p>
 </li>
 </ul>
 </section>
 <section>
-<h2 id="array">11 array</h2>
+<h2 id="memory-safety-notes-">11 memory safety notes.</h2>
 <ul>
-<li><p>Arrays are always dense.</p>
+<li><p>Array has two iterator, safe and unsafe. the latest is fastest but
+it&#39;s not memory safe...</p>
 </li>
-<li><p>Arrays always contains a common type</p>
-</li>
-<li><p>Assign a pointer to something in the array it&#39;s only possible
-if fixed size.</p>
+<li><p>When an array is resized could be stored in other memory block,
+all raw pointers should be invalidated.</p>
 </li>
 </ul>
+</section>
+<section>
+<h2 id="syntax">12 syntax</h2>
 <pre><code class="lang-syntax">array-literal
 &quot;[&quot; array-item-list &quot;]&quot;
 
 array-item-list
 assignament-expression (&quot;,&quot; assignament-expression)
+
+lhs-array-type
+type (&quot;[&quot; number? &quot;]&quot;)+
+
+rhs-array-type
+type (&quot;[&quot; number | var-identifier &quot;]&quot;)+
 </code></pre>
 <section>
-<h3 id="declaration-initialization">11.1 Declaration &amp; Initialization</h3>
+<h3 id="declaration-initialization">12.1 Declaration &amp; Initialization</h3>
 <ul>
-<li>dynamic arrays use &#39;var&#39; declaration.</li>
-<li>static arrays use &#39;static&#39; declaration.</li>
+<li>dynamic arrays use &#39;var&#39; declaration (can be resized)</li>
+<li>static arrays use &#39;static&#39; declaration (cannot be resized)</li>
 </ul>
 <p>dynamic stack array</p>
 <blockquote>
@@ -1704,7 +1494,7 @@ assert st_slice[0] == dyn_slice[0];
 </code></pre>
 </section>
 <section>
-<h3 id="multi-dimensional-implementation-compiler-notes-">11.2 multi-dimensional implementation (compiler-notes)</h3>
+<h3 id="multi-dimensional-implementation-compiler-notes-">12.2 multi-dimensional implementation (compiler-notes)</h3>
 <p><code>multi-dimensional</code> arrays are a different type, that is not directly
 exposed to user.</p>
 <p>To be performance, must be memory continous, parser cannot solve this problem if the array is not fixed-size, so need to be solved as compile-runtime.</p>
@@ -1718,7 +1508,7 @@ ar.indexOf(0, 6, 12);
 </code></pre>
 </section>
 <section>
-<h3 id="array-instance-properties">11.3 Array instance properties</h3>
+<h3 id="array-instance-properties">12.3 Array instance properties</h3>
 <ul>
 <li><p><code>length</code></p>
 <p>readonly. Number of elements.</p>
@@ -1739,7 +1529,7 @@ If the array is multi-dimensional</p>
 </ul>
 </section>
 <section>
-<h3 id="transformations-transcoding">11.4 transformations/transcoding</h3>
+<h3 id="transformations-transcoding">12.4 transformations/transcoding</h3>
 <ul>
 <li><p><code>to_string</code></p>
 <p>Return the JSON representation.</p>
@@ -1762,7 +1552,7 @@ values as values.</p>
 -->
 </section>
 <section>
-<h3 id="array-functions">11.5 array functions</h3>
+<h3 id="array-functions">12.5 array functions</h3>
 <p><strong>STUDY</strong> i have to add <em>any</em> as type, because <code>index_of</code> neede it.
 But is this possible in our type-system?
 Also sort... could lead to some problems...
@@ -1830,7 +1620,7 @@ Returns a shallow copy of a portion of an array into a new array object</p>
 </ul>
 </section>
 <section>
-<h3 id="looping">11.6 looping</h3>
+<h3 id="looping">12.6 looping</h3>
 <p>For evey function listed here if the function is anonymously declared, the compiler will transform them into a blocks for performance.</p>
 <ul>
 <li><p><code>every</code> <strong>array</strong> arr, <strong>fn</strong> callback(<strong>any</strong> element,
@@ -1876,7 +1666,7 @@ the array (from right-to-left) has to reduce it to a single value.</p>
 <p><a name="array-iterators"></a></p>
 </section>
 <section>
-<h3 id="iterators">11.7 iterators</h3>
+<h3 id="iterators">12.7 iterators</h3>
 <p><code>for-itr</code> need an iterator that behave. These are their rules:</p>
 <ul>
 <li>When remove an object, all iterators need to be notified.
@@ -1908,27 +1698,90 @@ log itr2; // stdout: 3
 </ul>
 </section>
 <section>
-<h3 id="notes">11.8 Notes</h3>
+<h3 id="notes">12.8 Notes</h3>
 <ul>
 <li>if type is defined, when enter a switch gives a compile error.</li>
 </ul>
+<p><a name="bitmask-type"></a></p>
 </section>
 <section>
-<h2 id="struct-union">12 struct &amp; union</h2>
+<h2 id="bitmask">13 bitmask</h2>
+<p>bitmask is a structure that pack booleans in the minimal space to
+avoid cache misses. the bitmask can be merged inside a struct or used
+separately.</p>
+<p>Minimal space, means the minimum amount of memory necessary to
+represent all booleans. 1-8 will be ui8, 9-16 ui16...</p>
+<p>By default bitmask is allocated and initialized to 0.</p>
+<pre><code class="lang-syntax">bitmask-declaration
+&#39;export&#39;? &#39;expand&#39;? &quot;bitmask&quot; var-identifier &quot;{&quot; bitmask-prop-list &quot;}&quot;  &quot;;&quot;
+
+bitmask-prop-list
+bitmask-prop (&quot;,&quot; bitmask-prop)*
+
+bitmask-prop
+(group &quot;:&quot;)? var-identifier [&quot;=&quot; boolean-literal]
+</code></pre>
+<pre><code class="lang-plee">bitmask week {
+    is_monday = true,
+    is_thursday,
+    is_wenesday,
+    is_tuesday,
+    is_friday,
+    is_saturday,
+    is_sunday
+};
+
+var week v;
+log v; // stdout: bm{is_monday = true}
+week.is_tuesday = true;
+log v; // stdout = bm{is_monday = true, is_tuesday = true}
+</code></pre>
+<p>bitmask also comes with a convenient way to define flags just by accessing it&#39;s members.
+Also provides a method to define groups, only one bit property can be used.</p>
+<pre><code class="lang-plee">bitmask file_flags {
+  1: read = 0x0000,
+  1: write =    0x0001,
+  1: read_write = 0x0002,
+
+  binary = 0x0004,    /* must fit in char, reserved by dos */
+  text = 0x0008,    /* must fit in char, reserved by dos */
+  no_inherit = 0x0080,    /* DOS-specific */
+  create = 0x0100,    /* second byte, away from DOS bits */
+  fail_if_exists = 0x0200,
+  no_ctty = 0x0400,
+  truncate = 0x0800,
+  append = 0x1000,
+  non_block = 0x2000,
+};
+
+var rwb = file_flags.read_write.binary;
+var rwac = file_flags.read_write.append.create;
+</code></pre>
+<pre><code class="lang-plee-err">var rw = file_flags.read.write;
+// compile-err: bitmask initialization error: read, write are in the same group.
+</code></pre>
+<p><a name="struct-type"></a>
+<a name="union-type"></a>
+<a name="extends-type"></a></p>
+</section>
+<section>
+<h2 id="struct-union">14 struct &amp; union</h2>
 <p>Structs are complex data type declaration
 that defines a physically grouped list of variables and
 functions to be placed under one name in a block of memory.</p>
 <p>Unions are different layouts of the same block of memory. Only one
 should be used at a given time. The size will be the minimum required
 to store any layout (so the biggest of all).</p>
-<p>Functions have direct access to those variables in the group by their name if no collision occur, and using <code>struct_name.property</code> otherwise</p>
-<p>Pointer variables can be reserved, resized but not deleted.
+<p>Functions declared inside a struct aren&#39;t in the memory block, it&#39;s just a
+convenient way to group functions that act over a struct.
+Those functions have direct access to the variables declared in struct if
+no collision occur, and using <code>struct_name.property</code> otherwise.</p>
+<p>Array variables can be allocated, resized but not deleted.
 Their memory is owned by the struct, and memory will be
 freed when the struct is deleted.
-If you need to free a pointer memory inside a struct,
-use <code>resize xx.xx[0]</code>.</p>
+If you need to free their memory use <code>resize foo.bar[0]</code>.</p>
 <section>
-<h3 id="syntax">12.1 Syntax</h3>
+<h3 id="syntax">14.1 Syntax</h3>
 <pre><code class="lang-syntax">struct-declaration
 (&#39;compact&#39;)? &#39;struct&#39; var-identifier (&#39;extends&#39; var-identifier)? block-body
 
@@ -1944,7 +1797,7 @@ block-body
   var number y = 0;
 
   fn add _x, _y {
-    // notice that v2.x point to x member and not the global variable.
+    // notice that v2.x point to x member and not a global variable.
     v2.x += _x;
     // but v2 can be avoided if no name collision
     y += _y;
@@ -1972,7 +1825,7 @@ log instance.y; // stdout: 0
 <p>see <a href="#with">with</a> statement for access shortcuts.</p>
 </section>
 <section>
-<h3 id="index-property-access">12.2 index/property access</h3>
+<h3 id="index-property-access">14.2 index/property access</h3>
 <p>A struct can be access by index (like arrays) or named properties.</p>
 <pre><code class="lang-plee">assert v2[0] == v2.x;
 assert v2[1] == v2.y;
@@ -1982,45 +1835,62 @@ assert v2[1] == v2.y;
 assert v2.properties == [&quot;x&quot;, &quot;y&quot;];
 assert v2.types == [&quot;number&quot;, &quot;number&quot;];
 assert v2.size == 8; // bytes
+assert v2.layout == [4,4]; // negative numbers means padding!
 </code></pre>
 </section>
 <section>
-<h3 id="extends">12.3 extends</h3>
+<h3 id="extends">14.3 extends</h3>
 <p>Simple struct inheritance.
 Notice: A struct can be downcasted if nobody in the inheritance chain is <code>compact</code>.</p>
 </section>
 <section>
-<h3 id="compact">12.4 compact</h3>
+<h3 id="compact">14.4 compact</h3>
 <p>Compact will shrink the memory footprint of the struct to the
 minimum.</p>
 <ul>
 <li>Sorting properties (reducing paddings)</li>
-<li>merging bools into bitmask.</li>
+<li>merging bools into bitmask (maybe)</li>
 </ul>
-<p>Why <code>compact</code> is not by default? It increase performance...</p>
-<p>Because break save/load binary data compatibility, adding a new property at the end could break your code.</p>
-<p><code>compact</code> is just to show you how to re-arrange your struct. use
-<code>log</code> how your struct is in memory.</p>
-<p>In contrast it&#39;s useful with <code>extends</code>, because it will rearrange all
-properties, but, remember that then cannot be downcasted.</p>
-<pre><code class="lang-plee">struct v2 { var ui8 x; var ui8 y; };
-compact struct v3c extends { var ui8 z; };
-struct v3 extends { var ui8 z; };
+<p><strong>Pros</strong></p>
+<ul>
+<li>low memory footprint</li>
+<li>usable with extends/union to pack many small structs.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Could break save/load of binary data. if something change.</li>
+<li>The struct cannot be downcasted.</li>
+</ul>
+<p><code>compact</code> is usefull to know how to re-arrange your struct to be memory efficient
+use <code>log &lt;struct-name&gt;</code> to see the result.</p>
+<pre><code class="lang-plee">// start with a vector2
+struct v2 {
+  var ui8 x;
+  var ui8 y;
+};
+// now declare two vectors3, one compact
+compact struct v3c extends v2 {
+  var ui8 z;
+};
+struct v3 extends v2 {
+  var ui8 z;
+};
 
 // init ordered
-v3c vecc3(1,2, 3);
+var v3c vec3_c(1, 2, 3);
 
 // init by name
-v3 vec3(x: 1, y: 2, z: 3);
+var v3 vec3(x: 1, y: 2, z: 3);
 
-v2 vec2 = (vec2) v3; // this is valid
+// downcast v3
+var v2 vec2 = (vec2) v3; // this is valid
 </code></pre>
 <pre><code class="lang-plee-err">// v3c cannot be downcasted, because is compact
 v2 vec2_err = (vec2) v3c;
 </code></pre>
 </section>
 <section>
-<h3 id="parser">12.5 parser</h3>
+<h3 id="parser">14.5 parser</h3>
 <ul>
 <li><p><code>#set lazy_struct_var 1</code></p>
 <p>optional <code>var</code> inside struct, more like c</p>
@@ -2028,19 +1898,24 @@ v2 vec2_err = (vec2) v3c;
 </ul>
 </section>
 <section>
-<h3 id="implementation-notes">12.6 implementation notes</h3>
-<p>Functions inside the struct must be hoisted outside the struct and
-prepend a new argument of the struct type with the struct name.
+<h3 id="implementation-notes">14.6 implementation notes</h3>
+<p>Functions inside the struct must be hoisted outside.
+Then prepend a new argument of the struct type (by ref?)
+with the struct name.
 Because functions can be called as classy and functional
 this remove complexity to the compiler once more and move
 it to parser.</p>
+<p><a name="block-type"></a></p>
 </section>
 <section>
-<h2 id="block">13 block</h2>
+<h2 id="block">15 block</h2>
 <p>It&#39;s the same as struct but memory continuous.</p>
 <p>To be memory continuous, sizes of all arrays must
-be defined at once, and can obly be allocated in the heap.</p>
-<p>Syntax</p>
+be defined at once, and can only be allocated in the heap.</p>
+<section>
+<h3 id="syntax">15.1 Syntax</h3>
+<p><strong>TODO</strong> default constructor in the block could lead to problems, because it&#39;s the same
+syntax in struct. struct -&gt; init members. block -&gt; init size...</p>
 <pre><code class="lang-syntax">block-declaration
 &#39;block&#39; var-identifier [&quot;,&quot; var-identifier]+ block-body;
 
@@ -2062,13 +1937,14 @@ resize x(15, 10); // note: this will allocate, copy and free the old memory.
 </code></pre>
 <pre><code class="lang-plee-err">resize x.ptr_a[0]; // compilation error
 delete x.ptr_a[15]; // compilation error
-// block property cannot freed, you must free the entire block
+// compile-err: block property cannot freed, you must free the entire block
 </code></pre>
 <p>note: do not need to store the size/length in the array.
 both a_list and b_list will be arrays and will have
 <code>.length</code> and <code>.size</code>.</p>
+</section>
 <section>
-<h3 id="implementation">13.1 Implementation</h3>
+<h3 id="implementation">15.2 Implementation</h3>
 <p>example:</p>
 <pre><code class="lang-plee">// declaration
 block ab_blk a, b {
@@ -2100,15 +1976,16 @@ block ab_blk a, b {
 </tr>
 </tbody>
 </table>
-<p><a href="https://github.com/llafuente/language/blob/master/playground/contiguos-memeory.c">POC</a></p>
+<p><a href="https://github.com/llafuente/language/blob/master/playground/c/continuous-memory.c">POC</a></p>
 </section>
 <section>
-<h3 id="interlace-proposal-">13.2 interlace (proposal)</h3>
+<h3 id="interlaced-proposal-">15.3 interlaced (proposal)</h3>
 <p>Because the implementation is so difficult i just leave the note.</p>
-<p>Interlaced array memory.</p>
+<p>Interlaced array memory, improve access to the same index in every array in the
+block because they are now memory continuous</p>
 <p>Example (plee/c-ish)</p>
 <pre><code>// declaration
-block ab_blk a, b {
+interlaced block ab_blk a, b {
   var ui8[a] a_list;
   var ui8[b] b_list;
 };
@@ -2130,9 +2007,10 @@ for i8 i = 0 .. 4 {
 <li>2 (ab_blk.a_list[1])</li>
 <li>4 (ab_blk.b_list[1])</li>
 </ul>
+<p><a name="object-type"></a></p>
 </section>
 <section>
-<h2 id="objects">14 Objects</h2>
+<h2 id="objects">16 Objects</h2>
 <p>Abstract data type composed of a collection of (key, value) pairs.</p>
 <p>Keys are always a unique string.
 Numbers cannot be assigned without casting. Because <code>!</code> operator need to be sure of what type are involved (<a href="#!operator">see below</a>).</p>
@@ -2149,12 +2027,12 @@ var_identifier &#39;:&#39; (literal|expression) &#39;,&#39;
 <pre><code>var d;
 var xxx = {
   &quot;a&quot;: &quot;world&quot;,
-  &quot;b&quot;: hello(), // function
-  &quot;c&quot;: variable, // variable, dont forget the last comma!
+  &quot;b&quot;: hello(), // function as value
+  &quot;c&quot;: variable, // variable as value
   d: hello(), // variable as key :)
 };
 </code></pre><section>
-<h3 id="methods">14.1 methods</h3>
+<h3 id="methods">16.1 methods</h3>
 <ul>
 <li><p><code>$has</code> <strong>object</strong> obj, <strong>string</strong> key : <strong>bool</strong></p>
 <p>Return if given key is defined.</p>
@@ -2172,18 +2050,26 @@ var xxx = {
 <li><p><code>$delete</code> <strong>object</strong> obj, <strong>string</strong> key : <strong>any</strong></p>
 <p>Remove given key and return pointer or null.</p>
 </li>
-<li><p><code>$setter</code> <strong>object</strong> obj, <em>fn</em> <strong>sttr</strong> = null : <strong>function</strong></p>
+<li><p><code>$setter</code> <strong>object</strong> obj, <strong>fn</strong> <em>sttr</em> = null : <strong>function</strong></p>
 <p>Set a setter function that will be called before each set.</p>
 <p>if null is provided will remove the previous setter.</p>
 </li>
-<li><p><code>$getter</code> <strong>object</strong> obj, <em>fn</em> <strong>gttr</strong> = null : <strong>function</strong></p>
+<li><p><code>$getter</code> <strong>object</strong> obj, <strong>fn</strong> <em>gttr</em> = null : <strong>function</strong></p>
 <p>Set a getter function that will be called before each get.</p>
 <p>if null is provided will remove the previous getter.</p>
+</li>
+<li><p><code>$observe</code> <strong>object</strong> obj, <strong>fn</strong> <em>obsr</em>(<em>string</em> action, <em>string</em> prop, <em>box</em> value)</p>
+<p>Notify obsr when something happend in the object.</p>
+<ul>
+<li>set</li>
+<li>get</li>
+<li>delete</li>
+</ul>
 </li>
 </ul>
 </section>
 <section>
-<h2 id="-exits-operator-nested-has-shortcut-">15 <code>?</code> exits operator (nested <code>$has</code> shortcut)</h2>
+<h2 id="-exits-operator-nested-has-shortcut-">17 <code>?</code> exits operator (nested <code>$has</code> shortcut)</h2>
 <p>Object has a special method <code>$has</code> but it recommended to use the <code>?</code> operator for readability purposes.</p>
 <pre><code>if xxx.say.hello? {
   // do something
@@ -2200,7 +2086,7 @@ if xxx.hello? == 10 { // expanded to xxx.$has(&quot;hello&quot;) &amp;&amp; xxx.
 </code></pre><p><strong>TODO</strong> review, this operator is maybe safe at the begining.</p>
 </section>
 <section>
-<h2 id="-safe-asignament">16 <code>?</code> safe asignament</h2>
+<h2 id="-safe-asignament">18 <code>?</code> safe asignament</h2>
 <p><code>?</code> operator can be used in assignment expressions.
 Compiler will expand your code and give you a reasonable collection of runtime-errors.</p>
 <blockquote>
@@ -2229,7 +2115,7 @@ xxx.$get(&quot;first&quot;).$get(&quot;second&quot;).$get(&quot;third&quot;)[0] 
 </code></pre><p><a name="!operator"></a></p>
 </section>
 <section>
-<h2 id="-force-asignament">17 <code>!</code> force asignament</h2>
+<h2 id="-force-asignament">19 <code>!</code> force asignament</h2>
 <p>A more inteligent compiler should now how to assign complex things based just on knowing the first one.</p>
 <pre><code>var obj = {};
 
@@ -2245,19 +2131,415 @@ obj2.list[3]! = 55;
 
 log obj2.toJSON();
 // stdout: {&quot;list&quot;: [null, null, null, 55]}
-</code></pre></section>
-<section>
-<h1 id="iterable"> Iterable</h1>
-<p>Object, Arrays and Y..X</p>
+</code></pre><p><a name="box-type"></a></p>
 </section>
 <section>
-<h1 id="observers"> Observers</h1>
-<p>Observers listen changes in variables, it only works on debug mode, on release this code will be removed.</p>
-<pre><code>observer(var).on(fn(String action[assignament|access], Mixed value) {...})
-</code></pre><section>
-<h2 id="functions">1 Functions</h2>
+<h2 id="box">20 box</h2>
+<p>Wrap a variable with it&#39;s type (aka <a href="http://en.wikipedia.org/wiki/Variant_type">Variant</a>)</p>
+<p>A box has a very few operations to ensure type safety and correctness while allow
+to bypass type system and move logic to runtime.</p>
 <section>
-<h3 id="philosophy">1.1 Philosophy</h3>
+<h3 id="boxing">20.1 boxing</h3>
+<p>box creation.</p>
+<pre><code class="lang-plee">var x = [&quot;a&quot;, 1];
+// a will be in a box
+// 1 will be in a box
+log typeof x; // stdout: box[]
+</code></pre>
+<p><strong>TODO</strong> function boxing is possible, but call a function without the proper arguments?
+<strong>TODO</strong> box a module ?</p>
+</section>
+<section>
+<h3 id="unboxing">20.2 unboxing</h3>
+<p>Casting box to something usable.</p>
+<pre><code class="lang-plee">
+var string x0 = x[0]; // type here is mandatory.
+var i64 x1 = x[1]; // type here is mandatory.
+
+// recommended to check before.
+if (typeof x == &quot;string&quot;) {
+  string _x0 = x[0];
+}
+</code></pre>
+</section>
+<section>
+<h2 id="operators">21 Operators</h2>
+<table>
+<thead>
+<tr>
+<th>Precedence</th>
+<th>Operator type</th>
+<th>Associativity</th>
+<th>Individual operators</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Grouping</td>
+<td>n/a</td>
+<td>( … )</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Member Access</td>
+<td>left-to-right</td>
+<td><em>lhs</em> <strong>.</strong> <em>rhs</em></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Computed Member Access</td>
+<td>left-to-right</td>
+<td><em>lhs</em> [ … ]</td>
+</tr>
+<tr>
+<td>1</td>
+<td>new (with argument list)</td>
+<td>n/a</td>
+<td>new … ( … )</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Function Call</td>
+<td>left-to-right</td>
+<td><em>lhs</em> (…)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>new (without argument list)</td>
+<td>right-to-left</td>
+<td>new <em>rhs</em></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Postfix Increment</td>
+<td>n/a</td>
+<td><em>lhs</em> ++</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Postfix Decrement</td>
+<td>n/a</td>
+<td><em>lhs</em> --</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Logical NOT</td>
+<td>right-to-left</td>
+<td>! <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bitwise NOT</td>
+<td>right-to-left</td>
+<td>~ <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Unary Plus</td>
+<td>right-to-left</td>
+<td>+ <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Unary Negation</td>
+<td>right-to-left</td>
+<td>- <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Prefix Increment</td>
+<td>right-to-left</td>
+<td>++ <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Prefix Decrement</td>
+<td>right-to-left</td>
+<td>-- <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>typeof</td>
+<td>right-to-left</td>
+<td>typeof <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>delete</td>
+<td>right-to-left</td>
+<td>delete <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>resize</td>
+<td>right-to-left</td>
+<td>resize <em>rhs</em></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Exits operator</td>
+<td>n/a</td>
+<td><em>lhs</em>?</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Multiplication</td>
+<td>left-to-right</td>
+<td><em>lhs</em> * <em>rhs</em></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Division</td>
+<td>left-to-right</td>
+<td><em>lhs</em> / <em>rhs</em></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Remainder</td>
+<td>left-to-right</td>
+<td><em>lhs</em> % <em>rhs</em></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Addition</td>
+<td>left-to-right</td>
+<td><em>lhs</em> + <em>rhs</em></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Subtraction</td>
+<td>left-to-right</td>
+<td><em>lhs</em> - <em>rhs</em></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Bitwise Left Shift</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &lt;&lt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Bitwise Right Shift</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &gt;&gt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Less Than</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &lt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Less Than Or Equal</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &lt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><em>lhs</em> ≤ <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Greater Than</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &gt; <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Greater Than Or Equal</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &gt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><em>lhs</em> ≥ <em>rhs</em></td>
+</tr>
+<tr>
+<td>8</td>
+<td>force assignment</td>
+<td>left-to-right</td>
+<td><em>rhs</em> !</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Equality</td>
+<td>left-to-right</td>
+<td><em>lhs</em> == <em>rhs</em></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Floating point equality (inside epsilon range)</td>
+<td>left-to-right</td>
+<td><em>lhs</em> ~= <em>rhs</em></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Inequality</td>
+<td>left-to-right</td>
+<td><em>lhs</em> != <em>rhs</em></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><em>lhs</em> ≠ <em>rhs</em></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Address Equality</td>
+<td>left-to-right</td>
+<td><em>lhs</em> $= <em>rhs</em></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Bitwise AND</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &amp; <em>rhs</em></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Bitwise XOR</td>
+<td>left-to-right</td>
+<td><em>lhs</em> ^ <em>rhs</em></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Bitwise OR</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &#124; <em>rhs</em></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Logical AND</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &amp;&amp; <em>rhs</em></td>
+</tr>
+<tr>
+<td>14</td>
+<td>Logical OR</td>
+<td>left-to-right</td>
+<td><em>lhs</em> &#124;&#124; <em>rhs</em></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Conditional</td>
+<td>right-to-left</td>
+<td><em>lhs</em> ? … : <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Safe assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> ?= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> = <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> += <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> -= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> *= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> /= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> %= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &lt;&lt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &gt;&gt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &gt;&gt;&gt;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &amp;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> ^= <em>rhs</em></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Assignment</td>
+<td>right-to-left</td>
+<td><em>lhs</em> &#124;= <em>rhs</em></td>
+</tr>
+<tr>
+<td>17</td>
+<td>Cast operator</td>
+<td>left-to-right</td>
+<td><em>lhs</em> as <em>type</em></td>
+</tr>
+</tbody>
+</table>
+<!--
+| 17 | Spread | n/a | ... … |
+| 18 | Comma / Sequence | left-to-right | *lhs* , *rhs* | </tbody>
+| 4 | void | right-to-left | void *rhs* |
+| 7 | Bitwise Unsigned Right Shift | left-to-right | *lhs* >>> *rhs* |
+| 8 | in | left-to-right | *lhs* in *rhs* |
+| 8 | instanceof | left-to-right | *lhs* instanceof *rhs* |
+| 9 | Strict Equality | left-to-right | *lhs* === *rhs* |
+| 9 | Strict Inequality | left-to-right | *lhs* !== *rhs* |
+| 17 | yield | right-to-left | yield *rhs* |
+-->
+<p>Mathematical operators need to be separated by <code>space</code> for readability
+purposes and fully support UTF-8 as identifier.</p>
+<pre><code>var x = y + z; // ok
+</code></pre><p>See more information about <a href="#var-idenfiers">var-idenfiers</a></p>
+<pre><code>var x = y+z; // compilation-error
+// undefined variable x+z
+</code></pre></section>
+<section>
+<h2 id="functions">22 Functions</h2>
+<section>
+<h3 id="philosophy">22.1 Philosophy</h3>
 <ul>
 <li><p><a href="http://en.wikipedia.org/wiki/Function_overloading">Function overloading</a></p>
 </li>
@@ -2287,7 +2569,7 @@ generate as many functions as needed to optimize execution time.</p>
 </ul>
 </section>
 <section>
-<h3 id="functions-identifier-name-rules-fn_identifier-">1.2 Functions identifier/name rules (<em>fn_identifier</em>)</h3>
+<h3 id="functions-identifier-name-rules-fn_identifier-">22.2 Functions identifier/name rules (<em>fn_identifier</em>)</h3>
 <ul>
 <li>Must not be a <a href="#number">number</a>.</li>
 <li>Cannot start with a <code>$</code></li>
@@ -2298,7 +2580,7 @@ generate as many functions as needed to optimize execution time.</p>
 <p>Can I use <code>a+b</code> or <code>a-b</code> as function name... The answer is: <em>Yes</em>, we can. Even snowman!</p>
 </section>
 <section>
-<h3 id="syntax">1.3 Syntax</h3>
+<h3 id="syntax">22.3 Syntax</h3>
 <pre><code class="lang-syntax">function-type-declaration
 function-header &quot;;&quot;
 
@@ -2341,7 +2623,7 @@ literal &#39;:&#39; (literal|expression)
 <code>empty-statement</code>.</p>
 </section>
 <section>
-<h3 id="declaration">1.4 Declaration</h3>
+<h3 id="declaration">22.4 Declaration</h3>
 <pre><code class="lang-plee">fn giveme x {
     return x;
 }
@@ -2352,7 +2634,7 @@ log giveme(0); // stdout: 0
 <p>Types are automatically exported in modules if required.</p>
 </section>
 <section>
-<h3 id="function-call">1.5 function call</h3>
+<h3 id="function-call">22.5 function call</h3>
 <ul>
 <li><p>Classic function call</p>
 <pre><code class="lang-plee">log sum(5, 6);
@@ -2373,7 +2655,7 @@ runtime execution.</p>
 argument.</p>
 </section>
 <section>
-<h3 id="default-arguments">1.6 default arguments</h3>
+<h3 id="default-arguments">22.6 default arguments</h3>
 <pre><code class="lang-plee">fn sum ui8 a, ui8 b = 1 {
 
 }
@@ -2385,7 +2667,7 @@ argument.</p>
 </code></pre>
 </section>
 <section>
-<h2 id="argument-assertion-shortcut-">2 Argument assertion (shortcut)</h2>
+<h2 id="argument-assertion-shortcut-">23 Argument assertion (shortcut)</h2>
 <p>Assertion is a common use to check arguments invalid ranges/value.</p>
 <p>You could use any check comparison to create an assertion.
 <em>notice</em>: compiler allow <em>strange</em> checks like &#39;&gt; 5&#39; and &#39;&lt; 6&#39; that
@@ -2398,7 +2680,7 @@ fn sum ui8 a, ui8 b = 1 &lt; 0 == null {
 }
 </code></pre>
 <section>
-<h3 id="parameter-names-call">2.1 Parameter names call</h3>
+<h3 id="parameter-names-call">23.1 Parameter names call</h3>
 <p>Name each parameter to match argument names of a function.</p>
 <p>Solve two common problems.</p>
 <ul>
@@ -2429,7 +2711,7 @@ sum(5, b: 6); // this is allowed
 </code></pre>
 </section>
 <section>
-<h3 id="anonimous-functions">2.2 Anonimous functions</h3>
+<h3 id="anonimous-functions">23.2 Anonimous functions</h3>
 <p>Same syntax prefixing parameters with &quot;,&quot; or use parenthesis.</p>
 <pre><code class="lang-plee">fn ,a ,b { // without parenthesis
 
@@ -2441,7 +2723,7 @@ fn (a ,b) { // without parenthesis
 </code></pre>
 </section>
 <section>
-<h3 id="variadic-function-brackend-dependant-">2.3 Variadic function (brackend-dependant)</h3>
+<h3 id="variadic-function-brackend-dependant-">23.3 Variadic function (brackend-dependant)</h3>
 <p>Variadic functions allow you to receive any number of arguments of the same type.</p>
 <pre><code class="lang-plee">// this function recieve many ui8
 fn sumall ui8... {
@@ -2459,7 +2741,7 @@ fn glue string start, string to_join..., string end {
 </code></pre>
 </section>
 <section>
-<h3 id="operator-functions">2.4 Operator functions</h3>
+<h3 id="operator-functions">23.4 Operator functions</h3>
 <p><strong>TODO</strong> too vage, need to be more tighten.
 this could lead to some problems. operator function declaration
 need to be standard, and checked by the compile, define those rules.
@@ -2502,7 +2784,7 @@ v_ra = v_ra + v_rb; // v will be modified now (12,2)
 </code></pre>
 </section>
 <section>
-<h3 id="arguments-by-value">2.5 Arguments by value</h3>
+<h3 id="arguments-by-value">23.5 Arguments by value</h3>
 <p><code>clone</code> operator is used before an argument to specify that
 you want to clone it.</p>
 <pre><code class="lang-plee">function mod_all(clone x, y) {
@@ -2518,7 +2800,7 @@ log y; // stdout: 1
 </code></pre>
 </section>
 <section>
-<h3 id="-function-as-arguments">2.6 <code>function</code> as arguments</h3>
+<h3 id="-function-as-arguments">23.6 <code>function</code> as arguments</h3>
 <p>Any function can be used as argument just using it&#39;s name.
 But the <code>fn</code> keyword means that accept any, to accept all in fact you are telling the
 parser that duplicate your function as many times as necessary...
@@ -2567,11 +2849,11 @@ arr.each({
 </code></pre>
 </section>
 <section>
-<h2 id="name-collision-resolution">3 Name collision/resolution</h2>
+<h2 id="name-collision-resolution">24 Name collision/resolution</h2>
 <p>Because the first argument will have a pseudo-method, functions with the same name
 cannot have the same arguments. To avoid collision we introduce a &quot;do not export&quot;</p>
 <section>
-<h3 id="functions-in-modules-">3.1 functions in modules.</h3>
+<h3 id="functions-in-modules-">24.1 functions in modules.</h3>
 <p>Just as a brief introduction, functions in modules has special keyword to specify
 their behavior.</p>
 <ul>
@@ -2581,7 +2863,7 @@ their behavior.</p>
 </ul>
 </section>
 <section>
-<h3 id="documentation">3.2 documentation</h3>
+<h3 id="documentation">24.2 documentation</h3>
 <p>Documentation is a two-way information for the parser/compiler.</p>
 <p>Both sources must be align or one missing.</p>
 <p>The following two examples are identical</p>
@@ -2609,11 +2891,11 @@ fn string x, y {
 </code></pre>
 </section>
 <section>
-<h3 id="-run">3.3 #run</h3>
+<h3 id="-run">24.3 #run</h3>
 <p>Compile time function running.</p>
 </section>
 <section>
-<h3 id="bind-statement">3.4 bind statement</h3>
+<h3 id="bind-statement">24.4 bind statement</h3>
 <p>Bind arguments to a function returning a function with only the missing arguments.</p>
 <pre><code class="lang-plee">fn op x, y {
   return x + y * 2;
@@ -2637,7 +2919,7 @@ op_x5(x: 5, y: 5); // x parameter not found.
 </code></pre>
 </section>
 <section>
-<h3 id="cache-function-">3.5 cache(function)</h3>
+<h3 id="cache-function-">24.5 cache(function)</h3>
 <p>Cache the result of a function. Cached value will be returned if the input is the same.</p>
 <pre><code class="lang-plee">fn sum x, y {
   log &quot;work&quot;;
@@ -2836,6 +3118,7 @@ they provide <code>fallthrough</code> as error prone replacement of non-<code>br
 <li><code>continue</code>, continue testing</li>
 </ul>
 <p><code>default</code> case must be the last, and do not need to <code>break</code>, <code>fallthrough</code> or <code>continue</code>.</p>
+<p>Each <code>case</code> has it&#39;s own block. so var declarations don&#39;t leak to other cases.</p>
 <p>There are three types of switch:</p>
 <ul>
 <li>comparison switch.</li>
@@ -3314,18 +3597,39 @@ There is no recover
 </section>
 <section>
 <h2 id="with">10 with</h2>
-<pre><code class="lang-syntax">with member-expression (&#39;;&#39; | block-statement)
+<p>Allocate all members of a struct/block in given/current scope.</p>
+<p>If parser found a member not used, the stack allocation is removed, keep only what it&#39;s used.</p>
+<p>This will lead to some performance gain and code clarity, but could also hide
+some concurrency bugs...</p>
+<p>Why improve performance?
+To access a struct member compiler must do some pointer math, allocating directly
+the member, the math is gone and it could access directly the member.
+But at the end of the block it should</p>
+<p><strong>TODO</strong> maybe with statement is not the best way to call it, maybe <code>cache</code> and
+provide a &quot;standard with&quot; without allocating. or <code>withalloc</code>, <code>withstack</code>, <code>stack with</code>, <code>cache with</code>...</p>
+<p><em>Notice</em>: with-block is preferred over with-current-block.</p>
+<section>
+<h3 id="syntax">10.1 syntax</h3>
+<pre><code class="lang-syntax">with
+with-current-block
+with-block
+
+with-block
+&#39;with&#39; member-expression block-statement EOS
+
+with-current-block
+&#39;with&#39; member-expression EOS
 </code></pre>
 <p>continuation of <a href="#struct-example">struct example</a></p>
-<pre><code class="lang-plee">var v2 instance;
+<pre><code class="lang-plee">var v2 instance; // default constructor 0,0
 instance.add(5, 6);
 log instance.x; // stdout: 5
 log instance.y; // stdout: 6
 
 // you can aboid using &quot;instance&quot; in a block
 with instance {
-  log x;
-  log y;
+  log x; // stdout: 5
+  log y; // stdout: 6
 }
 
 or you can just avoid using &quot;instance&quot; in current scope.
@@ -3340,6 +3644,9 @@ var x;
 with instance; // error: x is already declared.
 log x;
 </code></pre>
+<p><strong> compiler-notes </strong></p>
+<p>if &quot;with&quot; has no target block is hoisted to the top.
+Even if it could lead to a performance regression.</p>
 </section>
 <section>
 <h2 id="memory-management">11 Memory management</h2>
