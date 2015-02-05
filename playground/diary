@@ -1,0 +1,12 @@
+#!/bin/sh
+
+reset
+# -g
+clang -S -emit-llvm -O0 -std=gnu99 -Wgcc-compat -Wall -v operators.c
+#clang -S -emit-llvm -O3 -std=gnu99 -Wgcc-compat -Wall -v operators.c
+#clang -S -emit-llvm -O3 -v -std=gnu99 operators.c
+#clang -S -emit-llvm -O3 -v -std=c99 -Rpass=inline operators.c
+cat operators.ll
+
+
+#valgrind --leak-check=full -v ./memory-pool
