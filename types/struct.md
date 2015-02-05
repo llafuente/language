@@ -11,13 +11,15 @@ Unions are different layouts of the same block of memory. Only one
 should be used at a given time. The size will be the minimum required
 to store any layout (so the biggest of all).
 
-Functions have direct access to those variables in the group by their name if no collision occur, and using `struct_name.property` otherwise
+Functions declared inside a struct aren't in the memory block, it's just a
+convenient way to group functions that act over a struct.
+Those functions have direct access to the variables declared in struct if
+no collision occur, and using `struct_name.property` otherwise.
 
-Pointer variables can be reserved, resized but not deleted.
+Array variables can be allocated, resized but not deleted.
 Their memory is owned by the struct, and memory will be
 freed when the struct is deleted.
-If you need to free a pointer memory inside a struct,
-use `resize xx.xx[0]`.
+If you need to free their memory use `resize foo.bar[0]`.
 
 ### Syntax
 
@@ -39,7 +41,7 @@ struct v2 {
   var number y = 0;
 
   fn add _x, _y {
-    // notice that v2.x point to x member and not the global variable.
+    // notice that v2.x point to x member and not a global variable.
     v2.x += _x;
     // but v2 can be avoided if no name collision
     y += _y;
@@ -83,6 +85,7 @@ assert v2.length == 2;
 assert v2.properties == ["x", "y"];
 assert v2.types == ["number", "number"];
 assert v2.size == 8; // bytes
+assert v2.layout == [4,4]; // negative numbers means padding!
 ```
 
 ### extends
@@ -97,31 +100,44 @@ Compact will shrink the memory footprint of the struct to the
 minimum.
 
 * Sorting properties (reducing paddings)
-* merging bools into bitmask.
+* merging bools into bitmask (maybe)
 
-Why `compact` is not by default? It increase performance...
+**Pros**
 
-Because break save/load binary data compatibility, adding a new property at the end could break your code.
+* low memory footprint
+* usable with extends/union to pack many small structs.
 
-`compact` is just to show you how to re-arrange your struct. use
-`log` how your struct is in memory.
+**Cons**
 
-In contrast it's useful with `extends`, because it will rearrange all
-properties, but, remember that then cannot be downcasted.
+* Could break save/load of binary data. if something change.
+* The struct cannot be downcasted.
+
+`compact` is usefull to know how to re-arrange your struct to be memory efficient
+use `log <struct-name>` to see the result.
 
 
 ```plee
-struct v2 { var ui8 x; var ui8 y; };
-compact struct v3c extends { var ui8 z; };
-struct v3 extends { var ui8 z; };
+// start with a vector2
+struct v2 {
+  var ui8 x;
+  var ui8 y;
+};
+// now declare two vectors3, one compact
+compact struct v3c extends v2 {
+  var ui8 z;
+};
+struct v3 extends v2 {
+  var ui8 z;
+};
 
 // init ordered
-v3c vecc3(1,2, 3);
+var v3c vec3_c(1, 2, 3);
 
 // init by name
-v3 vec3(x: 1, y: 2, z: 3);
+var v3 vec3(x: 1, y: 2, z: 3);
 
-v2 vec2 = (vec2) v3; // this is valid
+// downcast v3
+var v2 vec2 = (vec2) v3; // this is valid
 
 ```
 

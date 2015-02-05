@@ -11,6 +11,8 @@ A variable identifier can contain any valid UTF-8.
 
 * Cannot be a reserved word
 
+* Cannot be a defined type. Function/struct/block/... names are a type.
+
 
 #### Stylistic Conventions
 

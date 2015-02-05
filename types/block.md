@@ -7,7 +7,11 @@ To be memory continuous, sizes of all arrays must
 be defined at once, and can only be allocated in the heap.
 
 
-Syntax
+
+### Syntax
+
+**TODO** default constructor in the block could lead to problems, because it's the same
+syntax in struct. struct -> init members. block -> init size...
 
 ```syntax
 block-declaration
@@ -66,20 +70,21 @@ Memory map:
 |:-----:|:-----:|:--------:|:--------:|
 |a-array|b-array| contents | contents |
 
-[POC](https://github.com/llafuente/language/blob/master/playground/contiguos-memeory.c)
+[POC](https://github.com/llafuente/language/blob/master/playground/c/continuous-memory.c)
 
 
-### interlace (proposal)
+### interlaced (proposal)
 
 Because the implementation is so difficult i just leave the note.
 
-Interlaced array memory.
+Interlaced array memory, improve access to the same index in every array in the
+block because they are now memory continuous
 
 Example (plee/c-ish)
 
 ```
 // declaration
-block ab_blk a, b {
+interlaced block ab_blk a, b {
   var ui8[a] a_list;
   var ui8[b] b_list;
 };
