@@ -31,7 +31,6 @@ var files = {
     "types/block.md": "block.html",
     "types/object.md": "object.html",
     "types/box.md": "box.html",
-    "types/observers.md": "observers.html",
 
     "operators.markdown": "operators.html",
 
