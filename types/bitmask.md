@@ -1,5 +1,5 @@
 <a name="bitmask-type"></a>
-## bitmask
+### bitmask
 
 bitmask is a structure that pack booleans in the minimal space to
 avoid cache misses. the bitmask can be merged inside a struct or used

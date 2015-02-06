@@ -1,9 +1,9 @@
 <a name="string-type"></a>
-## string
+### string
 
 `string` store UTF-8 characters.
 
-### instance properties
+#### instance properties
 
 * *ui64* size = 0 [readonly]
 
@@ -21,14 +21,14 @@
 
   Number of characters
 
-### operators
+#### operators
 
 * `[]` access to a single character first byte.
 * `+` concatenate two strings
 * `>` & `<` compare two strings
 * `=` overwrite lhs and resize if needed
 
-### instance methods
+#### instance methods
 
 * **substr** (*string* str, *ui64* start != nan, *ui64* length = infinity != nan)
 
@@ -207,7 +207,7 @@ One-way string hashing
 * [crc32](http://php.net/manual/en/function.crc32.php)
 
 
-### string properties (under study)
+#### string properties (under study)
 
 * *ui64* pool_size = 1m [mutable]
 
@@ -230,7 +230,7 @@ One-way string hashing
   Fragmentation factor.
 
 
-### string allocation function (under study)
+#### string allocation function (under study)
 
 * .defrag **TODO** study more
 

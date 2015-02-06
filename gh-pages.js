@@ -35,7 +35,7 @@ var files = {
     "operators.markdown": "operators.html",
 
     "functions/_intro.markdown": "functions.html",
-    "functions/listeners.markdown": "functions-listeners.html",
+    //"functions/listeners.markdown": "functions-listeners.html",
 
     "error-handling.markdown": "error-handling.html",
 
@@ -87,6 +87,7 @@ var renderer = new marked.Renderer();
 var old_heading = renderer.heading;
 var last_level = 0;
 var headings = new Array(10);
+var TOC = [];
 
 renderer.heading = function (text, level) {
   headings[level] = headings[level] || 0;
@@ -120,12 +121,23 @@ renderer.heading = function (text, level) {
 
   last_level = level;
 
+  aname = args[0].replace(/[^A-Za-z0-9]/g, "-");
+  ret.push('<a name="' + aname + '"></a>');
+
+  var toc_pad = "";
+  i = 0;
+  while (++i <= level) {
+    toc_pad+="&nbsp;&nbsp;&nbsp;";
+  }
+  TOC.push(toc_pad + '<a href="#' + aname + '">' + args[0] + '</a>');
+
   ret.push(old_heading.apply(this, args));
 
   return ret.join("\n");
 };
 marked(source, { renderer: renderer }, function(err, content) {
   content = tpl.replace("%body%", content + "</section>");
+  content = content.replace("%toc%", TOC.join("<br />") + "<br /><br />");
 
   //console.log(content);
   //process.exit();

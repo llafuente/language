@@ -1,5 +1,5 @@
 <a name="pointers-type"></a>
-## Pointers
+### Pointers
 
 **TODO** this need review and a real comparison with c-pointers.
 
@@ -12,7 +12,7 @@ There many types of pointers.
 | `ptr`     | multiple |    yes    |     yes    |     no       |  no  |
 
 
-### `ref`
+#### `ref`
 
 Points to a single memory address, is dereferenced because there
 is no operation that can be perform on the pointer apart from assign to other memory address.
@@ -102,7 +102,7 @@ But it will also work on a single value.
 * ref is always dereferenced except on assinament expression
 on left equal and address on right side.
 
-### `itr` (safe & unsafe)
+#### `itr` (safe & unsafe)
 
 Pointer iterator, it could be considered as "movable ref".
 
@@ -207,7 +207,7 @@ save it in the struct
 assigned to other memory.
 
 
-### `ptr`
+#### `ptr`
 
 Raw C-like pointer, for maximum performance.
 It's not safe:

@@ -1,5 +1,5 @@
 <a name="enum-type"></a>
-## enum
+### enum
 
 ```syntax
 enum-declaration

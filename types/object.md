@@ -1,5 +1,5 @@
 <a name="object-type"></a>
-## Objects
+### Objects
 
 Abstract data type composed of a collection of (key, value) pairs.
 
@@ -30,7 +30,7 @@ var xxx = {
 };
 ```
 
-### methods
+#### methods
 
 * `$has` **object** obj, **string** key : **bool**
 
@@ -74,7 +74,7 @@ var xxx = {
   * delete
 
 
-## `?` exits operator (nested `$has` shortcut)
+#### `?` exits operator (nested `$has` shortcut)
 
 Object has a special method `$has` but it recommended to use the `?` operator for readability purposes.
 
@@ -98,7 +98,7 @@ xxx.$has("say") ? (xxx.say.$has("hello") ? xxx.say.hello : null)  : null
 
 **TODO** review, this operator is maybe safe at the begining.
 
-## `?` safe asignament
+#### `?` safe asignament
 
 `?` operator can be used in assignment expressions.
 Compiler will expand your code and give you a reasonable collection of runtime-errors.
@@ -133,7 +133,7 @@ xxx.$get("first").$get("second").$get("third")[0] = "just a string";
 ```
 
 <a name="!operator"></a>
-## `!` force asignament
+#### `!` force asignament
 
 A more inteligent compiler should now how to assign complex things based just on knowing the first one.
 

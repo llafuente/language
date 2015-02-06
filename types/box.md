@@ -1,12 +1,12 @@
 <a name="box-type"></a>
-## box
+### box
 
 Wrap a variable with it's type (aka [Variant](http://en.wikipedia.org/wiki/Variant_type))
 
 A box has a very few operations to ensure type safety and correctness while allow
 to bypass type system and move logic to runtime.
 
-### boxing
+#### boxing
 
 box creation.
 
@@ -20,7 +20,7 @@ log typeof x; // stdout: box[]
 **TODO** function boxing is possible, but call a function without the proper arguments?
 **TODO** box a module ?
 
-### unboxing
+#### unboxing
 
 Casting box to something usable.
 

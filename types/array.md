@@ -1,12 +1,12 @@
 <a name="array-type"></a>
-## array
+### array
 
 * Arrays are always dense and memory continuos.
 
 * Arrays always contains a common type.
 
 
-## memory safety notes.
+#### memory safety notes.
 
 * Array has two iterator, safe and unsafe. the latest is fastest but
 it's not memory safe...
@@ -14,7 +14,7 @@ it's not memory safe...
 * When an array is resized could be stored in other memory block,
 all raw pointers should be invalidated.
 
-## syntax
+#### syntax
 
 ```syntax
 array-literal
@@ -31,7 +31,7 @@ type ("[" number | var-identifier "]")+
 
 ```
 
-### Declaration & Initialization
+#### Declaration & Initialization
 
 * dynamic arrays use 'var' declaration (can be resized)
 * static arrays use 'static' declaration (cannot be resized)
@@ -100,7 +100,7 @@ assert st_slice[0] == dyn_slice[0];
 
 ```
 
-### multi-dimensional implementation (compiler-notes)
+#### multi-dimensional implementation (compiler-notes)
 
 `multi-dimensional` arrays are a different type, that is not directly
 exposed to user.
@@ -119,7 +119,7 @@ ar.indexOf(0, 6, 12);
 ```
 
 
-### Array instance properties
+#### Array instance properties
 
 * `length`
 
@@ -142,7 +142,7 @@ ar.indexOf(0, 6, 12);
   Get the value in the given pos.
   If the array is multi-dimensional
 
-### transformations/transcoding
+#### transformations/transcoding
 
 * `to_string`
 
@@ -167,7 +167,7 @@ ar.indexOf(0, 6, 12);
 .is: // memory position check -> check length. if the same, loop every item and do `this[i] is that[i]`
 -->
 
-### array functions
+#### array functions
 
 **STUDY** i have to add *any* as type, because `index_of` neede it.
 But is this possible in our type-system?
@@ -253,7 +253,7 @@ Even with type inference, some types could need something special...
 
 
 
-### looping
+#### looping
 
 For evey function listed here if the function is anonymously declared, the compiler will transform them into a blocks for performance.
 
@@ -307,7 +307,7 @@ For evey function listed here if the function is anonymously declared, the compi
   Tests whether some element in the array passes the test implemented by the provided function
 
 <a name="array-iterators"></a>
-### iterators
+#### iterators
 
 `for-itr` need an iterator that behave. These are their rules:
 
@@ -340,6 +340,6 @@ log itr2; // stdout: 3
 
 * splice/push
 
-### Notes
+#### Notes
 
 * if type is defined, when enter a switch gives a compile error.

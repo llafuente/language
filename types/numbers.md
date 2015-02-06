@@ -1,5 +1,5 @@
 <a name="number-type"></a>
-## Number types
+### Number types
 
 Any number type has the following properties.
 
@@ -77,7 +77,7 @@ var dir diagonal = dir.north | dir.east;
 
 
 
-### Safe mode
+#### Safe mode
 
 Safe mode wrap some operations, giving runtime-errors if something
 happends:

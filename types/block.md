@@ -1,5 +1,5 @@
 <a name="block-type"></a>
-## block
+### block
 
 It's the same as struct but memory continuous.
 
@@ -8,7 +8,7 @@ be defined at once, and can only be allocated in the heap.
 
 
 
-### Syntax
+#### Syntax
 
 **TODO** default constructor in the block could lead to problems, because it's the same
 syntax in struct. struct -> init members. block -> init size...
@@ -49,7 +49,7 @@ both a_list and b_list will be arrays and will have
 `.length` and `.size`.
 
 
-### Implementation
+#### Implementation
 
 example:
 ```plee
@@ -73,7 +73,7 @@ Memory map:
 [POC](https://github.com/llafuente/language/blob/master/playground/c/continuous-memory.c)
 
 
-### interlaced (proposal)
+#### interlaced (proposal)
 
 Because the implementation is so difficult i just leave the note.
 

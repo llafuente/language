@@ -1,7 +1,7 @@
 <a name="struct-type"></a>
 <a name="union-type"></a>
 <a name="extends-type"></a>
-## struct & union
+### struct & union
 
 Structs are complex data type declaration
 that defines a physically grouped list of variables and
@@ -21,7 +21,7 @@ Their memory is owned by the struct, and memory will be
 freed when the struct is deleted.
 If you need to free their memory use `resize foo.bar[0]`.
 
-### Syntax
+#### Syntax
 
 ```syntax
 struct-declaration
@@ -40,6 +40,7 @@ struct v2 {
   var number x = 0;
   var number y = 0;
 
+  // example of a function inside the struct
   fn add _x, _y {
     // notice that v2.x point to x member and not a global variable.
     v2.x += _x;
@@ -50,7 +51,8 @@ struct v2 {
   }
 };
 
-fn add v2 v, _x, _y: v2 {
+// example of a function outside the struct
+fn subtract v2 v, _x, _y: v2 {
     v.x -= _x;
     v.y -= _y;
 
@@ -58,18 +60,25 @@ fn add v2 v, _x, _y: v2 {
 }
 
 var v2 instance;
-instance.add(5, 6);
+instance.add(5, 6); // method-like call
 log instance.x; // stdout: 5
 log instance.y; // stdout: 6
 
-instance.subtract(5, 6);
+instance.subtract(5, 6); // method-like call
+log instance.x; // stdout: 0
+log instance.y; // stdout: 0
+
+
+// alternative way call them, plain functional call
+add(instance, 1, 1);
+subtract(instance, 1, 1);
 log instance.x; // stdout: 0
 log instance.y; // stdout: 0
 ```
 
 see [with](#with) statement for access shortcuts.
 
-### index/property access
+#### index/property access
 
 A struct can be access by index (like arrays) or named properties.
 
@@ -88,13 +97,13 @@ assert v2.size == 8; // bytes
 assert v2.layout == [4,4]; // negative numbers means padding!
 ```
 
-### extends
+#### extends
 
 Simple struct inheritance.
 Notice: A struct can be downcasted if nobody in the inheritance chain is `compact`.
 
 
-### compact
+#### compact
 
 Compact will shrink the memory footprint of the struct to the
 minimum.
@@ -146,13 +155,13 @@ var v2 vec2 = (vec2) v3; // this is valid
 v2 vec2_err = (vec2) v3c;
 ```
 
-### parser
+#### parser
 
 * `#set lazy_struct_var 1`
 
   optional `var` inside struct, more like c
 
-### implementation notes
+#### implementation notes
 
 Functions inside the struct must be hoisted outside.
 Then prepend a new argument of the struct type (by ref?)
