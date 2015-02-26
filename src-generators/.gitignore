@@ -1,0 +1,4 @@
+# remove intermediary files not needed in the git
+/math.c
+/math-test-linked.bc
+/math-test-linked.s
