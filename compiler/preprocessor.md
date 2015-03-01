@@ -1,12 +1,35 @@
-### Preprocesor.
+### Preprocessor.
 
-Preprocesor actions is prefix with `#` and must be at the start of the line.
+Preprocessor actions is prefix with `#` and must be at the start of the line.
 
-####  `#include` **uri**
+Preprocessor rules are only available at module context in contrast with
+c preprocessor
 
-*note*: **uri** Relative to current file.
+That means anything defined inside a module cannot be used by the
+importer, but it can be use in the module imported modules.
 
-Add the file contents into the current position.
+Example:
+
+a.plee
+```plee
+#define XXX true
+import b;
+log YYY; // compiler-error: undefined variable
+
+b.plee
+```plee
+#define YYY true
+log XXX; // true
+```
+
+An obvious work-around is to #include a macro file (it's part of the
+[modules good practices](#modules))
+
+#### `#include` **uri**
+
+**uri** Relative path from current file or absolute.
+
+Add given file contents into the current position.
 
 This can be used *to extend* modules, or spread configuration files across your project.
 
@@ -14,7 +37,7 @@ Do not use it to include real code. Use [modules](#modules) instead.
 
 #### `#replace` **regexp** **replacement|block**
 
-Execute given `regexp` to the file once (just once).
+Execute given `regexp` to any file once, from now on,that's not include current file.
 
 Useful to replace inside strings or literals.
 
@@ -102,7 +125,7 @@ if-preprocessor
 
 #### `#error` string
 
-Raise a preprocesor error
+Raise a Preprocessor error, will stop compilation.
 
 ```
 #if PLATFORM == "mac-32" {
@@ -110,28 +133,11 @@ Raise a preprocesor error
 }
 ```
 
-#### `#parser-add` identifier function-declaration
-
-Inject code directly into the parser.
-
-This require knowledge of the parser itself, use it with caution.
-
-```
-#parser-add read_source_elements function read_if_statement() {
-  var ast = ast_new("xxx");
-
-  // über mad science!
-
-  return ast_end(ast);
-}
-```
-
-**TODO** when the basic parser is done back here!
-
-
 #### `#meta` text
 
-Set `metadata` property text in the next AST statement.
+Add `metadata` as text in the next AST statement.
+
+This metadata can be used in the postprocessor.
 
 ```plee
 #meta post-process

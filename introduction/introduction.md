@@ -7,16 +7,12 @@ Plee language documentation and compiler implementation notes.
 
 Things that the compiler *will do* for you.
 
-* Testing - continuous integration (CI) and code coverage
-at compile time.
+* Run tests (with code coverage) and benchmarks.
 
-* Documentation. Plee has type inference so we need a way to export
-that information, we build a basic documentation.
+* Documentation generation.
 
 * Export module interface in a clean file.
-Something like header file in c.
-
-* Benchmarks.
+Something like header file in c/cpp.
 
 * Code expansion and beautifier. Plee is full of shortcuts that
 generate code, code expansion display the full code that will be
@@ -36,11 +32,8 @@ for easy debugging.
 
 * Curly braces are mandatory *everywhere* but you can avoid using parenthesis :)
 
-* *pass-by-reference* everything to improve performance. You can clone
-everything easily.
-
 * No uppercases. Everything is lowercased and *case sensitive*.
-*False* is not *false*.
+*False* is not `false`. *False* don't exists.
 
 * Every type has a `null` value.
 
@@ -49,14 +42,14 @@ everything easily.
 * Comments are part of the language, cannot be everywhere,
 only at statement level.
 
+* **Experimental** *pass-by-reference* everything. You can clone everything easily.
 
 ## Philosophy behind the language
 
-* Error prone. If something is powerful but introduce errors,
-need to be reconsidered at least.
+* Error prone. Programming language es hard enough to introduce
+"undefined behaviours".
 
-* Easy to learn. You will see many reserved words,
-mostly because clarify things.
+* Easy to learn (aprochable) and clean syntax.
 
 * Easy to code & be lazy.
 
@@ -68,4 +61,22 @@ mostly because clarify things.
 Forget interfaces, abstract classes, protected methods, extends... Just plain and simple objects.
 
 * Be nice target for other languages. There is much code out there,
-playing nice with other languages it's important to us.s
+playing nice with other languages it's important to us.
+
+
+## Nomeclature
+
+Experimental.
+
+Not sure of the real usage, implemntation, possiblity... just an idea that
+could be cool, but don't know exactly how to make it true, in a resonable time
+and error prone. (help is welcome :)
+
+Propossal.
+
+Something that can change a lot while implementation occurs, and
+most of those changes will fill the doc and not he other way.
+
+Study
+
+After some more study will "upgrade" to Propossal or Experimental.

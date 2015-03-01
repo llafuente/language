@@ -8,8 +8,6 @@
 
 * [Variadic function](https://en.wikipedia.org/wiki/Variadic_function)
 
-* Everything is sent by reference
-
 * There is no `this` concept/keyword.
 
   `this` introduce many memory management problems.

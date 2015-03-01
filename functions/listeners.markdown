@@ -1,4 +1,4 @@
-# Listeners
+# Listeners (Propossal)
 
 Listeners can be attached to functions at compile time.
 
@@ -9,3 +9,5 @@ Listeners can be attached to functions at compile time.
 #listener(fn).afterOff(fn)
 #listener(fn).removeAll
 ```
+
+*STUDY* This could be part of the postprocessor

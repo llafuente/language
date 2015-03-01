@@ -19,8 +19,8 @@ next-statement
 
 * `break` the nearest loop is immediately terminated and program continue with the next statement to the loop.
 
-* `continue` jump to the first available stament:
-  * post increment stament (for)
+* `continue` jump to the first available statement:
+  * post increment statement (for)
   * enter condition (for, while)
   * iteration body (do-while)
 

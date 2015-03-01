@@ -1,6 +1,72 @@
 ## compiler
 
-### compiler command line
+Plee objective it's not only to be language, rather than be
+a language target for others.
+
+The compiler infraestructure is in layers to allow other languages to
+enter in the middle of any layer using simple JSON/TEXT file. Or just
+use one layer like preprocessor.
+
+Compiler layers:
+
+* Preprocesor
+
+  input: text (file)
+
+  output: text + JSON (metadata)
+
+  Read files and expand the code.
+
+  Generate a JSON file with the given expansion to allow tokenizer to
+  match the real line/column in the original file.
+
+* Tokenizer
+
+  input: text (file) + JSON (optional)
+
+  output: JSON (Tokens)
+
+  Tokenize given file applying some basic language rules.
+
+* AST generator & Postprocesor
+
+  input: JSON (Tokens)
+
+  output: JSON (AST)
+
+  Transform the tokenizer output into full AST.
+
+* Minimal AST (remove AST expansions)
+
+  input: JSON (AST)
+
+  output: JSON (MAST)
+
+  Reduce AST to it's minimal form (function calls & pointer arithmetic)
+
+  Undo the shortcuts/lazy forms found in the language.
+
+  STUDY: Could be part of a default postprocessor...
+
+* "Compile" (AST to LLVM IR)
+
+  input: JSON (MAST)
+
+  output: llvm ir, executable or execute program.
+
+  From given Minimal AST generate LLVM IR
+
+  Then will use `llvm-link` to generate a LLVM bc file
+
+  `ar` will include anything necesary in the bc
+
+  `llc` will compile to target arch
+
+
+
+
+
+### compiler command line (propossal)
 
 Usage:
 
@@ -12,7 +78,7 @@ actions:
   -safe           enable safe mode
   -t              run tests
   -c              compile (default if no action sent)
-  -p              parse
+  -p              parse and display AST
 
 actions can be mixed
 example: plee -e -c file.plee
@@ -34,83 +100,26 @@ parse arguments
 
 ```
 
-### Parser implementation.
-
-There are many languages out there that can solve many problems.
-Plee want to be target of many languages to do so. We need to build the
-compiler in layers, even if it's not optional, parse time vs compile time
-is so huge that parser, could be not optimal but feature rich.
-
-Each step exports JSON that could feed the next step.
-
-Steps:
-
-* Tokenizer.
-
-  Tokenize the code with the language rules (like `var a-b;` a-b is a variable not a, -, b)
-
-* AST generator ~& Preprocesor
-
-  Transform the tokenizer output into full AST.
-
-* AST expansion
-
-  Reduce AST to it's minimal form. Undo the shortcuts found in the language.
-
-* Postprocesor
-
-  User defined rules.
-
-* Generate Target code from AST
-
-  This is the key to be `language target`. Also
-
-  Output: text files?
-
-And then... compile/execute.
 
 
-### Compiler implementation
 
-**Study** choose!
-
-* Transcompile to C
-
-  fast, portable, rather straight. Some features are not supported (defer/lambda)
-  need to hack a lot the language
-
-* c bytecode
-
-  slow, portable, easy REPL
-
-* LLVM
-
-  very fast, difficult, nice linking to other languages like c/c++
-
-* JIT LLVM
-
-  rather fast, could support more introspection types,
-  more dynamic typing, easy REPL
-
-* AOT-JIT.
-
-  Use a JIT engine as Ahead of time compilation.
-
-### compile-time execution.
-
-Some features of the language need compile-time execution,
-like `test` or `bench`.
-
-
-### libraries
+### Core libraries
 
 * [pcre](http://www.pcre.org/)
 
   Perl Compatible Regular Expressions
 
+* [openlibm](https://github.com/JuliaLang/openlibm)
+
 * [libuv](http://www.pcre.org/)
 
   Asynchronous IO, NET, DNS & threads tools.
+
+* [zlib](http://www.zlib.net/)
+
+* [icu c](http://site.icu-project.org/)
+
+### Long term core libraries
 
 * [http-parser](https://github.com/joyent/http-parser)
 
@@ -118,26 +127,17 @@ like `test` or `bench`.
 
   window, opengl, & input
 
-* [llvm](http://llvm.org/)
-
-  Low Level Virtual Machine.
-
-  Compiler, AOC and JIT.
-
 * [asmlib](http://www.agner.org/optimize/)
   & [nt2](https://github.com/MetaScale/nt2)
 
   SIMD
 
-* [zlib](http://www.zlib.net/)
-
 * [openssl](https://www.openssl.org/)
-
-* [icu c](http://site.icu-project.org/)
 
 * [iconv](http://www.gnu.org/savannah-checkouts/gnu/libiconv/)
 
-### compilers based on LLVM
+
+### compilers based on LLVM (for reference)
 
 * [clay](https://bitbucket.org/kssreeram/clay)
 * [kaleidoscope](http://llvm.org/docs/tutorial/LangImpl1.html)
@@ -147,7 +147,3 @@ like `test` or `bench`.
 
 * [Mapping-High-Level-Constructs-to-LLVM-IR](http://llvm.lyngvig.org/Articles/Mapping-High-Level-Constructs-to-LLVM-IR)
 
-
-### general purpose vm
-
-* [parrot](http://www.parrot.org) [JIT info](http://trac.parrot.org/parrot/wiki/JITRewrite)

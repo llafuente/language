@@ -33,6 +33,30 @@ module-var
 Module declaration must be the first statement in a file, only
 preceded by a comment.
 
+### Good practices
+
+Files structure
+
+* macros.plee
+
+  Macro definition file. So users can #include this file in their
+  projects it has useful defines, and way you are sure of no collision
+  will ever occur by default.
+
+* index.plee
+
+  Entry point. When someone import a module will import in fact index.plee.
+
+  It should be mostly #include(s) to src/*
+
+* package.json
+
+  NPM file.
+
+* src/
+
+  Folder containing source code.
+
 ### export functions and variables.
 
 * `variable`

@@ -1,21 +1,22 @@
-### Postprocesor.
+### Postprocesor (experimental)
 
 Mainly to debug and instrument your code. Allow you to hook AST after being parsed.
 
+```syntax
+"#post" string-literal function-declaration
+```
 
-* `#post` ast-type block
+```plee
+// log every object before returning
+#post "return-statement" fn node, parent, module, file {
+var fn = get_nearest_function($0);
+if (fn.return_type == "object") {
+  before($0, "log " + $0.id + ";");
+}
+}
+```
 
-  ```
-  // log every object before returning
-  #post "return-statement" {
-    var fn = get_nearest_function($0);
-    if (fn.return_type == "object") {
-      before($0, "log " + $0.id + ";");
-    }
-  }
-  ```
-
-Available functions
+Available functions inside postprocessor callbacks.
 
 * is_defined(object ast, string variable_name)
 * get_nearest_scope(object ast)

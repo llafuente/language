@@ -13,7 +13,9 @@ until the surrounding function returns or throw.
 
 #### defer call-expr
 
-Execute function when the surrounding function returns but the deferred call's arguments are evaluated immediately.
+Execute function when the surrounding function returns.
+
+Deferred call's arguments are evaluated immediately.
 
 *Note*: to also defer the arguments evaluation you should wrap it in a block-statement.
 
@@ -24,7 +26,7 @@ defer { x(a); }; // a and x will be evaluated/executed later
 
 #### defer delete
 
-free memory when the surrounding function returns or throw/raise.
+Free memory when the surrounding function returns or throw/raise.
 
 ```
 fn x {
@@ -50,8 +52,8 @@ null
 
 ```plee
 fn x {
-  var x = "a string!";
-  defer log x;
+  var str = "a string!";
+  defer log str;
   defer log;
   return 10;
 }
@@ -65,12 +67,13 @@ a string!
 
 #### defer assert
 
-`defer log` will assert retuned value different of null if no arguments are sent.
+`defer assert` will assert retuned value different of null
+if no arguments are sent.
 
 ```plee
 fn x {
   defer assert;
-  return null;
+  return 0;
 }
 x()
 ```
