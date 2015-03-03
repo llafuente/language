@@ -3,8 +3,11 @@
 *.bc
 
 # compiled
+c/string
+c/array
+
 contiguos-memeory
 function-overload
 operators
-string
+
 memory-pool

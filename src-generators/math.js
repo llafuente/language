@@ -7,30 +7,30 @@
 // http://llvm.org/docs/LangRef.html#icmp-instruction
 
 //
-// expression operators
+// _ession operators
 //
 var operators = [
-  {operator: "+", type: "binary", function: "expr_sum"},
-  {operator: "-", type: "binary", function: "expr_sub"},
-  {operator: "*", type: "binary", function: "expr_mult"},
-  {operator: "/", type: "binary", function: "expr_div"},
-  {operator: "%", type: "binary", function: "expr_mod", remove: ["f32", "f64"]},
+  {operator: "+", type: "binary", function: "__sum__"},
+  {operator: "-", type: "binary", function: "__sub__"},
+  {operator: "*", type: "binary", function: "__mult__"},
+  {operator: "/", type: "binary", function: "__div__"},
+  {operator: "%", type: "binary", function: "__mod__", remove: ["f32", "f64"]},
 
-  {operator: "^", type: "binary", function: "expr_bitwise_xor", remove: ["f32", "f64"]},
-  {operator: "|", type: "binary", function: "expr_bitwise_or", remove: ["f32", "f64"]},
-  {operator: "&", type: "binary", function: "expr_bitwise_and", remove: ["f32", "f64"]},
+  {operator: "^", type: "binary", function: "__bitwise_xor__", remove: ["f32", "f64"]},
+  {operator: "|", type: "binary", function: "__bitwise_or__", remove: ["f32", "f64"]},
+  {operator: "&", type: "binary", function: "__bitwise_and__", remove: ["f32", "f64"]},
 
-  {operator: "<<", type: "binary", function: "expr_shift_left", remove: ["f32", "f64"]},
-  {operator: ">>", type: "binary", function: "expr_shift_right", remove: ["f32", "f64"]},
+  {operator: "<<", type: "binary", function: "__shift_left__", remove: ["f32", "f64"]},
+  {operator: ">>", type: "binary", function: "__shift_right__", remove: ["f32", "f64"]},
 
-  {operator: "--", type: "right", function: "expr_post_decr"},
-  {operator: "++", type: "right", function: "expr_post_incr"},
+  {operator: "--", type: "right", function: "__post_decr__"},
+  {operator: "++", type: "right", function: "__post_incr__"},
 
-  {operator: "--", type: "left", function: "expr_pre_decr"},
-  {operator: "++", type: "left", function: "expr_pre_incr"},
-  {operator: "-", type: "left", function: "expr_negate"},
-  {operator: "~", type: "left", function: "expr_bitwise_not", remove: ["f32", "f64"]},
-  {operator: "!", type: "left", function: "expr_logical_not"},
+  {operator: "--", type: "left", function: "__pre_decr__"},
+  {operator: "++", type: "left", function: "__pre_incr__"},
+  {operator: "-", type: "left", function: "__negate__"},
+  {operator: "~", type: "left", function: "__bitwise_not__", remove: ["f32", "f64"]},
+  {operator: "!", type: "left", function: "__logical_not__"},
 ];
 
 //
@@ -60,7 +60,7 @@ types.forEach(function(type) {
         declared.push({
           type: "function",
           id: op.function,
-          name: fn_name,
+          ir_uid: fn_name,
           input: [type.lang, type.lang],
           output: [type.lang]
         });
@@ -77,7 +77,7 @@ types.forEach(function(type) {
         declared.push({
           type: "function",
           id: op.function,
-          name: fn_name,
+          ir_uid: fn_name,
           input: [type.lang],
           output: [type.lang]
         });
@@ -94,7 +94,7 @@ types.forEach(function(type) {
         declared.push({
           type: "function",
           id: op.function,
-          name: fn_name,
+          ir_uid: fn_name,
           input: [type.lang],
           output: [type.lang]
         });
@@ -112,7 +112,7 @@ types.forEach(function(type) {
 // functions
 [
   // Trigonometric functions
-  "cos", "sin", "tan", "acos", "asin", "atan", "atan2"
+  "cos", "sin", "tan", "acos", "asin", "atan", "atan2",
   // Hyperbolic functions
   "cosh", "sinh", "tanh", "acosh", "asinh", "atanh",
 
@@ -121,14 +121,23 @@ types.forEach(function(type) {
 ];
 
 //
-// truncate
+// truncate/cast
 //
 
 types.forEach(function(atype) {
   types.forEach(function(btype) {
     if (atype.lang == btype.lang) return;
 
-    var fn_name = ["trunc", atype.lang, btype.lang].join("_")
+    var fn_name = ["__cast__", atype.lang, btype.lang].join("_");
+
+    declared.push({
+      type: "function",
+      id: "__cast__",
+      ir_uid: fn_name,
+      input: [atype.lang],
+      output: [btype.lang]
+    });
+
     c_functions.push(
       atype.c + " " + fn_name + "(" + btype.c + " a) {\n" +
       "  return a;\n" +

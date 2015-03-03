@@ -2,3 +2,4 @@
 /math.c
 /math-test-linked.bc
 /math-test-linked.s
+/openlibm
