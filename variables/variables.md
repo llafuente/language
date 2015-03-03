@@ -244,39 +244,7 @@ A primitive are the standard types (most simple) types.
 
   for example: `stdout`, `stderr`, `stdin`.
 
-#### Primitive templates
-
-Instead the common aproach of allow any type as template, Plee
-enforce the use of a 'common minimum type'. The compiler will
-generate more specific functions if needed.
-
-* `function`, `fn`
-
-  Match to a function (anonymous or not)
-
-* `number`
-
-  Match to a numeric types. by default: f32
-
-* `ptr`, `ref`, `itr`
-
-  Are very special types, that allow memory arithmetic of some type.
-
-  [pointers in detail](#pointers-type)
-
-* `any`
-
-  Can be anything, it's usage is not recomended.
-
 #### Data aggregation
-
-Complex types always have a subtype, that can be a primitive or a box.
-
-* `array`
-
-  List of things in a continuous memory.
-
-  [array in details](#array-type)
 
 * `struct`
 
@@ -284,7 +252,7 @@ Complex types always have a subtype, that can be a primitive or a box.
 
   [struct in details](#struct-type)
 
-* **block**
+* `block`
 
   It's the same as struct but memory continuous.
 
@@ -292,35 +260,81 @@ Complex types always have a subtype, that can be a primitive or a box.
 
   [block in details](#block-type)
 
-* **object**
-
-  Aggregate multiple data (of the same type) under a dynamic list of keys.
-
-  [object in details](#object-type)
-
 * `bitmask`
 
   Primitive to pack booleans
 
   [bitmask in details](#bitmask-type)
 
+
 #### Types wrappers
 
-A type wrapper add extra functionality to a type without modifing
-the type itself.
+Wrapper always gives extra functionality to a basic type
+without modifying the type itself, mostly change memory
+representation/aggrupation.
 
-* **box**
+* `array`
+
+  Dense memory-continuos data.
+
+  [array in details](#array-type)
+
+
+* `object`
+
+  Dynamic key-value structure of a single type.
+
+  [object in details](#object-type)
+
+* `box`
 
   Wrap a variable with it's type (aka Variant)
 
-  Now box can be used in an array/object, and store heterogeneous data.
+  Now box can be used in an array/object to store heterogeneous data.
 
   [box in details](#box-type)
 
+#### Primitive templates
+
+  Templates on Plee don't follow the C++ rules.
+
+  In C++ a template must be used in both sides: declaration and use.
+
+  Plee divide templates in two styles. Type templating and Type wrapping
+
+  *Type templating*
+
+  Use a common name to define many subtypes
+
+  * `function`, `fn`
+
+  Match to a function (anonymous or not)
+
+  * `number`
+
+  Match to a numeric types. Default: `f32`
+
+  * `any`
+
+  Can be anything, it's the same as not specify the type.
+
+  *Type wrapping*
+
+  * `ptr`, `ref`, `itr`
+
+  Requiere a sub-type (that will be templated). You always have
+  a pointer to X
+
+  [pointers in detail](#pointers-type)
+
+  * `array`
+
+  Array are dense-memory continuous data of one kind
+
+  * `object`
+
 
 #### Type properties
-
-
 
 
 **iterable**
@@ -328,7 +342,7 @@ the type itself.
 
 > Can be directly used inside a `for-in` loop
 
-**thread-block**
+**thread-block** (experimental)
 > A thread can block the usage for the rest of the threads.
 
 > When a thread want to use it, first must wait the lock.
@@ -339,6 +353,10 @@ the type itself.
 > when a variable references counter add 1
 
 > when a variable is deleted counter subtract 1
+
+STUDY: this can be done with a type wrapper...
+maybe do not force users to use it by default
+
 
 #### functions in modules.
 
