@@ -325,7 +325,7 @@ test("default paramaters 2", function (t) {
     },
     {
       "type" : "parameter",
-      "range" : [9,26],
+      "range" : [9,25],
       "clone" : false,
       "const" : false,
       "id" : {
@@ -358,11 +358,11 @@ test("default paramaters 2", function (t) {
         }
       },{
         "type" : "parameter-assertion",
-        "range" : [21,26],
+        "range" : [21,25],
         "operator" : "!=",
         "value" : {
           "type" : "null-literal",
-          "range" : [23,26]
+          "range" : [23,25]
         }
       }]
     }

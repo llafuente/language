@@ -4,7 +4,7 @@
   "description": "Custom language",
   "main": "index.js",
   "scripts": {
-    "test": "tap test/test-*.js",
+    "test": "tap tests/test-*.js",
     "coverage": "node test/code-coverage.js",
     "generate": "node node_modules/pegjs/bin/pegjs plee-grammar.peg",
     "postinstall": "chmod +x ./bin/parse"
