@@ -1,0 +1,25 @@
+var i8 a1,
+  ui8 a2,
+
+  i16 b1,
+  ui16 b2,
+
+  i32 c1,
+  ui32 c2,
+
+  i64 d1,
+  ui64 d2,
+
+  f32 e1,
+  f64 e2,
+
+  string s;
+
+var [] s; // use type inference for subtype
+var array<ui8> s; // force subtype
+var ui8[] s; // variable size
+
+var {} s;
+var object<ui8> s;
+
+var ref<ui8[]> s; // ref to list of chars
