@@ -1,0 +1,14 @@
+bitmask week {
+    is_monday = true,
+    is_thursday,
+    is_wenesday,
+    is_tuesday,
+    is_friday,
+    is_saturday,
+    is_sunday
+};
+
+var week v;
+log v; // stdout: bm{is_monday = true}
+week.is_tuesday = true;
+log v; // stdout = bm{is_monday = true, is_tuesday = true}

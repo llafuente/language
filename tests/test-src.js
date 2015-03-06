@@ -6,7 +6,8 @@ var tap = require("tap"),
   parser = require("../lib/parser.js"),
   argv = require('yargs'),
   file_to_update = [],
-  inspect_test = null;
+  inspect_test = null,
+  debug_level = 0;
 
 if (argv.argv.update) {
   if ("string" === typeof argv.argv.update) {
@@ -15,6 +16,11 @@ if (argv.argv.update) {
     file_to_update = argv.argv.update;
   }
 }
+if (argv.argv.v) {
+  debug_level = parseInt(argv.argv.v, 10);
+}
+
+
 
 if (argv.argv.inspect) {
   inspect_test = argv.argv.inspect;
@@ -30,7 +36,7 @@ function setup(code) {
   var tokens = tokenizer.parse(code, 0);
   tokens = tokenizer.rangenize (tokens);
   try {
-    var ast = parser(tokens, 0);
+    var ast = parser(tokens, debug_level);
   } catch(e) {
     return e;
   }
