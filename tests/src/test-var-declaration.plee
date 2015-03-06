@@ -12,11 +12,11 @@ var e = {};
 
 var ui8 f;
 
-var ui8 g[10];
+var ui8[10] g;
 
-var ui8 h[c];
+var ui8[] h = new ui8[c];
 
-var ui8 i[c = b];
+var ui8[] i = new ui8[c = b];
 
 var ui8 j = a + b;
 

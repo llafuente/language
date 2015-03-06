@@ -1,0 +1,580 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    133
+  ],
+  "body": [
+    {
+      "type": "var-declaration",
+      "range": [
+        0,
+        7
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            2,
+            3
+          ],
+          "var_type": null,
+          "id": "a"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            4,
+            5
+          ],
+          "var_type": null,
+          "id": "b"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            6,
+            7
+          ],
+          "var_type": null,
+          "id": "c"
+        }
+      ]
+    },
+    {
+      "type": "binary-expr",
+      "range": [
+        9,
+        14
+      ],
+      "expression": true,
+      "left": {
+        "type": "var-literal",
+        "range": [
+          9,
+          11
+        ],
+        "value": "a"
+      },
+      "operator": "+",
+      "right": {
+        "type": "var-literal",
+        "range": [
+          13,
+          14
+        ],
+        "value": "b"
+      }
+    },
+    {
+      "type": "binary-expr",
+      "range": [
+        16,
+        21
+      ],
+      "expression": true,
+      "left": {
+        "type": "var-literal",
+        "range": [
+          16,
+          18
+        ],
+        "value": "a"
+      },
+      "operator": "-",
+      "right": {
+        "type": "var-literal",
+        "range": [
+          20,
+          21
+        ],
+        "value": "b"
+      }
+    },
+    {
+      "type": "binary-expr",
+      "range": [
+        23,
+        32
+      ],
+      "expression": true,
+      "left": {
+        "type": "var-literal",
+        "range": [
+          23,
+          25
+        ],
+        "value": "a"
+      },
+      "operator": "+",
+      "right": {
+        "type": "binary-expr",
+        "range": [
+          27,
+          32
+        ],
+        "expression": true,
+        "left": {
+          "type": "var-literal",
+          "range": [
+            27,
+            29
+          ],
+          "value": "b"
+        },
+        "operator": "*",
+        "right": {
+          "type": "var-literal",
+          "range": [
+            31,
+            32
+          ],
+          "value": "c"
+        }
+      }
+    },
+    {
+      "type": "binary-expr",
+      "range": [
+        34,
+        39
+      ],
+      "expression": true,
+      "left": {
+        "type": "var-literal",
+        "range": [
+          34,
+          36
+        ],
+        "value": "a"
+      },
+      "operator": "&&",
+      "right": {
+        "type": "var-literal",
+        "range": [
+          38,
+          39
+        ],
+        "value": "b"
+      }
+    },
+    {
+      "type": "binary-expr",
+      "range": [
+        41,
+        46
+      ],
+      "expression": true,
+      "left": {
+        "type": "var-literal",
+        "range": [
+          41,
+          43
+        ],
+        "value": "b"
+      },
+      "operator": "||",
+      "right": {
+        "type": "var-literal",
+        "range": [
+          45,
+          46
+        ],
+        "value": "c"
+      }
+    },
+    {
+      "type": "left-unary-expr",
+      "range": [
+        48,
+        50
+      ],
+      "right": {
+        "type": "var-literal",
+        "range": [
+          49,
+          50
+        ],
+        "value": "b"
+      },
+      "operator": "+"
+    },
+    {
+      "type": "left-unary-expr",
+      "range": [
+        52,
+        54
+      ],
+      "right": {
+        "type": "var-literal",
+        "range": [
+          53,
+          54
+        ],
+        "value": "c"
+      },
+      "operator": "++"
+    },
+    {
+      "type": "right-unary-expr",
+      "range": [
+        56,
+        58
+      ],
+      "left": {
+        "type": "var-literal",
+        "range": [
+          56,
+          57
+        ],
+        "value": "b"
+      },
+      "operator": "++"
+    },
+    {
+      "type": "right-unary-expr",
+      "range": [
+        60,
+        62
+      ],
+      "left": {
+        "type": "var-literal",
+        "range": [
+          60,
+          61
+        ],
+        "value": "c"
+      },
+      "operator": "--"
+    },
+    {
+      "type": "comment",
+      "range": [
+        64,
+        67
+      ],
+      "multiline": false,
+      "text": "TODO ++b++; ?\n"
+    },
+    {
+      "type": "call-expr",
+      "range": [
+        67,
+        70
+      ],
+      "callee": {
+        "type": "var-literal",
+        "range": [
+          67,
+          68
+        ],
+        "value": "callme"
+      },
+      "arguments": [
+        {
+          "type": "arguments-seq",
+          "range": [
+            68,
+            70
+          ],
+          "items": []
+        }
+      ]
+    },
+    {
+      "type": "call-expr",
+      "range": [
+        72,
+        76
+      ],
+      "callee": {
+        "type": "var-literal",
+        "range": [
+          72,
+          73
+        ],
+        "value": "callme"
+      },
+      "arguments": [
+        {
+          "type": "arguments-seq",
+          "range": [
+            73,
+            76
+          ],
+          "items": [
+            {
+              "type": "argument",
+              "range": [
+                74,
+                75
+              ],
+              "parameter": null,
+              "value": {
+                "type": "var-literal",
+                "range": [
+                  74,
+                  75
+                ],
+                "value": "maybe"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "binary-expr",
+      "range": [
+        78,
+        85
+      ],
+      "expression": true,
+      "left": {
+        "type": "var-literal",
+        "range": [
+          78,
+          80
+        ],
+        "value": "foo"
+      },
+      "operator": "||",
+      "right": {
+        "type": "call-expr",
+        "range": [
+          82,
+          85
+        ],
+        "callee": {
+          "type": "var-literal",
+          "range": [
+            82,
+            83
+          ],
+          "value": "bar"
+        },
+        "arguments": [
+          {
+            "type": "arguments-seq",
+            "range": [
+              83,
+              85
+            ],
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "type": "binary-expr",
+      "range": [
+        87,
+        94
+      ],
+      "expression": true,
+      "left": {
+        "type": "var-literal",
+        "range": [
+          87,
+          89
+        ],
+        "value": "success"
+      },
+      "operator": "&&",
+      "right": {
+        "type": "call-expr",
+        "range": [
+          91,
+          94
+        ],
+        "callee": {
+          "type": "var-literal",
+          "range": [
+            91,
+            92
+          ],
+          "value": "callback"
+        },
+        "arguments": [
+          {
+            "type": "arguments-seq",
+            "range": [
+              92,
+              94
+            ],
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        96,
+        107
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            98,
+            100
+          ],
+          "var_type": null,
+          "id": "x",
+          "init": {
+            "type": "function-declaration",
+            "range": [
+              102,
+              107
+            ],
+            "id": null,
+            "parameters": {
+              "type": "parameters",
+              "range": [
+                104,
+                104
+              ],
+              "list": []
+            },
+            "return_type": null,
+            "body": {
+              "type": "block",
+              "range": [
+                104,
+                107
+              ],
+              "body": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "call-expr",
+      "range": [
+        109,
+        132
+      ],
+      "callee": {
+        "type": "group-expr",
+        "range": [
+          109,
+          122
+        ],
+        "body": {
+          "type": "function-declaration",
+          "range": [
+            110,
+            120
+          ],
+          "id": null,
+          "parameters": {
+            "type": "parameters",
+            "range": [
+              112,
+              112
+            ],
+            "list": []
+          },
+          "return_type": null,
+          "body": {
+            "type": "block",
+            "range": [
+              112,
+              120
+            ],
+            "body": [
+              {
+                "type": "return-statement",
+                "range": [
+                  114,
+                  117
+                ],
+                "value": {
+                  "type": "number-literal",
+                  "range": [
+                    116,
+                    117
+                  ],
+                  "value": 0
+                },
+                "var_type": null
+              }
+            ]
+          }
+        }
+      },
+      "arguments": [
+        {
+          "type": "arguments-seq",
+          "range": [
+            122,
+            132
+          ],
+          "items": [
+            {
+              "type": "argument",
+              "range": [
+                123,
+                131
+              ],
+              "parameter": null,
+              "value": {
+                "type": "call-expr",
+                "range": [
+                  123,
+                  131
+                ],
+                "callee": {
+                  "type": "function-declaration",
+                  "range": [
+                    123,
+                    129
+                  ],
+                  "id": {
+                    "type": "var-literal",
+                    "range": [
+                      125,
+                      127
+                    ],
+                    "value": "x"
+                  },
+                  "parameters": {
+                    "type": "parameters",
+                    "range": [
+                      127,
+                      127
+                    ],
+                    "list": []
+                  },
+                  "return_type": null,
+                  "body": {
+                    "type": "block",
+                    "range": [
+                      127,
+                      129
+                    ],
+                    "body": null
+                  }
+                },
+                "arguments": [
+                  {
+                    "type": "arguments-seq",
+                    "range": [
+                      129,
+                      131
+                    ],
+                    "items": []
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

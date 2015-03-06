@@ -1,0 +1,101 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    17
+  ],
+  "body": [
+    {
+      "type": "if-statement",
+      "range": [
+        4,
+        7
+      ],
+      "test": {
+        "type": "var-literal",
+        "range": [
+          6,
+          7
+        ],
+        "value": "x"
+      },
+      "body": [
+        {
+          "type": "call-expr",
+          "range": [
+            0,
+            4
+          ],
+          "callee": {
+            "type": "var-literal",
+            "range": [
+              0,
+              1
+            ],
+            "value": "a"
+          },
+          "arguments": [
+            {
+              "type": "arguments-seq",
+              "range": [
+                1,
+                4
+              ],
+              "items": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "if-statement",
+      "range": [
+        13,
+        16
+      ],
+      "test": {
+        "type": "left-unary-expr",
+        "range": [
+          13,
+          16
+        ],
+        "right": {
+          "type": "var-literal",
+          "range": [
+            15,
+            16
+          ],
+          "value": "x"
+        },
+        "operator": "!"
+      },
+      "body": [
+        {
+          "type": "call-expr",
+          "range": [
+            9,
+            13
+          ],
+          "callee": {
+            "type": "var-literal",
+            "range": [
+              9,
+              10
+            ],
+            "value": "b"
+          },
+          "arguments": [
+            {
+              "type": "arguments-seq",
+              "range": [
+                10,
+                13
+              ],
+              "items": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

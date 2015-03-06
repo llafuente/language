@@ -1,0 +1,37 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    8
+  ],
+  "body": [
+    {
+      "type": "block",
+      "range": [
+        0,
+        8
+      ],
+      "body": [
+        {
+          "type": "var-declaration",
+          "range": [
+            2,
+            5
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                4,
+                5
+              ],
+              "var_type": null,
+              "id": "x"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

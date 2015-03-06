@@ -1,0 +1,467 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    123
+  ],
+  "body": [
+    {
+      "type": "var-declaration",
+      "range": [
+        0,
+        55
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            2,
+            5
+          ],
+          "var_type": {
+            "type": "i8",
+            "range": [
+              2,
+              4
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "a1"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            7,
+            10
+          ],
+          "var_type": {
+            "type": "ui8",
+            "range": [
+              7,
+              9
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "a2"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            12,
+            15
+          ],
+          "var_type": {
+            "type": "i16",
+            "range": [
+              12,
+              14
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "b1"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            17,
+            20
+          ],
+          "var_type": {
+            "type": "ui16",
+            "range": [
+              17,
+              19
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "b2"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            22,
+            25
+          ],
+          "var_type": {
+            "type": "i32",
+            "range": [
+              22,
+              24
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "c1"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            27,
+            30
+          ],
+          "var_type": {
+            "type": "ui32",
+            "range": [
+              27,
+              29
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "c2"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            32,
+            35
+          ],
+          "var_type": {
+            "type": "i64",
+            "range": [
+              32,
+              34
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "d1"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            37,
+            40
+          ],
+          "var_type": {
+            "type": "ui64",
+            "range": [
+              37,
+              39
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "d2"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            42,
+            45
+          ],
+          "var_type": {
+            "type": "f32",
+            "range": [
+              42,
+              44
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "e1"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            47,
+            50
+          ],
+          "var_type": {
+            "type": "f64",
+            "range": [
+              47,
+              49
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "e2"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            52,
+            55
+          ],
+          "var_type": {
+            "type": "string",
+            "range": [
+              52,
+              54
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "s"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        57,
+        63
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            59,
+            63
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              59,
+              62
+            ],
+            "sub_type": {
+              "type": null,
+              "range": [
+                59,
+                59
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "s"
+        }
+      ]
+    },
+    {
+      "type": "comment",
+      "range": [
+        65,
+        67
+      ],
+      "multiline": false,
+      "text": " use type inference for subtype\n"
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        67,
+        75
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            69,
+            75
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              69,
+              74
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                71,
+                72
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": null
+          },
+          "id": "s"
+        }
+      ]
+    },
+    {
+      "type": "comment",
+      "range": [
+        77,
+        79
+      ],
+      "multiline": false,
+      "text": " force subtype\n"
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        79,
+        86
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            81,
+            86
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              82,
+              85
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                81,
+                82
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "s"
+        }
+      ]
+    },
+    {
+      "type": "comment",
+      "range": [
+        88,
+        91
+      ],
+      "multiline": false,
+      "text": " variable size\n"
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        91,
+        97
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            93,
+            97
+          ],
+          "var_type": {
+            "type": "object",
+            "range": [
+              93,
+              96
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "s"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        99,
+        107
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            101,
+            107
+          ],
+          "var_type": {
+            "type": "object",
+            "range": [
+              101,
+              106
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                103,
+                104
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": null
+          },
+          "id": "s"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        109,
+        119
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            111,
+            119
+          ],
+          "var_type": {
+            "type": "ref",
+            "range": [
+              111,
+              118
+            ],
+            "sub_type": {
+              "type": "array",
+              "range": [
+                114,
+                116
+              ],
+              "sub_type": {
+                "type": "ui8",
+                "range": [
+                  113,
+                  114
+                ],
+                "sub_type": null,
+                "dimensions": null
+              },
+              "dimensions": [
+                {
+                  "type": "number-literal",
+                  "value": 0
+                }
+              ]
+            },
+            "dimensions": null
+          },
+          "id": "s"
+        }
+      ]
+    },
+    {
+      "type": "comment",
+      "range": [
+        121,
+        123
+      ],
+      "multiline": false,
+      "text": " ref to list of chars\n"
+    }
+  ]
+}

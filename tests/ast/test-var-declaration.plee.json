@@ -1,0 +1,1113 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    302
+  ],
+  "body": [
+    {
+      "type": "comment",
+      "range": [
+        0,
+        3
+      ],
+      "multiline": false,
+      "text": " also test most of the literals\n"
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        3,
+        6
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            5,
+            6
+          ],
+          "var_type": null,
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        8,
+        14
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            10,
+            11
+          ],
+          "var_type": null,
+          "id": "b"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            13,
+            14
+          ],
+          "var_type": null,
+          "id": "c"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        16,
+        23
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            18,
+            20
+          ],
+          "var_type": null,
+          "id": "d",
+          "init": {
+            "type": "number-literal",
+            "range": [
+              22,
+              23
+            ],
+            "value": 0
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        25,
+        40
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            27,
+            29
+          ],
+          "var_type": null,
+          "id": "e",
+          "init": {
+            "type": "array-literal",
+            "range": [
+              31,
+              40
+            ],
+            "items": [
+              {
+                "type": "number-literal",
+                "range": [
+                  32,
+                  33
+                ],
+                "value": 1
+              },
+              {
+                "type": "number-literal",
+                "range": [
+                  35,
+                  36
+                ],
+                "value": 2
+              },
+              {
+                "type": "number-literal",
+                "range": [
+                  38,
+                  39
+                ],
+                "value": 3
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        42,
+        50
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            44,
+            46
+          ],
+          "var_type": null,
+          "id": "e",
+          "init": {
+            "type": "object-literal",
+            "range": [
+              48,
+              50
+            ],
+            "properties": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        52,
+        57
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            54,
+            57
+          ],
+          "var_type": {
+            "type": "ui8",
+            "range": [
+              54,
+              56
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "f"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        59,
+        67
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            61,
+            67
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              62,
+              66
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                61,
+                62
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "range": [
+                  63,
+                  64
+                ],
+                "value": 10
+              }
+            ]
+          },
+          "id": "g"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        69,
+        85
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            71,
+            77
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              72,
+              75
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                71,
+                72
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "h",
+          "init": {
+            "type": "new-expr",
+            "range": [
+              79,
+              85
+            ],
+            "callee": {
+              "type": "member-expr",
+              "range": [
+                81,
+                85
+              ],
+              "object": {
+                "type": "var-literal",
+                "range": [
+                  81,
+                  82
+                ],
+                "value": "ui8"
+              },
+              "properties": [
+                {
+                  "type": "var-literal",
+                  "range": [
+                    83,
+                    84
+                  ],
+                  "value": "c"
+                }
+              ]
+            },
+            "arguments": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        87,
+        107
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            89,
+            95
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              90,
+              93
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                89,
+                90
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "i",
+          "init": {
+            "type": "new-expr",
+            "range": [
+              97,
+              107
+            ],
+            "callee": {
+              "type": "member-expr",
+              "range": [
+                99,
+                107
+              ],
+              "object": {
+                "type": "var-literal",
+                "range": [
+                  99,
+                  100
+                ],
+                "value": "ui8"
+              },
+              "properties": [
+                {
+                  "type": "assignment-expr",
+                  "range": [
+                    101,
+                    106
+                  ],
+                  "left": {
+                    "type": "var-literal",
+                    "range": [
+                      101,
+                      103
+                    ],
+                    "value": "c"
+                  },
+                  "right": {
+                    "type": "var-literal",
+                    "range": [
+                      105,
+                      106
+                    ],
+                    "value": "b"
+                  },
+                  "operator": "="
+                }
+              ]
+            },
+            "arguments": []
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        109,
+        122
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            111,
+            115
+          ],
+          "var_type": {
+            "type": "ui8",
+            "range": [
+              111,
+              113
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "j",
+          "init": {
+            "type": "binary-expr",
+            "range": [
+              117,
+              122
+            ],
+            "expression": true,
+            "left": {
+              "type": "var-literal",
+              "range": [
+                117,
+                119
+              ],
+              "value": "a"
+            },
+            "operator": "+",
+            "right": {
+              "type": "var-literal",
+              "range": [
+                121,
+                122
+              ],
+              "value": "b"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        124,
+        135
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            126,
+            130
+          ],
+          "var_type": {
+            "type": "ui8",
+            "range": [
+              126,
+              128
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "k",
+          "init": {
+            "type": "call-expr",
+            "range": [
+              132,
+              135
+            ],
+            "callee": {
+              "type": "var-literal",
+              "range": [
+                132,
+                133
+              ],
+              "value": "a"
+            },
+            "arguments": [
+              {
+                "type": "arguments-seq",
+                "range": [
+                  133,
+                  135
+                ],
+                "items": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        137,
+        165
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            139,
+            141
+          ],
+          "var_type": null,
+          "id": "ñ",
+          "init": {
+            "type": "object-literal",
+            "range": [
+              143,
+              165
+            ],
+            "properties": [
+              {
+                "type": "object-property",
+                "range": [
+                  145,
+                  149
+                ],
+                "left": {
+                  "type": "var-literal",
+                  "range": [
+                    145,
+                    146
+                  ],
+                  "value": "c"
+                },
+                "right": {
+                  "type": "var-literal",
+                  "range": [
+                    148,
+                    149
+                  ],
+                  "value": "b"
+                }
+              },
+              {
+                "type": "object-property",
+                "range": [
+                  151,
+                  164
+                ],
+                "left": {
+                  "type": "string-literal",
+                  "range": [
+                    151,
+                    154
+                  ],
+                  "value": "x"
+                },
+                "right": {
+                  "type": "assignment-expr",
+                  "range": [
+                    157,
+                    164
+                  ],
+                  "left": {
+                    "type": "var-literal",
+                    "range": [
+                      157,
+                      159
+                    ],
+                    "value": "a"
+                  },
+                  "right": {
+                    "type": "var-literal",
+                    "range": [
+                      161,
+                      162
+                    ],
+                    "value": "c"
+                  },
+                  "operator": "="
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        167,
+        174
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            169,
+            174
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              170,
+              173
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                169,
+                170
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        176,
+        183
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            178,
+            183
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              179,
+              182
+            ],
+            "sub_type": {
+              "type": "fn",
+              "range": [
+                178,
+                179
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        185,
+        193
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            187,
+            193
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              188,
+              192
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                187,
+                188
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "range": [
+                  189,
+                  190
+                ],
+                "value": 5
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        195,
+        205
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            197,
+            205
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              198,
+              204
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                197,
+                198
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "range": [
+                  199,
+                  200
+                ],
+                "value": 5
+              },
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        207,
+        218
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            209,
+            218
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              210,
+              217
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                209,
+                210
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "range": [
+                  211,
+                  212
+                ],
+                "value": 5
+              },
+              {
+                "type": "number-literal",
+                "range": [
+                  214,
+                  215
+                ],
+                "value": 6
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        220,
+        233
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            222,
+            233
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              223,
+              232
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                222,
+                223
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "range": [
+                  224,
+                  225
+                ],
+                "value": 5
+              },
+              {
+                "type": "number-literal",
+                "range": [
+                  227,
+                  228
+                ],
+                "value": 6
+              },
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        235,
+        249
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            237,
+            249
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              238,
+              248
+            ],
+            "sub_type": {
+              "type": "ui8",
+              "range": [
+                237,
+                238
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "range": [
+                  239,
+                  240
+                ],
+                "value": 5
+              },
+              {
+                "type": "number-literal",
+                "range": [
+                  242,
+                  243
+                ],
+                "value": 6
+              },
+              {
+                "type": "number-literal",
+                "range": [
+                  245,
+                  246
+                ],
+                "value": 7
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        251,
+        257
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            253,
+            257
+          ],
+          "var_type": {
+            "type": "array",
+            "range": [
+              253,
+              256
+            ],
+            "sub_type": {
+              "type": null,
+              "range": [
+                253,
+                253
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "dimensions": [
+              {
+                "type": "number-literal",
+                "value": 0
+              }
+            ]
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        259,
+        265
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            261,
+            265
+          ],
+          "var_type": {
+            "type": "object",
+            "range": [
+              261,
+              264
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        267,
+        274
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            269,
+            274
+          ],
+          "var_type": {
+            "type": "object",
+            "range": [
+              269,
+              273
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        276,
+        283
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            278,
+            283
+          ],
+          "var_type": {
+            "type": "object",
+            "range": [
+              278,
+              282
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "a"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        285,
+        292
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            287,
+            292
+          ],
+          "var_type": {
+            "type": "object",
+            "range": [
+              287,
+              291
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "b"
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        294,
+        301
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            296,
+            301
+          ],
+          "var_type": {
+            "type": "object",
+            "range": [
+              296,
+              300
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "c"
+        }
+      ]
+    }
+  ]
+}

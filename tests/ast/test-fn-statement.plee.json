@@ -1,0 +1,1580 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    361
+  ],
+  "body": [
+    {
+      "type": "function-declaration",
+      "range": [
+        0,
+        8
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          2,
+          4
+        ],
+        "value": "a"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          4,
+          4
+        ],
+        "list": []
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          4,
+          8
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        8,
+        16
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          10,
+          12
+        ],
+        "value": "b"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          12,
+          12
+        ],
+        "list": []
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          12,
+          16
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        16,
+        26
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          18,
+          20
+        ],
+        "value": "one_arg"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          20,
+          22
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              20,
+              22
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                20,
+                22
+              ],
+              "value": "arg1"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          22,
+          26
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        26,
+        39
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          28,
+          30
+        ],
+        "value": "two_args"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          30,
+          35
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              30,
+              31
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                30,
+                31
+              ],
+              "value": "arg1"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              33,
+              35
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                33,
+                35
+              ],
+              "value": "arg2"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          35,
+          39
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        39,
+        56
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          41,
+          43
+        ],
+        "value": "def_arg"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          43,
+          52
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              43,
+              48
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                43,
+                45
+              ],
+              "value": "arg1"
+            },
+            "default": {
+              "type": "number-literal",
+              "range": [
+                47,
+                48
+              ],
+              "value": 0
+            },
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              50,
+              52
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                50,
+                52
+              ],
+              "value": "arg2"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          52,
+          56
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        56,
+        77
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          58,
+          60
+        ],
+        "value": "def_and_assert"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          60,
+          73
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              60,
+              69
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                60,
+                62
+              ],
+              "value": "arg1"
+            },
+            "default": {
+              "type": "number-literal",
+              "range": [
+                64,
+                66
+              ],
+              "value": 0
+            },
+            "assertions": [
+              {
+                "type": "parameter-assertion",
+                "range": [
+                  66,
+                  69
+                ],
+                "operator": "!=",
+                "value": {
+                  "type": "null-literal",
+                  "range": [
+                    68,
+                    69
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "parameter",
+            "range": [
+              71,
+              73
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                71,
+                73
+              ],
+              "value": "arg2"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          73,
+          77
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        77,
+        100
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          79,
+          81
+        ],
+        "value": "def_and_assert"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          81,
+          96
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              81,
+              92
+            ],
+            "clone": true,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                83,
+                85
+              ],
+              "value": "arg1"
+            },
+            "default": {
+              "type": "number-literal",
+              "range": [
+                87,
+                89
+              ],
+              "value": 0
+            },
+            "assertions": [
+              {
+                "type": "parameter-assertion",
+                "range": [
+                  89,
+                  92
+                ],
+                "operator": "!=",
+                "value": {
+                  "type": "null-literal",
+                  "range": [
+                    91,
+                    92
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "parameter",
+            "range": [
+              94,
+              96
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                94,
+                96
+              ],
+              "value": "arg2"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          96,
+          100
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        100,
+        112
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          102,
+          104
+        ],
+        "value": "member_expr_as_default"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          104,
+          108
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              104,
+              108
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "array",
+              "range": [
+                104,
+                106
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                106,
+                108
+              ],
+              "value": "arr"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          108,
+          112
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        112,
+        135
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          114,
+          116
+        ],
+        "value": "member_expr_as_default"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          116,
+          131
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              116,
+              119
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "array",
+              "range": [
+                116,
+                118
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                118,
+                119
+              ],
+              "value": "arr"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              121,
+              131
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "ui64",
+              "range": [
+                121,
+                123
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                123,
+                125
+              ],
+              "value": "limit"
+            },
+            "default": {
+              "type": "member-expr",
+              "range": [
+                127,
+                131
+              ],
+              "object": {
+                "type": "var-literal",
+                "range": [
+                  127,
+                  128
+                ],
+                "value": "arr"
+              },
+              "properties": [
+                {
+                  "type": "string-literal",
+                  "range": [
+                    129,
+                    131
+                  ],
+                  "value": "length"
+                }
+              ]
+            },
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          131,
+          135
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "comment",
+      "range": [
+        135,
+        139
+      ],
+      "multiline": true,
+      "text": " TODO\nfn call_as_default super_def = callme() {\n\n}\n"
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        139,
+        155
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          141,
+          143
+        ],
+        "value": "lambda_test"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          143,
+          143
+        ],
+        "list": []
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          143,
+          155
+        ],
+        "body": [
+          {
+            "type": "function-declaration",
+            "range": [
+              145,
+              153
+            ],
+            "id": {
+              "type": "var-literal",
+              "range": [
+                147,
+                149
+              ],
+              "value": "lambda_done"
+            },
+            "parameters": {
+              "type": "parameters",
+              "range": [
+                149,
+                149
+              ],
+              "list": []
+            },
+            "return_type": null,
+            "body": {
+              "type": "block",
+              "range": [
+                149,
+                153
+              ],
+              "body": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "comment",
+      "range": [
+        155,
+        157
+      ],
+      "multiline": false,
+      "text": " anonimous function, no arguments\n"
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        157,
+        168
+      ],
+      "id": null,
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          159,
+          159
+        ],
+        "list": []
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          159,
+          168
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              161,
+              164
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                163,
+                164
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "comment",
+      "range": [
+        168,
+        170
+      ],
+      "multiline": false,
+      "text": " anonimous function, one arguments\n"
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        170,
+        185
+      ],
+      "id": null,
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          174,
+          176
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              174,
+              176
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                174,
+                176
+              ],
+              "value": "y"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          176,
+          185
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              178,
+              181
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                180,
+                181
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "comment",
+      "range": [
+        185,
+        187
+      ],
+      "multiline": false,
+      "text": " anonimous function, two arguments or more\n"
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        187,
+        205
+      ],
+      "id": null,
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          191,
+          196
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              191,
+              192
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                191,
+                192
+              ],
+              "value": "x"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              194,
+              196
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                194,
+                196
+              ],
+              "value": "y"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          196,
+          205
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              198,
+              201
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                200,
+                201
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "comment",
+      "range": [
+        205,
+        207
+      ],
+      "multiline": false,
+      "text": " optional parenthesis\n"
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        207,
+        221
+      ],
+      "id": null,
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          210,
+          210
+        ],
+        "list": []
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          212,
+          221
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              214,
+              217
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                216,
+                217
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        221,
+        236
+      ],
+      "id": null,
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          224,
+          225
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              224,
+              225
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                224,
+                225
+              ],
+              "value": "a"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          227,
+          236
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              229,
+              232
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                231,
+                232
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        236,
+        254
+      ],
+      "id": null,
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          239,
+          243
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              239,
+              240
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                239,
+                240
+              ],
+              "value": "a"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              242,
+              243
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                242,
+                243
+              ],
+              "value": "b"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          245,
+          254
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              247,
+              250
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                249,
+                250
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        254,
+        279
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          256,
+          258
+        ],
+        "value": "x"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          259,
+          268
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              259,
+              260
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                259,
+                260
+              ],
+              "value": "a"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              262,
+              263
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                262,
+                263
+              ],
+              "value": "b"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              265,
+              268
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "ui8",
+              "range": [
+                265,
+                267
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                267,
+                268
+              ],
+              "value": "c"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          270,
+          279
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              272,
+              275
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                274,
+                275
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        279,
+        308
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          281,
+          283
+        ],
+        "value": "y"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          284,
+          293
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              284,
+              285
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                284,
+                285
+              ],
+              "value": "a"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              287,
+              288
+            ],
+            "clone": false,
+            "const": false,
+            "id": {
+              "type": "var-literal",
+              "range": [
+                287,
+                288
+              ],
+              "value": "b"
+            },
+            "default": null,
+            "assertions": null
+          },
+          {
+            "type": "parameter",
+            "range": [
+              290,
+              293
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "ui8",
+              "range": [
+                290,
+                292
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                292,
+                293
+              ],
+              "value": "c"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": {
+        "type": "var-literal",
+        "range": [
+          297,
+          299
+        ],
+        "value": "ui64"
+      },
+      "body": {
+        "type": "block",
+        "range": [
+          299,
+          308
+        ],
+        "body": [
+          {
+            "type": "return-statement",
+            "range": [
+              301,
+              304
+            ],
+            "value": {
+              "type": "number-literal",
+              "range": [
+                303,
+                304
+              ],
+              "value": 1
+            },
+            "var_type": null
+          }
+        ]
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        308,
+        324
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          310,
+          312
+        ],
+        "value": "complex_types"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          313,
+          318
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              313,
+              318
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "object",
+              "range": [
+                313,
+                317
+              ],
+              "sub_type": null,
+              "dimensions": null
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                317,
+                318
+              ],
+              "value": "a"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          320,
+          324
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        324,
+        346
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          326,
+          328
+        ],
+        "value": "complex_types2"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          329,
+          340
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              329,
+              340
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "array",
+              "range": [
+                330,
+                339
+              ],
+              "sub_type": {
+                "type": "ui8",
+                "range": [
+                  329,
+                  330
+                ],
+                "sub_type": null,
+                "dimensions": null
+              },
+              "dimensions": [
+                {
+                  "type": "number-literal",
+                  "range": [
+                    331,
+                    332
+                  ],
+                  "value": 1
+                },
+                {
+                  "type": "number-literal",
+                  "range": [
+                    334,
+                    335
+                  ],
+                  "value": 2
+                },
+                {
+                  "type": "number-literal",
+                  "value": 0
+                }
+              ]
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                339,
+                340
+              ],
+              "value": "a"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          342,
+          346
+        ],
+        "body": null
+      }
+    },
+    {
+      "type": "function-declaration",
+      "range": [
+        346,
+        361
+      ],
+      "id": {
+        "type": "var-literal",
+        "range": [
+          348,
+          350
+        ],
+        "value": "complex_types3"
+      },
+      "parameters": {
+        "type": "parameters",
+        "range": [
+          351,
+          356
+        ],
+        "list": [
+          {
+            "type": "parameter",
+            "range": [
+              351,
+              356
+            ],
+            "clone": false,
+            "const": false,
+            "var_type": {
+              "type": "array",
+              "range": [
+                352,
+                355
+              ],
+              "sub_type": {
+                "type": "fn",
+                "range": [
+                  351,
+                  352
+                ],
+                "sub_type": null,
+                "dimensions": null
+              },
+              "dimensions": [
+                {
+                  "type": "number-literal",
+                  "value": 0
+                }
+              ]
+            },
+            "id": {
+              "type": "var-literal",
+              "range": [
+                355,
+                356
+              ],
+              "value": "a"
+            },
+            "default": null,
+            "assertions": null
+          }
+        ]
+      },
+      "return_type": null,
+      "body": {
+        "type": "block",
+        "range": [
+          358,
+          361
+        ],
+        "body": null
+      }
+    }
+  ]
+}

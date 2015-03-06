@@ -21,7 +21,6 @@ function next_test() {
         kid.on("exit", next_test);
     } else {
         ass.report('html', function(err, report) {
-            console.log(report);
             require('fs').writeFileSync(path.join(__dirname, "..", "coverage.html"), report);
 
             ass.report('json', function(err, r) {

@@ -1,0 +1,535 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    163
+  ],
+  "body": [
+    {
+      "type": "struct-declaration",
+      "range": [
+        0,
+        43
+      ],
+      "continous": false,
+      "body": [
+        {
+          "type": "var-declaration",
+          "range": [
+            6,
+            15
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                8,
+                12
+              ],
+              "var_type": {
+                "type": "i32",
+                "range": [
+                  8,
+                  10
+                ],
+                "sub_type": null,
+                "dimensions": null
+              },
+              "id": "length",
+              "init": {
+                "type": "number-literal",
+                "range": [
+                  14,
+                  15
+                ],
+                "value": 0
+              }
+            }
+          ]
+        },
+        {
+          "type": "var-declaration",
+          "range": [
+            17,
+            26
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                19,
+                23
+              ],
+              "var_type": {
+                "type": "i32",
+                "range": [
+                  19,
+                  21
+                ],
+                "sub_type": null,
+                "dimensions": null
+              },
+              "id": "capacity",
+              "init": {
+                "type": "number-literal",
+                "range": [
+                  25,
+                  26
+                ],
+                "value": 0
+              }
+            }
+          ]
+        },
+        {
+          "type": "var-declaration",
+          "range": [
+            28,
+            40
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                30,
+                37
+              ],
+              "var_type": {
+                "type": "ptr",
+                "range": [
+                  30,
+                  35
+                ],
+                "sub_type": {
+                  "type": "i32",
+                  "range": [
+                    32,
+                    33
+                  ],
+                  "sub_type": null,
+                  "dimensions": null
+                },
+                "dimensions": null
+              },
+              "id": "values",
+              "init": {
+                "type": "number-literal",
+                "range": [
+                  39,
+                  40
+                ],
+                "value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "struct-declaration",
+      "range": [
+        45,
+        88
+      ],
+      "continous": true,
+      "body": [
+        {
+          "type": "var-declaration",
+          "range": [
+            51,
+            60
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                53,
+                57
+              ],
+              "var_type": {
+                "type": "i32",
+                "range": [
+                  53,
+                  55
+                ],
+                "sub_type": null,
+                "dimensions": null
+              },
+              "id": "length",
+              "init": {
+                "type": "number-literal",
+                "range": [
+                  59,
+                  60
+                ],
+                "value": 0
+              }
+            }
+          ]
+        },
+        {
+          "type": "var-declaration",
+          "range": [
+            62,
+            71
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                64,
+                68
+              ],
+              "var_type": {
+                "type": "i32",
+                "range": [
+                  64,
+                  66
+                ],
+                "sub_type": null,
+                "dimensions": null
+              },
+              "id": "capacity",
+              "init": {
+                "type": "number-literal",
+                "range": [
+                  70,
+                  71
+                ],
+                "value": 0
+              }
+            }
+          ]
+        },
+        {
+          "type": "var-declaration",
+          "range": [
+            73,
+            85
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                75,
+                82
+              ],
+              "var_type": {
+                "type": "ptr",
+                "range": [
+                  75,
+                  80
+                ],
+                "sub_type": {
+                  "type": "i32",
+                  "range": [
+                    77,
+                    78
+                  ],
+                  "sub_type": null,
+                  "dimensions": null
+                },
+                "dimensions": null
+              },
+              "id": "values",
+              "init": {
+                "type": "number-literal",
+                "range": [
+                  84,
+                  85
+                ],
+                "value": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        90,
+        114
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            92,
+            96
+          ],
+          "var_type": {
+            "type": "ptr",
+            "range": [
+              92,
+              94
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "p",
+          "init": {
+            "type": "new-expr",
+            "range": [
+              98,
+              104
+            ],
+            "callee": {
+              "type": "member-expr",
+              "range": [
+                100,
+                104
+              ],
+              "object": {
+                "type": "var-literal",
+                "range": [
+                  100,
+                  101
+                ],
+                "value": "i32"
+              },
+              "properties": [
+                {
+                  "type": "number-literal",
+                  "range": [
+                    102,
+                    103
+                  ],
+                  "value": 10
+                }
+              ]
+            },
+            "arguments": []
+          }
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            106,
+            109
+          ],
+          "var_type": {
+            "type": "ptr",
+            "range": [
+              106,
+              108
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "x"
+        },
+        {
+          "type": "var-declarator",
+          "range": [
+            111,
+            114
+          ],
+          "var_type": {
+            "type": "t",
+            "range": [
+              111,
+              113
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "tt"
+        }
+      ]
+    },
+    {
+      "type": "assignment-expr",
+      "range": [
+        116,
+        123
+      ],
+      "left": {
+        "type": "member-expr",
+        "range": [
+          116,
+          120
+        ],
+        "object": {
+          "type": "var-literal",
+          "range": [
+            116,
+            117
+          ],
+          "value": "tt"
+        },
+        "properties": [
+          {
+            "type": "string-literal",
+            "range": [
+              118,
+              120
+            ],
+            "value": "xx"
+          }
+        ]
+      },
+      "right": {
+        "type": "number-literal",
+        "range": [
+          122,
+          123
+        ],
+        "value": 1
+      },
+      "operator": "="
+    },
+    {
+      "type": "left-unary-expr",
+      "range": [
+        125,
+        127
+      ],
+      "right": {
+        "type": "var-literal",
+        "range": [
+          126,
+          127
+        ],
+        "value": "p"
+      },
+      "operator": "++"
+    },
+    {
+      "type": "assignment-expr",
+      "range": [
+        129,
+        134
+      ],
+      "left": {
+        "type": "var-literal",
+        "range": [
+          129,
+          131
+        ],
+        "value": "p"
+      },
+      "right": {
+        "type": "number-literal",
+        "range": [
+          133,
+          134
+        ],
+        "value": 3
+      },
+      "operator": "+="
+    },
+    {
+      "type": "assignment-expr",
+      "range": [
+        136,
+        141
+      ],
+      "left": {
+        "type": "var-literal",
+        "range": [
+          136,
+          138
+        ],
+        "value": "x"
+      },
+      "right": {
+        "type": "var-literal",
+        "range": [
+          140,
+          141
+        ],
+        "value": "p"
+      },
+      "operator": "="
+    },
+    {
+      "type": "assignment-expr",
+      "range": [
+        143,
+        149
+      ],
+      "left": {
+        "type": "var-literal",
+        "range": [
+          143,
+          145
+        ],
+        "value": "x"
+      },
+      "right": {
+        "type": "left-unary-expr",
+        "range": [
+          147,
+          149
+        ],
+        "right": {
+          "type": "var-literal",
+          "range": [
+            148,
+            149
+          ],
+          "value": "t"
+        },
+        "operator": "@"
+      },
+      "operator": "="
+    },
+    {
+      "type": "member-expr",
+      "range": [
+        151,
+        157
+      ],
+      "object": {
+        "type": "var-literal",
+        "range": [
+          151,
+          152
+        ],
+        "value": "p"
+      },
+      "properties": [
+        {
+          "type": "number-literal",
+          "range": [
+            153,
+            154
+          ],
+          "value": 0
+        },
+        {
+          "type": "string-literal",
+          "range": [
+            156,
+            157
+          ],
+          "value": "xx"
+        }
+      ]
+    },
+    {
+      "type": "left-unary-expr",
+      "range": [
+        159,
+        162
+      ],
+      "right": {
+        "type": "var-literal",
+        "range": [
+          161,
+          162
+        ],
+        "value": "p"
+      },
+      "operator": "delete"
+    }
+  ]
+}

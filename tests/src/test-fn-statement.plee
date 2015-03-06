@@ -32,11 +32,11 @@ fn member_expr_as_default array arr {
 fn member_expr_as_default array arr, ui64 limit = arr.length {
 
 }
-
+/* TODO
 fn call_as_default super_def = callme() {
 
 }
-
+*/
 
 fn lambda_test {
   fn lambda_done {
@@ -49,14 +49,13 @@ fn {
   return 1;
 }
 // anonimous function, one arguments
-fn ,y {
+fn , y {
   return 1;
 }
 // anonimous function, two arguments or more
-fn x, y {
+fn , x, y {
   return 1;
 }
-
 
 
 // optional parenthesis

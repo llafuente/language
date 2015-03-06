@@ -1,0 +1,27 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    6
+  ],
+  "body": [
+    {
+      "type": "call-expr",
+      "range": [
+        0,
+        5
+      ],
+      "callee": "log",
+      "arguments": [
+        {
+          "type": "string-literal",
+          "range": [
+            2,
+            5
+          ],
+          "value": "hello world"
+        }
+      ]
+    }
+  ]
+}
