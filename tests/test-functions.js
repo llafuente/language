@@ -298,75 +298,46 @@ test("default paramaters", function (t) {
 });
 
 
-test("default paramaters 2", function (t) {
-  var ast = setup("fn test struct a, b = a.length != 0 != null {}\n");
+test("hardcore parameters (call-expr, asserts, member-expr, default)", function (t) {
+  var ast = setup([
+    "fn test",
+//    "struct a,",
+//    "b = a.length != 0 != null,",
+    "c = supercall()",
+    "{}",
+].join("\n"));
+
+console.log(ast);
 
   t.ok(!(ast instanceof Error), "no error");
 
   t.deepEqual(ast.body[0].parameters.list,[
-    {
-      "type" : "parameter",
-      "range" : [4,7],
-      "clone" : false,
-      "const" : false,
-      "var_type" : {
-        "type" : "struct",
-        "range" : [4,6],
-        "sub_type" : null,
-        "dimensions" : null
-      },
-      "id" : {
-        "type" : "var-literal",
-        "range" : [6,7],
-        "value" : "a"
-      },
-      "default" : null,
-      "assertions" : null
-    },
-    {
-      "type" : "parameter",
-      "range" : [9,25],
-      "clone" : false,
-      "const" : false,
-      "id" : {
-        "type" : "var-literal",
-        "range" : [9,11],
-        "value" : "b"
-      },
-      "default" : {
-        "type" : "member-expr",
-        "range" : [13,17],
-        "object" : {
-          "type" : "var-literal",
-          "range" : [13,14],
-          "value" : "a"
-        },
-        "properties" : [{
-          "type" : "string-literal",
-          "range" : [15,17],
-          "value" : "length"
-        }]
-      },
-      "assertions" : [{
-        "type" : "parameter-assertion",
-        "range" : [17,21],
-        "operator" : "!=",
-        "value" : {
-          "type" : "number-literal",
-          "range" : [19,21],
-          "value" : 0
+        {
+          "type" : "parameter",
+          "range" : [4,12],
+          "clone" : false,
+          "const" : false,
+          "id" : {
+            "type" : "var-literal",
+            "range" : [4,6],
+            "value" : "c"
+          },
+          "default" : {
+            "type" : "call-expr",
+            "range" : [8,12],
+            "callee" : {
+              "type" : "var-literal",
+              "range" : [8,9],
+              "value" : "supercall"
+            },
+            "arguments" : [{
+                "type" : "arguments-seq",
+                "range" : [9,12],
+                "items" : []
+              }]
+          },
+          "assertions" : null
         }
-      },{
-        "type" : "parameter-assertion",
-        "range" : [21,25],
-        "operator" : "!=",
-        "value" : {
-          "type" : "null-literal",
-          "range" : [23,25]
-        }
-      }]
-    }
-
   ]);
 
   t.end();

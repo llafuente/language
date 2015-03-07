@@ -1,0 +1,259 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    63
+  ],
+  "body": [
+    {
+      "type": "bitmask-declaration",
+      "range": [
+        0,
+        31
+      ],
+      "body": [
+        {
+          "type": "bitmask-property",
+          "range": [
+            6,
+            11
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              6,
+              8
+            ],
+            "value": "is_monday"
+          },
+          "default": {
+            "type": "bool-literal",
+            "range": [
+              10,
+              11
+            ],
+            "value": true
+          }
+        },
+        {
+          "type": "bitmask-property",
+          "range": [
+            13,
+            14
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              13,
+              14
+            ],
+            "value": "is_thursday"
+          },
+          "default": false
+        },
+        {
+          "type": "bitmask-property",
+          "range": [
+            16,
+            17
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              16,
+              17
+            ],
+            "value": "is_wenesday"
+          },
+          "default": false
+        },
+        {
+          "type": "bitmask-property",
+          "range": [
+            19,
+            20
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              19,
+              20
+            ],
+            "value": "is_tuesday"
+          },
+          "default": false
+        },
+        {
+          "type": "bitmask-property",
+          "range": [
+            22,
+            23
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              22,
+              23
+            ],
+            "value": "is_friday"
+          },
+          "default": false
+        },
+        {
+          "type": "bitmask-property",
+          "range": [
+            25,
+            26
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              25,
+              26
+            ],
+            "value": "is_saturday"
+          },
+          "default": false
+        },
+        {
+          "type": "bitmask-property",
+          "range": [
+            28,
+            30
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              28,
+              30
+            ],
+            "value": "is_sunday"
+          },
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        33,
+        38
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            35,
+            38
+          ],
+          "var_type": {
+            "type": "week",
+            "range": [
+              35,
+              37
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "v"
+        }
+      ]
+    },
+    {
+      "type": "call-expr",
+      "range": [
+        40,
+        43
+      ],
+      "callee": "log",
+      "arguments": [
+        {
+          "type": "var-literal",
+          "range": [
+            42,
+            43
+          ],
+          "value": "v"
+        }
+      ]
+    },
+    {
+      "type": "comment",
+      "range": [
+        45,
+        47
+      ],
+      "multiline": false,
+      "text": " stdout: bm{is_monday = true}\n"
+    },
+    {
+      "type": "assignment-expr",
+      "range": [
+        47,
+        54
+      ],
+      "left": {
+        "type": "member-expr",
+        "range": [
+          47,
+          51
+        ],
+        "object": {
+          "type": "var-literal",
+          "range": [
+            47,
+            48
+          ],
+          "value": "week"
+        },
+        "properties": [
+          {
+            "type": "string-literal",
+            "range": [
+              49,
+              51
+            ],
+            "value": "is_tuesday"
+          }
+        ]
+      },
+      "right": {
+        "type": "bool-literal",
+        "range": [
+          53,
+          54
+        ],
+        "value": true
+      },
+      "operator": "="
+    },
+    {
+      "type": "call-expr",
+      "range": [
+        56,
+        59
+      ],
+      "callee": "log",
+      "arguments": [
+        {
+          "type": "var-literal",
+          "range": [
+            58,
+            59
+          ],
+          "value": "v"
+        }
+      ]
+    },
+    {
+      "type": "comment",
+      "range": [
+        61,
+        63
+      ],
+      "multiline": false,
+      "text": " stdout = bm{is_monday = true, is_tuesday = true}\n"
+    }
+  ]
+}
