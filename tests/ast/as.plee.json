@@ -1,0 +1,35 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    6
+  ],
+  "body": [
+    {
+      "type": "cast",
+      "range": [
+        2,
+        5
+      ],
+      "var_type": {
+        "type": "ui8",
+        "range": [
+          4,
+          5
+        ],
+        "sub_type": null,
+        "dimensions": null
+      },
+      "body": [
+        {
+          "type": "number-literal",
+          "range": [
+            0,
+            2
+          ],
+          "value": 1
+        }
+      ]
+    }
+  ]
+}
