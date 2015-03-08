@@ -78,7 +78,7 @@ function test_file(file) {
 
     var ast_to_test = require(ast_file);
 
-    t.deepEqual(ast, ast_to_test);
+    t.deepEqual(ast, ast_to_test, ast_file);
     t.end();
   });
 }

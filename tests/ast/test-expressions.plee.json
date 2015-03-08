@@ -2,7 +2,7 @@
   "type": "program",
   "range": [
     0,
-    133
+    134
   ],
   "body": [
     {
@@ -453,29 +453,85 @@
       ]
     },
     {
-      "type": "call-expr",
+      "type": "group-expr",
       "range": [
         109,
-        132
+        121
       ],
-      "callee": {
-        "type": "group-expr",
+      "body": {
+        "type": "function-declaration",
         "range": [
-          109,
-          122
+          110,
+          120
         ],
-        "body": {
-          "type": "function-declaration",
+        "id": null,
+        "parameters": {
+          "type": "parameters",
           "range": [
-            110,
+            112,
+            112
+          ],
+          "list": []
+        },
+        "return_type": null,
+        "body": {
+          "type": "block",
+          "range": [
+            112,
             120
           ],
-          "id": null,
+          "body": [
+            {
+              "type": "return-statement",
+              "range": [
+                114,
+                117
+              ],
+              "value": {
+                "type": "number-literal",
+                "range": [
+                  116,
+                  117
+                ],
+                "value": 0
+              },
+              "var_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "group-expr",
+      "range": [
+        123,
+        133
+      ],
+      "body": {
+        "type": "call-expr",
+        "range": [
+          124,
+          132
+        ],
+        "callee": {
+          "type": "function-declaration",
+          "range": [
+            124,
+            130
+          ],
+          "id": {
+            "type": "var-literal",
+            "range": [
+              126,
+              128
+            ],
+            "value": "x"
+          },
           "parameters": {
             "type": "parameters",
             "range": [
-              112,
-              112
+              128,
+              128
             ],
             "list": []
           },
@@ -483,98 +539,23 @@
           "body": {
             "type": "block",
             "range": [
-              112,
-              120
+              128,
+              130
             ],
-            "body": [
-              {
-                "type": "return-statement",
-                "range": [
-                  114,
-                  117
-                ],
-                "value": {
-                  "type": "number-literal",
-                  "range": [
-                    116,
-                    117
-                  ],
-                  "value": 0
-                },
-                "var_type": null
-              }
-            ]
+            "body": null
           }
-        }
-      },
-      "arguments": [
-        {
-          "type": "arguments-seq",
-          "range": [
-            122,
-            132
-          ],
-          "items": [
-            {
-              "type": "argument",
-              "range": [
-                123,
-                131
-              ],
-              "parameter": null,
-              "value": {
-                "type": "call-expr",
-                "range": [
-                  123,
-                  131
-                ],
-                "callee": {
-                  "type": "function-declaration",
-                  "range": [
-                    123,
-                    129
-                  ],
-                  "id": {
-                    "type": "var-literal",
-                    "range": [
-                      125,
-                      127
-                    ],
-                    "value": "x"
-                  },
-                  "parameters": {
-                    "type": "parameters",
-                    "range": [
-                      127,
-                      127
-                    ],
-                    "list": []
-                  },
-                  "return_type": null,
-                  "body": {
-                    "type": "block",
-                    "range": [
-                      127,
-                      129
-                    ],
-                    "body": null
-                  }
-                },
-                "arguments": [
-                  {
-                    "type": "arguments-seq",
-                    "range": [
-                      129,
-                      131
-                    ],
-                    "items": []
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
+        },
+        "arguments": [
+          {
+            "type": "arguments-seq",
+            "range": [
+              130,
+              132
+            ],
+            "items": []
+          }
+        ]
+      }
     }
   ]
 }
