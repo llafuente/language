@@ -1,0 +1,3 @@
+enum dirs {north, west, south, east};
+enum dirs {north = 1, west, south, east};
+enum dirs {north = 10, west, south = 20, east};
