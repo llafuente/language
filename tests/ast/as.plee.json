@@ -1,8 +1,369 @@
 {
-  "parser": {
-    "position": 2,
-    "line": 1,
-    "column": 3,
-    "token": "as"
-  }
+  "type": "program",
+  "range": [
+    0,
+    75
+  ],
+  "body": [
+    {
+      "type": "cast",
+      "range": [
+        2,
+        5
+      ],
+      "var_type": {
+        "type": "ui8",
+        "range": [
+          4,
+          5
+        ],
+        "sub_type": null,
+        "dimensions": null
+      },
+      "body": [
+        {
+          "type": "number-literal",
+          "range": [
+            0,
+            2
+          ],
+          "value": 1
+        }
+      ]
+    },
+    {
+      "type": "cast",
+      "range": [
+        11,
+        16
+      ],
+      "var_type": {
+        "type": "array",
+        "range": [
+          14,
+          16
+        ],
+        "sub_type": {
+          "type": "ui8",
+          "range": [
+            13,
+            14
+          ],
+          "sub_type": null,
+          "dimensions": null
+        },
+        "dimensions": [
+          {
+            "type": "number-literal",
+            "value": 0
+          }
+        ]
+      },
+      "body": [
+        {
+          "type": "array-literal",
+          "range": [
+            7,
+            11
+          ],
+          "items": [
+            {
+              "type": "number-literal",
+              "range": [
+                8,
+                9
+              ],
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        18,
+        45
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            20,
+            24
+          ],
+          "var_type": {
+            "type": "ui8",
+            "range": [
+              20,
+              22
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "x",
+          "init": {
+            "type": "call-expr",
+            "range": [
+              26,
+              45
+            ],
+            "callee": {
+              "type": "var-literal",
+              "range": [
+                26,
+                27
+              ],
+              "value": "index_of"
+            },
+            "arguments": [
+              {
+                "type": "arguments-seq",
+                "range": [
+                  27,
+                  45
+                ],
+                "items": [
+                  {
+                    "type": "argument",
+                    "range": [
+                      28,
+                      37
+                    ],
+                    "parameter": null,
+                    "value": {
+                      "type": "cast",
+                      "range": [
+                        32,
+                        37
+                      ],
+                      "var_type": {
+                        "type": "array",
+                        "range": [
+                          35,
+                          37
+                        ],
+                        "sub_type": {
+                          "type": "ui8",
+                          "range": [
+                            34,
+                            35
+                          ],
+                          "sub_type": null,
+                          "dimensions": null
+                        },
+                        "dimensions": [
+                          {
+                            "type": "number-literal",
+                            "value": 0
+                          }
+                        ]
+                      },
+                      "body": [
+                        {
+                          "type": "array-literal",
+                          "range": [
+                            28,
+                            32
+                          ],
+                          "items": [
+                            {
+                              "type": "number-literal",
+                              "range": [
+                                29,
+                                30
+                              ],
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "argument",
+                    "range": [
+                      39,
+                      44
+                    ],
+                    "parameter": null,
+                    "value": {
+                      "type": "cast",
+                      "range": [
+                        41,
+                        44
+                      ],
+                      "var_type": {
+                        "type": "ui8",
+                        "range": [
+                          43,
+                          44
+                        ],
+                        "sub_type": null,
+                        "dimensions": null
+                      },
+                      "body": [
+                        {
+                          "type": "number-literal",
+                          "range": [
+                            39,
+                            41
+                          ],
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "var-declaration",
+      "range": [
+        47,
+        74
+      ],
+      "keyword": "var",
+      "body": [
+        {
+          "type": "var-declarator",
+          "range": [
+            49,
+            53
+          ],
+          "var_type": {
+            "type": "ui8",
+            "range": [
+              49,
+              51
+            ],
+            "sub_type": null,
+            "dimensions": null
+          },
+          "id": "x",
+          "init": {
+            "type": "call-expr",
+            "range": [
+              55,
+              74
+            ],
+            "callee": {
+              "type": "var-literal",
+              "range": [
+                55,
+                56
+              ],
+              "value": "index_of"
+            },
+            "arguments": [
+              {
+                "type": "arguments-seq",
+                "range": [
+                  56,
+                  74
+                ],
+                "items": [
+                  {
+                    "type": "argument",
+                    "range": [
+                      57,
+                      62
+                    ],
+                    "parameter": null,
+                    "value": {
+                      "type": "cast",
+                      "range": [
+                        59,
+                        62
+                      ],
+                      "var_type": {
+                        "type": "ui8",
+                        "range": [
+                          61,
+                          62
+                        ],
+                        "sub_type": null,
+                        "dimensions": null
+                      },
+                      "body": [
+                        {
+                          "type": "number-literal",
+                          "range": [
+                            57,
+                            59
+                          ],
+                          "value": 1
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "argument",
+                    "range": [
+                      64,
+                      73
+                    ],
+                    "parameter": null,
+                    "value": {
+                      "type": "cast",
+                      "range": [
+                        68,
+                        73
+                      ],
+                      "var_type": {
+                        "type": "array",
+                        "range": [
+                          71,
+                          73
+                        ],
+                        "sub_type": {
+                          "type": "ui8",
+                          "range": [
+                            70,
+                            71
+                          ],
+                          "sub_type": null,
+                          "dimensions": null
+                        },
+                        "dimensions": [
+                          {
+                            "type": "number-literal",
+                            "value": 0
+                          }
+                        ]
+                      },
+                      "body": [
+                        {
+                          "type": "array-literal",
+                          "range": [
+                            64,
+                            68
+                          ],
+                          "items": [
+                            {
+                              "type": "number-literal",
+                              "range": [
+                                65,
+                                66
+                              ],
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
 }

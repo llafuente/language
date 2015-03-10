@@ -3,4 +3,4 @@
 [1] as ui8[];
 
 var ui8 x = index_of([1] as ui8[], 1 as ui8);
-assert x == 0;
+var ui8 x = index_of(1 as ui8, [1] as ui8[]);
