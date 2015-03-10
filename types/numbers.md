@@ -52,18 +52,20 @@ Number representations
 
 * binary
 
- 0b[0-1]
+  * 0b[0-1]
 
- number will be truncated to nearest 8 byte possible. 0b0101 (is in fact 0b00000101)
+  number will be truncated to nearest 8 byte possible.
+  0b0101 (is in fact 0b00000101)
 
 * hecadecimal
 
- * 0x(abcdef0123456789)
- * 0#(abcdef0123456789)
+  * 0x(abcdef0123456789)
+  * 0#(abcdef0123456789)
 
 * octal
 
- 0o(01234567)
+  * 0o(01234567)
+  * 0c(01234567)
 
 
 bitmask dir {
