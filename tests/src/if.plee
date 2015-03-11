@@ -1,0 +1,34 @@
+if a {
+  var a;
+}
+
+if a + 7 < c {
+  log "ok";
+}
+
+if a {
+  var a;
+} else {
+  var b;
+}
+
+
+if a {
+  var a;
+} else if b {
+  var b;
+} else {
+  var c;
+}
+
+
+
+/*
+if 5 < x < 10 {
+    // mad science
+}
+
+if x, y, z < 0 { // x < 0 && y < 0 && z < 0
+    // mad science
+}
+*/

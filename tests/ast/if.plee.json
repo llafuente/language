@@ -1,0 +1,287 @@
+{
+  "type": "program",
+  "range": [
+    0,
+    102
+  ],
+  "body": [
+    {
+      "type": "if-statement",
+      "range": [
+        0,
+        13
+      ],
+      "test": {
+        "type": "var-literal",
+        "range": [
+          2,
+          4
+        ],
+        "value": "a"
+      },
+      "body": [
+        {
+          "type": "var-declaration",
+          "range": [
+            6,
+            9
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                8,
+                9
+              ],
+              "var_type": null,
+              "id": "a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "if-statement",
+      "range": [
+        13,
+        36
+      ],
+      "test": {
+        "type": "binary-expr",
+        "range": [
+          15,
+          25
+        ],
+        "expression": true,
+        "left": {
+          "type": "binary-expr",
+          "range": [
+            15,
+            21
+          ],
+          "expression": true,
+          "left": {
+            "type": "var-literal",
+            "range": [
+              15,
+              17
+            ],
+            "value": "a"
+          },
+          "operator": "+",
+          "right": {
+            "type": "number-literal",
+            "range": [
+              19,
+              21
+            ],
+            "value": 7
+          }
+        },
+        "operator": "<",
+        "right": {
+          "type": "var-literal",
+          "range": [
+            23,
+            25
+          ],
+          "value": "c"
+        }
+      },
+      "body": [
+        {
+          "type": "call-expr",
+          "range": [
+            27,
+            32
+          ],
+          "callee": "log",
+          "arguments": [
+            {
+              "type": "string-literal",
+              "range": [
+                29,
+                32
+              ],
+              "value": "ok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "if-statement",
+      "range": [
+        36,
+        60
+      ],
+      "test": {
+        "type": "var-literal",
+        "range": [
+          38,
+          40
+        ],
+        "value": "a"
+      },
+      "body": [
+        {
+          "type": "var-declaration",
+          "range": [
+            42,
+            45
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                44,
+                45
+              ],
+              "var_type": null,
+              "id": "a"
+            }
+          ]
+        }
+      ],
+      "else": {
+        "type": "block",
+        "range": [
+          51,
+          60
+        ],
+        "body": [
+          {
+            "type": "var-declaration",
+            "range": [
+              53,
+              56
+            ],
+            "keyword": "var",
+            "body": [
+              {
+                "type": "var-declarator",
+                "range": [
+                  55,
+                  56
+                ],
+                "var_type": null,
+                "id": "b"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "if-statement",
+      "range": [
+        60,
+        99
+      ],
+      "test": {
+        "type": "var-literal",
+        "range": [
+          62,
+          64
+        ],
+        "value": "a"
+      },
+      "body": [
+        {
+          "type": "var-declaration",
+          "range": [
+            66,
+            69
+          ],
+          "keyword": "var",
+          "body": [
+            {
+              "type": "var-declarator",
+              "range": [
+                68,
+                69
+              ],
+              "var_type": null,
+              "id": "a"
+            }
+          ]
+        }
+      ],
+      "else": {
+        "type": "if-statement",
+        "range": [
+          75,
+          99
+        ],
+        "test": {
+          "type": "var-literal",
+          "range": [
+            77,
+            79
+          ],
+          "value": "b"
+        },
+        "body": [
+          {
+            "type": "var-declaration",
+            "range": [
+              81,
+              84
+            ],
+            "keyword": "var",
+            "body": [
+              {
+                "type": "var-declarator",
+                "range": [
+                  83,
+                  84
+                ],
+                "var_type": null,
+                "id": "b"
+              }
+            ]
+          }
+        ],
+        "else": {
+          "type": "block",
+          "range": [
+            90,
+            99
+          ],
+          "body": [
+            {
+              "type": "var-declaration",
+              "range": [
+                92,
+                95
+              ],
+              "keyword": "var",
+              "body": [
+                {
+                  "type": "var-declarator",
+                  "range": [
+                    94,
+                    95
+                  ],
+                  "var_type": null,
+                  "id": "c"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "comment",
+      "range": [
+        99,
+        102
+      ],
+      "multiline": true,
+      "text": "\nif 5 < x < 10 {\n    // mad science\n}\n\nif x, y, z < 0 { // x < 0 && y < 0 && z < 0\n    // mad science\n}\n"
+    }
+  ]
+}
