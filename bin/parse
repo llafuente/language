@@ -45,6 +45,9 @@ function parse_file(file) {
     var ast = parser(ranges, argv.v || 0);
 
     console.log(util.inspect(ast, {depth: null, colors: true}));
+
+    require("../lib/compiler/compiler.js")(ranges, ast);
+
   } catch(e) {
     console.log(e);
     console.log(e.stack);
