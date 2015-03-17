@@ -49,6 +49,11 @@ for var i = 0; i < 10; ++i {
     // do your staff
 }
 
+unvar j;
+for j = 0; j < 10; ++j {
+  // do your staff
+}
+
 ```
 
 ### for-in
@@ -66,11 +71,19 @@ Iterator :
 * If a value after the current is removed won't appear in the loop.
 
 ```plee
-for [key, ] value in iterable {
+unvar key, value;
 
-} [else {
-    // executed if condition fails the first time
-}]
+for key, value in iterable {
+  log key, value;
+} else {
+  // executed if condition fails the first time
+}
+
+for value in iterable {
+  log value;
+} else {
+  // executed if condition fails the first time
+}
 ```
 
 
@@ -86,22 +99,35 @@ Iterator behavior:
 * It will iterate (max - min) times regardless removals or reach iterable.length
 
 ```plee
-for [key, ] value in iterable[3:5] {
+for key value in iterable[3:5] {
 
-} [else {
+} else {
     // executed if condition fails the first time
-}]
+}
+
+for key value in iterable[3:5] {
+
+} else {
+  // executed if condition fails the first time
+}
+
 ```
 
 
 ### for-till (shortcut)
 
-```plee
-for variable|number till number {
+**STUDY** how we handle negative iterations 15 till 10 --> --i ??
 
-} [else {
-    // executed if condition fails the first time
-}]
+```plee
+for 10 till 15 {
+
+}
+
+for 15 till 9 {
+
+} else {
+  // will be executed!
+}
 ```
 
 Compiler will translate for-till with the folowing rules:

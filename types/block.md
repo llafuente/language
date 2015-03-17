@@ -75,10 +75,10 @@ Memory map:
 
 #### interlaced (proposal)
 
-Because the implementation is so difficult i just leave the note.
+Because the implementation is so difficult I just leave the note.
 
-Interlaced array memory, improve access to the same index in every array in the
-block because they are now memory continuous
+Interlaced array memory, improve access to the same index
+in every array in the block because they are now memory continuous
 
 Example (plee/c-ish)
 

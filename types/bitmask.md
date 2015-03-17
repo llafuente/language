@@ -18,7 +18,7 @@ bitmask-prop-list
 bitmask-prop ("," bitmask-prop)*
 
 bitmask-prop
-(group ":")? var-identifier ["=" boolean-literal]
+(group ":")? var-identifier ["=" boolean-literal|numeric-literal]
 ```
 
 

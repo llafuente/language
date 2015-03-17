@@ -100,17 +100,17 @@ Types are automatically exported in modules if required.
 
 * Classic function call
 
-  ```plee
-  log sum(5, 6);
-  // stdout 11
-  ```
+```plee
+log sum(5, 6);
+// stdout 11
+```
 
 * Objects Oriented / Prototypal
 
-  ```plee
-  log 5.sum(6);
-  // stdout 11
-  ```
+```plee
+log 5.sum(6);
+// stdout 11
+```
 
 **note** If chaning if possible, use the second one, because
 allow compiler to use `tail-call-recursion` that optimize
@@ -459,3 +459,22 @@ work
 *Performance note*: arguments are serialized and stored as key in an object.
 Serialization fetch/store in the object has it costs, so keep in mind that the
 function call cost should be greater or no performance gain will be obtained.
+
+
+# call
+
+Call a function by name and a list of arguments.
+
+Call will check argument types before calling the function
+
+```plee
+fn call string fn_name, box[] arguments { /*...*/ }
+
+fn my_func string a, number b { /*...*/}
+
+call("my_func", ["a", 100]);
+
+```
+
+**STUDY** call should be local to modules ? what it's the
+scope it can call

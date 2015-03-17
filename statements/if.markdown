@@ -25,13 +25,13 @@ chained-comparison
 ### if-classic
 
 ```plee
-if test {
+if x > 10 {
     // note: braces are mandatory, event for empty-statements
-} [else if test {
+} else x < 10 {
 
-} [else {
-
-}]
+} else {
+  // x = 10
+}
 ```
 
 

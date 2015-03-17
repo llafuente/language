@@ -1,39 +1,45 @@
 ## Error handling
 
-Manage exceptions is in plee is very peculiar. Like C, there is not real exceptions class to throw. You throw anything `not null`.
+Error handling do not use Exceptions but it use most of it's
+terminology.
 
-it's recomended to use `exception()` function to throw.
+What is an error:
 
-### exception
+* `failure`: something don't do it's work properly. The best
+example is arithmetic overflow.
+* `error`: abnormal execution state. Invalid values / asserts.
+* `warning`: Not an error, but will be soon :)
+* `notice`: Mostly used to let you know something could be dangerous,
+most of the notices are compile-time.
 
-`exception` it's a reserved word so the compiler can track line and file.
-But it should be considered as a function with the following header.
 
-> **exception**(*string* type, *string* message, *ui64* code, *object* user_data) : *object* {
->
-> var object to_throw = {
->   "type": type,
->   "message": message,
->   "code": code,
->   "user_data": user_data,
-> };
->
->  return to_throw;
->
->}
+### exception type
+
+`exception` it's a struct
+
+```plee
+enum exception_levels {
+  failure,
+  error,
+  warning,
+  notice
+};
+
+struct exception {
+  var exception_levels level;
+  var string message;
+  var i64 code;
+  var box userdata;
+};
+```
+
+### exception throw
 
 ```
-var err = exception "invalid-auth", "pwd-failed", 501;
-```
-
-**TODO** review, exception needs to be a reserved word ?
-
-### throw
-
-throw a new exception up.
-
-```
-throw "invalid-auth", "pwd-failed", 501;
+throw failure("message", 100/*code*/, user_data);
+throw error("message", 100/*code*/, user_data);
+throw notice("message", 100/*code*/, user_data);
+throw warning("message", 100/*code*/, user_data);
 ```
 
 ### raise
@@ -53,7 +59,7 @@ raise exp; // but this will
 
 Exceptions manager are functions with a compatible header:
 
-* First argument: object
+* Arguments: exception
 * Returns: ui8
 
 Returns code behavior.
@@ -65,7 +71,7 @@ The function will return null and continue.
 * 3 retry
 
 ```
-function manage_error(object err) : ui8 {
+function manage_error(exception err) : ui8 {
   log err.type;
   log err.message;
 

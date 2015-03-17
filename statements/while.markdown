@@ -4,7 +4,10 @@
 
 ```syntax
 while-statement
-**TODO**
+'while' expression block-statement ['else' block-statement]
+
+do-while-statement
+'do' block-statement 'while' expression ';'
 ```
 
 ### while
@@ -16,8 +19,8 @@ If condition is never else block will be executed if exists.
 ```plee
 while test {
   // block
-} [else {
-}]
+} else {
+}
 ```
 
 ## do-while
