@@ -439,3 +439,9 @@ fn a {
   }
 }
 ```
+
+
+### __types
+
+__types contains all type information from your entire program,
+modules included.

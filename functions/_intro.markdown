@@ -147,9 +147,9 @@ simply don't allow any number, so becareful.
 
 ```plee
 // default: 1
-// assert if negative
-// assert if is null
-fn sum ui8 a, ui8 b = 1 < 0 == null {
+// must be positive (assert)
+// must be not null (assert)
+fn sum ui8 a, ui8 b = 1 > 0 != null {
 
 }
 ```
@@ -164,7 +164,7 @@ Solve two common problems.
 optional/default values.
 
 * Function overloading with the same types is allowed with diferent
-arguments identifiers
+arguments identifiers (but it's not recommended for clarity)
 
 * Clearly indicate the purpose of each argument you pass to the
 function.
@@ -181,9 +181,12 @@ fn sum ui8 c, ui8 b {
 
 sum(5 as b, 6 as a);
 sum(c: 5, b: 6);
-sum(5, 6); // compiler-error
 // Argument expansion is required found two compatible functions: ...
 sum(5, b: 6); // this is allowed
+```
+
+```plee-err
+sum(5, 6); // ???
 ```
 
 ### Anonimous functions
@@ -500,3 +503,8 @@ call("my_func", ["a", 100]);
 
 **STUDY** call should be local to modules ? what it's the
 scope it can call
+
+### __functions
+
+__functions is a global variable with all functions declared,
+arguments and return values.

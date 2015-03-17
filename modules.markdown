@@ -1,7 +1,7 @@
 <a name="modules"></a>
 ## Modules
 
-Modules in plee are the way to mimic classes without following any related paradigm.
+Modules in plee are the way to mimic classes without following any related paradigm. Also works as isolated logic.
 
 ### Module name/identifier
 
@@ -9,7 +9,9 @@ Modules in plee are the way to mimic classes without following any related parad
 * cannot contains spaces.
 * cannot contains uppercases.
 * Cannot start with a $
-* Any UTF-8 valid character (**STUDY** support only URL-valid character set)
+* Any UTF-8 valid character
+
+**propossal** support only URL-valid character set [rfc3986](http://tools.ietf.org/html/rfc3986#section-2)
 
 
 ### Syntax
@@ -39,19 +41,24 @@ Files structure
 
 * macros.plee
 
-  Macro definition file. So users can #include this file in their
-  projects it has useful defines, and way you are sure of no collision
-  will ever occur by default.
+  Macro definition file.
 
-* index.plee
+  Macros don't leak outside the module definition, but maybe users need
+  some of your macros to work easily, put in this file the public macros
+  only.
 
-  Entry point. When someone import a module will import in fact index.plee.
+  Users that consume your module should `#include` this file, you could
+  raise a compile error if something `#ifndef`.
+
+* main.plee
+
+  Entry point. When someone import a module will import in fact this file.
 
   It should be mostly #include(s) to src/*
 
 * package.json
 
-  NPM file.
+  [NPM file](https://docs.npmjs.com/files/package.json).
 
 * src/
 
@@ -69,7 +76,11 @@ Files structure
 
 * `function`
 
-> export fn get_secret() {}
+> export fn get_secret() { /*...*/ }
+
+* `struct`
+
+> export struct v2 { /*...*/ }
 
 
 ### import a module
