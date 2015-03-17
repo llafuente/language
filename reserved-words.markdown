@@ -16,8 +16,11 @@
 * bitmask
 * object
 * function, fn
-* p1, p2, p3, p4
 * nan
+* __types
+* __functions
+* call
+* bind
 
 *statements*
 * for
