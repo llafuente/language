@@ -221,6 +221,28 @@ fn glue string start, string to_join..., string end {
 
 ```
 
+### arguments
+
+arguments variable is a reserved word, it's type is box[]
+
+```plee
+
+fn cast_sum string a, number b {
+  log typeof arguments[0];
+  log typeof arguments[1];
+
+  var _a = (number) a;
+  return _a + b;
+}
+
+log ("10", 1);
+```
+
+```stdout
+string
+i64
+11
+```
 
 ### Operator functions
 
@@ -461,7 +483,7 @@ Serialization fetch/store in the object has it costs, so keep in mind that the
 function call cost should be greater or no performance gain will be obtained.
 
 
-# call
+### call
 
 Call a function by name and a list of arguments.
 
