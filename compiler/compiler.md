@@ -34,7 +34,8 @@ Compiler layers:
 
   output: JSON (AST)
 
-  Transform the tokenizer output into full AST.
+  Transform the tokenizer output into full AST. Only produce
+syntax errors.
 
 * Minimal AST (remove AST expansions)
 
@@ -54,7 +55,12 @@ Compiler layers:
 
   output: llvm ir, executable or execute program.
 
-  From given Minimal AST generate LLVM IR
+  From given Minimal AST generate LLVM IR.
+
+  Passes:
+
+  * Type inference
+  * Templates
 
   Then will use `llvm-link` to generate a LLVM bc file
 

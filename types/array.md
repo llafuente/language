@@ -8,11 +8,15 @@
 
 #### memory safety notes.
 
-* Array has two iterator, safe and unsafe. the latest is fastest but
-it's not memory safe...
+* Array has two iterator
 
-* When an array is resized could be stored in other memory block,
-all raw pointers should be invalidated.
+  const iterator: use it when array won't change over time.
+
+  mutable iterator: use ir when array will change, iterator will manage
+  the logic for insert and removal.
+
+* When an array is resized could be stored in other memory block, user
+must invalidate all pointer to it.
 
 #### syntax
 
