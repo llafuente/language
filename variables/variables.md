@@ -271,7 +271,7 @@ A primitive are the standard types (most simple) types.
 
 Wrapper always gives extra functionality to a basic type
 without modifying the type itself, mostly change memory
-representation/aggrupation.
+representation/aggrupation and operarations/operator behaviors.
 
 * `array`
 
