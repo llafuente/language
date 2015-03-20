@@ -51,10 +51,10 @@ function-header-full
 function-header-lazy
 
 function-header-full
-('inline'|'no_inline')? ('fn'|'function') '(' fn-identifier arguments-list? ')'
+('inline'|'no_inline'|'deprecate'|'forbid')? ('fn'|'function') '(' fn-identifier arguments-list? ')'
 
 function-header-lazy
-('inline'|'no_inline')? ('fn'|'function') fn-identifier arguments-list?
+('inline'|'no_inline'|'deprecate'|'forbid')? ('fn'|'function') fn-identifier arguments-list?
 
 arguments-list
 "("? argument (',' arguments-list)* ")"?
@@ -331,7 +331,7 @@ declaration will be used.
 // this function is not callable only declare the type.
 fn each_callback($0, string $1);
 
-inline fn each array ar, each_callback callback {
+inline fn each array ar, inline each_callback callback {
     var i = 0,
         max = ar.lenth;
 
@@ -375,6 +375,23 @@ arr.each(fn ($0, string $1) {
 Because the first argument will have a pseudo-method, functions with the same name
 cannot have the same arguments. To avoid collision we introduce a "do not export"
 
+## Function options
+
+* inline
+
+  will try to inline your function, avoiding function-call overhead.
+
+* no_inline
+
+  make sure that your function is not inline
+
+* deprecate
+
+  Raise a compile-warning when used.
+
+* forbid
+
+  Raise a compiler-error when used.
 
 ### functions in modules.
 

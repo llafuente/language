@@ -1,4 +1,4 @@
-### Variables & types.
+### Variables
 
 <a name="var-idenfiers"></a>
 #### Variable identifier, allowed names
@@ -53,107 +53,6 @@ var ui64 e; // also: i64
 log e; // stdout: 0
 ```
 
-#### paradigms
-
-* [Type introspection](http://en.wikipedia.org/wiki/Type_introspection)
-
-  All primitives and complex types has a very verbose output with
-  `log` for easy debugging. You also have access in runtime
-  to some properties of how the type is declared printing it's type.
-
-* Required keyword at declaration for readability purposes and easy
-search
-
-* [Type inference](http://en.wikipedia.org/wiki/Type_inference)
-
-* Types lowercased.
-
-* Auto scope. Compiler will choose between function or block scope.
-
-
-#### Type inference.
-
-Logic behind type inference as follow:
-
-* variables
-  * declaration + initialization
-
-    variable will get the type that the initialization return.
-
-  * declaration
-
-    variable will get the type of the first assignment found.
-
-    This cannot be used to "unbox" from array/object.
-
-  * parameter
-
-    if the variable is a parameter of a function will get it's type.
-
-  * narrow type by operation
-
-    Sometimes a variable will be in some operations and that can narrow it's type
-    the compiler will anotate until only one is valid.
-
-    for examples `a + b;` wont give most...
-    Because can be used for numbers/arrays/strings but that remove modules and object!
-
-* arguments
-  There are two cases.
-
-  * arguments without a type
-
-  * arguments with complex types.
-
-    Comples types require a primitive to be a complete type that can
-    be compiled. The compiler will fill the gap with the calling types
-
-
-* return
-  Return type of a function is the type of all return statements found.
-
-  box won't be allowed to be a return type unless user defined it.
-
-
-
-
-```plee
-fn sum x, y {
-    return x + y;
-}
-
-sum(1 as u8, 2 as u8);
-// will generate a new function with a compatible signature.
-// fn sum ui8 x, ui8 y: ui8 {...}
-
-```plee-err
-var ui8 x = sum(1 as ui8, 1 as ui32);
-// it will comlaint about resolution loss in x
-// fn sum ui8 x, ui32 y: ui32 {...}
-
-var ui8 x = sum(1 as ui8, [1] as ui8[]);
-// compile-error: incompatible type operation found for: ui8 + ui8[]
-```
-
-
-#### implicit type conversion
-
-A type can only grow in precision on right hand side.
-
-```plee
-var x = 0; // ui64
-var y = 0.1; // float
-var z = x + y; // float
-```
-
-But will not grow in left hand side.
-
-```plee-err
-var x = 0; // ui64
-var y = 0.1; // float
-x = x + y; // float
-```
-
 #### explicit type declaration
 
 ```plee
@@ -176,24 +75,11 @@ var ui64 x = to_ui64(0.0);
 var x = 0 as ui8;
 ```
 
-#### invalid explicit conversions
+`c-style` conversion
 
-Some convertion are meant to be used as a function rather
-than usign `as` operator.
-
-| from     |    to    | description |
-|----------|----------|-------------|
-| array    | string   | invalid cast: use join |
-| function | *        | invalid cast: functions cannot be casted |
-| string   | function | invalid cast: use call function |
-| object   | array    | invalid cast: use object.values or object.keys |
-| object   | block    | invalid cast: use copy operator |
-| block    | object   | invalid cast: use to_object |
-| block    | array    | invalid cast use to_array |
-| block    | *        | invalid cast: |
-| struct   | object   | invalid cast use to_object |
-| struct   | array    | invalid cast use to_array |
-| struct   | *        | invalid cast |
+```plee
+var x = (ui8) 0;
+```
 
 
 #### Primitives / Basic types
@@ -275,14 +161,14 @@ representation/aggrupation and operarations/operator behaviors.
 
 * `array`
 
-  Dense memory-continuos data.
+  Arrays are dense-memory continuous data of one kind.
 
   [array in details](#array-type)
 
 
 * `object`
 
-  Dynamic key-value structure of a single type.
+  Dynamic key-value structure data of one kind.
 
   [object in details](#object-type)
 
@@ -294,21 +180,14 @@ representation/aggrupation and operarations/operator behaviors.
 
   [box in details](#box-type)
 
-#### Primitive templates
+#### Type template
 
-  Templates on Plee don't follow the C++ rules.
-
-  In C++ a template must be used in both sides: declaration and use.
-
-  Plee divide templates in two styles. Type templating and Type wrapping
-
-  *Type templating*
-
-  Use a common name to define many subtypes
+  Type template allow to narrow type inference to a compatible types.
 
   * `function`, `fn`
 
-  Match to a function (anonymous or not)
+  Match to a function (anonymous or not) any number of arguments or
+  return type.
 
   * `number`
 
@@ -318,84 +197,43 @@ representation/aggrupation and operarations/operator behaviors.
 
   Can be anything, it's the same as not specify the type.
 
-  *Type wrapping*
+#### Type definition
+
+
+#### Type Wrapping
+
+  A wrapper add, overwrite and disallow operators given a specific type.
+  Also if a function is defined using both the wapper<type> and type,
+  wapper<type> will have higher priority and will be used.
 
   * `ptr`, `ref`, `itr`
 
-  Requiere a sub-type (that will be templated). You always have
-  a pointer to X
+  Require a sub-type (that will be templated).
+  There are all the same, pointer to a type, but functionality
+  is very different.
 
   [pointers in detail](#pointers-type)
 
   * `array`
 
-  Array are dense-memory continuous data of one kind
+  Arrays are dense-memory continuous data of one kind
 
   * `object`
 
-
-#### Type properties
-
-
-**iterable**
-> Has some special methods like: each, filter, reduce...
-
-> Can be directly used inside a `for-in` loop
-
-**thread-block** (experimental)
-> A thread can block the usage for the rest of the threads.
-
-> When a thread want to use it, first must wait the lock.
-
-**shared-ptr**
-> Reference-counted shared pointer.
-
-> when a variable references counter add 1
-
-> when a variable is deleted counter subtract 1
-
-STUDY: this can be done with a type wrapper...
-maybe do not force users to use it by default
+  Dynamic key-value structure data of one kind.
 
 
-#### functions in modules.
+
+
+
+#### variables in modules.
 
 Just as a brief introduction, variable in modules has special keyword
 to specify their behavior.
 
 * `export var` allow a variable to be accessed outside the module
-* There is no way to export a *readonly* variable.
-
-#### special functions
-
-* `regexp_test`
-
-  Give you support to include your type inside a switch with a regular expression
-  test.
-
-* `to_string`
-
-  transform your type into an string.
-
-* `to_number`
-
-  Transform your type into a number.
-
-* `to_log`
-
-  Used by log. Native types include the type name before calling `to_json`.
-
-  If the function is not defined, log will use `to_string` instead.
-
-* `to_json`
-
-  Give you support to enconding: `json`
-
-* `operator` "assignament operators"
-
-  Allow to use your type on left side of the assignament operators.
-
-  All this calls will be inlined if possible.
+and modified
+* `export const` allow a variable to be accessed outside the module
 
 
 ### Auto scope
@@ -439,9 +277,3 @@ fn a {
   }
 }
 ```
-
-
-### __types
-
-__types contains all type information from your entire program,
-modules included.

@@ -38,7 +38,8 @@
 | 9 | Floating point equality (inside epsilon range) | left-to-right | *lhs* ~= *rhs* |
 | 9 | Inequality | left-to-right | *lhs* != *rhs* |
 |   |            |               | *lhs* ≠ *rhs* |
-| 9 | Address Equality | left-to-right | *lhs* $= *rhs* |
+| 9 | Address Equality | left-to-right | *lhs* @= *rhs* |
+| 9 | Add/Append/Push | left-to-right | *lhs* [] *rhs* |
 | 10 | Bitwise AND | left-to-right | *lhs* & *rhs* |
 | 11 | Bitwise XOR | left-to-right | *lhs* ^ *rhs* |
 | 12 | Bitwise OR | left-to-right | *lhs* &#124; *rhs* |

@@ -21,6 +21,8 @@ var files = {
     "entry-point.markdown": "compiler.html",
 
     "variables/variables.md": "variables.html",
+
+    "types/types-intro.md": "types-intro.md",
     "types/numbers.md": "numbers.html",
     "types/string.md": "string.html",
     "types/enum.md": "enum.html",
